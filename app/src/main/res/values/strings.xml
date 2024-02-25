@@ -4,7 +4,7 @@
     <string name="channel_name">Canal de notificaciones de Menditrack</string>
     <string name="channel_desc">Este canal lanzará las notificaciones de la aplicación</string>
 
-    <string name="goBack">Atrás</string>
+    <string name="go_back">Atrás</string>
     <string name="info">Información</string>
     <string name="settings">Ajustes</string>
     <string name="menu">Menú</string>
@@ -13,5 +13,7 @@
     <string name="my_routes">Tus rutas</string>
     <string name="my_profile">Tu perfil</string>
     <string name="log_out">Cerrar sesión</string>
+    <string name="accept">Aceptar</string>
+    <string name="app_desc">Esta aplicacion es un portal de rutas de montaña donde se pueden guardar rutas propias y consultar las rutas de otros usuarios de la comunidad Menditrack</string>
 
 </resources>

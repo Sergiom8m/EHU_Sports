@@ -5,7 +5,7 @@
     <string name="channel_name">Menditrack notifikazio kanala</string>
     <string name="channel_desc">Kanal honek aplikazioaren notifikazioak bota ditu</string>
 
-    <string name="goBack">Atzera</string>
+    <string name="go_back">Atzera</string>
     <string name="info">Informazioa</string>
     <string name="settings">Ezarpenak</string>
     <string name="menu">Menua</string>
@@ -13,5 +13,7 @@
     <string name="my_routes">Zure ibilbideak</string>
     <string name="my_profile">Zure profila</string>
     <string name="log_out">Saioa amaitu</string>
+    <string name="accept">Ados</string>
+    <string name="app_desc">Aplikazio hau mendiko ibilbideen atari bat da, eta bertan zure ibilbideak gorde eta Menditrack komunitateko beste erabiltzaile batzuen ibilbideak kontsulta ditzakezu.</string>
 
 </resources>
