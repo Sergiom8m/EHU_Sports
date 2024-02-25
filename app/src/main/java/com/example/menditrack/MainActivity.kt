@@ -13,13 +13,9 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.menditrack.navigation.MyAppNavigation
 import com.example.menditrack.ui.theme.MendiTrackTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -50,7 +46,9 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     NotificationPermission()
-                    MyAppNavigation(appViewModel = appViewModel)
+                    MyAppNavigation(appViewModel = appViewModel) { code: String ->
+                        LanguageChange(code)
+                    }
                 }
             }
         }

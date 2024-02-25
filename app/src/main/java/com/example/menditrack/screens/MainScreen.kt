@@ -1,11 +1,11 @@
 package com.example.menditrack.screens
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,10 +45,20 @@ import androidx.navigation.compose.rememberNavController
 import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
 import com.example.menditrack.data.Language
+import java.util.Locale
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen(navController: NavController, appViewModel: AppViewModel, modifier: Modifier){
+fun MainScreen(
+    navController: NavController,
+    appViewModel: AppViewModel,
+    modifier: Modifier,
+    LanguageChange: (String) -> Unit
+){
+
+    val language = appViewModel.actual_language
+    LanguageChange(language.code)
+
     Scaffold (
         topBar = { TopBar(navController, appViewModel, modifier)},
         bottomBar = { BottomBar(navController, appViewModel, modifier) },
@@ -216,16 +227,4 @@ fun InfoDialog(showInfo: Boolean, onConfirm: () -> Unit) {
 fun BodyContent(navController: NavController, appViewModel: AppViewModel, modifier: Modifier) {
 
 
-}
-
-@Preview(showSystemUi = true, showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Composable
-fun MainScreenPreviewLight(){
-    MainScreen(navController = rememberNavController(), appViewModel = AppViewModel(), modifier = Modifier)
-}
-
-@Preview(showSystemUi = true, showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun MainScreenPreviewDark(){
-    MainScreen(navController = rememberNavController(), appViewModel = AppViewModel(), modifier = Modifier)
 }

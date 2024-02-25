@@ -13,15 +13,16 @@ import com.example.menditrack.screens.MainScreen
 fun MyAppNavigation(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    appViewModel: AppViewModel
-    ) {
+    appViewModel: AppViewModel,
+    LanguageChange: (String) -> Unit
+) {
         NavHost(
             modifier = modifier,
             navController = navController,
             startDestination = AppScreens.MainScreen.route
         ){
             composable(route = AppScreens.MainScreen.route){
-                MainScreen(navController, appViewModel, modifier)
+                MainScreen(navController, appViewModel, modifier, LanguageChange)
             }
         }
 }
