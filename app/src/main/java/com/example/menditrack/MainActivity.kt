@@ -18,6 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.menditrack.navigation.MyAppNavigation
 import com.example.menditrack.ui.theme.MendiTrackTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
@@ -34,6 +37,7 @@ class MainActivity : ComponentActivity() {
         const val CHANNEL_ID = "Menditrack_Channel"
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("Menditrack", "Init")
         super.onCreate(savedInstanceState)
@@ -45,7 +49,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
+                    NotificationPermission()
+                    MyAppNavigation(appViewModel = appViewModel)
                 }
             }
         }

@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MendiTrack</string>
+
     <string name="channel_name">Menditrack notifikazio kanala</string>
+    <string name="channel_desc">Kanal honek aplikazioaren notifikazioak bota ditu</string>
+
+    <string name="goBack">Atzera</string>
+    <string name="info">Informazioa</string>
+    <string name="settings">Ezarpenak</string>
+    <string name="menu">Menua</string>
+    <string name="public_routes">Ibilbide publikoak</string>
+    <string name="my_routes">Zure ibilbideak</string>
+    <string name="my_profile">Zure profila</string>
+    <string name="log_out">Saioa amaitu</string>
+
 </resources>
