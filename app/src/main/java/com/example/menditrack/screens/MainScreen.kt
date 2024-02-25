@@ -1,6 +1,7 @@
 package com.example.menditrack.screens
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
@@ -60,7 +61,7 @@ fun MainScreen(
     LanguageChange(language.code)
 
     Scaffold (
-        topBar = { TopBar(navController, appViewModel, modifier)},
+        topBar = { TopBar(navController, appViewModel, modifier, LocalContext.current)},
         bottomBar = { BottomBar(navController, appViewModel, modifier) },
         floatingActionButton = { FloatingButton(navController, appViewModel, modifier) }
     ) {
@@ -125,7 +126,7 @@ fun BottomBar(navController: NavController, appViewModel: AppViewModel, modifier
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(navController: NavController, appViewModel: AppViewModel, modifier: Modifier) {
+fun TopBar(navController: NavController, appViewModel: AppViewModel, modifier: Modifier, context: Context) {
     
     var showInfo by rememberSaveable { mutableStateOf(false) }
     var showSettings by rememberSaveable { mutableStateOf(false) }
@@ -141,7 +142,7 @@ fun TopBar(navController: NavController, appViewModel: AppViewModel, modifier: M
         ),
 
         navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { (context as? Activity)?.finish() }) {
                 Icon(
                     imageVector = Icons.Filled.KeyboardArrowLeft,
                     contentDescription = stringResource(id = R.string.go_back),
