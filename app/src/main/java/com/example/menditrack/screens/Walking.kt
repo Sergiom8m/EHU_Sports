@@ -8,11 +8,11 @@ import androidx.navigation.NavController
 import com.example.menditrack.AppViewModel
 
 @Composable
-fun Profile(
+fun Walking(
     innerPadding: PaddingValues,
     appViewModel: AppViewModel,
     navController: NavController,
     modifier: Modifier = Modifier
-){  
-    Text(text = "PROFILE")
+){
+    Text(text = "CAMINATA")
 }

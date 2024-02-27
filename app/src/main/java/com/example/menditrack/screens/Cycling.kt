@@ -8,11 +8,11 @@ import androidx.navigation.NavController
 import com.example.menditrack.AppViewModel
 
 @Composable
-fun Feed(
+fun Cycling(
     innerPadding: PaddingValues,
     appViewModel: AppViewModel,
     navController: NavController,
     modifier: Modifier = Modifier
 ){
-    Text(text = "FEED")
+    Text(text = "CICLISMO")
 }

@@ -8,11 +8,11 @@ import androidx.navigation.NavController
 import com.example.menditrack.AppViewModel
 
 @Composable
-fun Home(
+fun Running(
     innerPadding: PaddingValues,
     appViewModel: AppViewModel,
     navController: NavController,
     modifier: Modifier = Modifier
-) {
-    Text(text = "HOME")
+){
+    Text(text = "CARRERA")
 }
