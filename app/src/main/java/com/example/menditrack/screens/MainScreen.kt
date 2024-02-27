@@ -9,10 +9,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.List
@@ -37,37 +40,54 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
+import com.example.menditrack.data.Design
 import com.example.menditrack.data.Language
+import com.example.menditrack.navigation.AppScreens
 import java.util.Locale
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
-    navController: NavController,
     appViewModel: AppViewModel,
     modifier: Modifier,
-    LanguageChange: (String) -> Unit
+    languageChange: (String) -> Unit
 ){
 
     val language = appViewModel.actual_language
-    LanguageChange(language.code)
+    languageChange(language.code)
+
+    val navController = rememberNavController()
 
     Scaffold (
-        topBar = { TopBar(navController, appViewModel, modifier, LocalContext.current)},
+        topBar = { TopBar(appViewModel, modifier, LocalContext.current)},
         bottomBar = { BottomBar(navController, appViewModel, modifier) },
         floatingActionButton = { FloatingButton(navController, appViewModel, modifier) }
-    ) {
-        BodyContent(navController, appViewModel, modifier)
+    ) { innerPadding ->
+        NavHost(
+            modifier = Modifier.padding(innerPadding),
+            navController = navController,
+            startDestination = AppScreens.Home.route
+        ){
+            composable(AppScreens.Feed.route) { Feed(innerPadding, appViewModel, navController)}
+            composable(AppScreens.Home.route) { Home(innerPadding, appViewModel, navController)}
+            composable(AppScreens.Profile.route) {Profile(innerPadding, appViewModel, navController)}
+        }
     }
 }
+
 
 @Composable
 fun FloatingButton(navController: NavController, appViewModel: AppViewModel, modifier: Modifier) {
@@ -76,49 +96,33 @@ fun FloatingButton(navController: NavController, appViewModel: AppViewModel, mod
 
 @Composable
 fun BottomBar(navController: NavController, appViewModel: AppViewModel, modifier: Modifier) {
-    BottomAppBar(
-        modifier = modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(16.dp),
-        containerColor = MaterialTheme.colorScheme.primary
+    BottomNavigation(
+        backgroundColor = MaterialTheme.colorScheme.primary
     ) {
-        IconButton(
-            onClick = { /*TODO*/ },
-            modifier = Modifier.weight(1f)
-        ) {
-            Icon(
-                imageVector = Icons.Filled.List,
-                contentDescription = stringResource(id = R.string.public_routes),
-                tint = Color(0xFFFFFFFF)
-            )
-        }
-        IconButton(
-            onClick = { /*TODO*/ },
-            modifier = Modifier.weight(1f)
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Lock,
-                contentDescription = stringResource(id = R.string.my_routes),
-                tint = Color(0xFFFFFFFF)
-            )
-        }
-        IconButton(
-            onClick = { /*TODO*/ },
-            modifier = Modifier.weight(1f)
-        ) {
-            Icon(
-                imageVector = Icons.Filled.AccountCircle,
-                contentDescription = stringResource(id = R.string.my_profile),
-                tint = Color(0xFFFFFFFF)
-            )
-        }
-        IconButton(
-            onClick = { /*TODO*/ },
-            modifier = Modifier.weight(1f)
-        ) {
-            Icon(
-                imageVector = Icons.Filled.ExitToApp,
-                contentDescription = stringResource(id = R.string.log_out),
-                tint = Color(0xFFFFFFFF)
+        val items = listOf(
+            Design(AppScreens.Feed, "Feed", Icons.Filled.List),
+            Design(AppScreens.Home, "Home", Icons.Filled.Home),
+            Design(AppScreens.Profile, "Profile", Icons.Filled.AccountCircle)
+        )
+
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentDestination = navBackStackEntry?.destination
+
+        items.forEach { screen ->
+            BottomNavigationItem(
+                selectedContentColor = MaterialTheme.colorScheme.onPrimary,
+                icon = { Icon(screen.icon, contentDescription = null, tint = Color.White) },
+                label = { Text(screen.name, color = Color.White) },
+                selected = currentDestination?.hierarchy?.any { it.route == screen.screen.route } == true,
+                onClick = {
+                    navController.navigate(screen.screen.route) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
             )
         }
     }
@@ -126,7 +130,7 @@ fun BottomBar(navController: NavController, appViewModel: AppViewModel, modifier
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(navController: NavController, appViewModel: AppViewModel, modifier: Modifier, context: Context) {
+fun TopBar(appViewModel: AppViewModel, modifier: Modifier, context: Context) {
     
     var showInfo by rememberSaveable { mutableStateOf(false) }
     var showSettings by rememberSaveable { mutableStateOf(false) }

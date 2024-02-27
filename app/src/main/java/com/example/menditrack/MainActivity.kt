@@ -16,7 +16,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import com.example.menditrack.navigation.MyAppNavigation
+import com.example.menditrack.screens.MainScreen
 import com.example.menditrack.ui.theme.MendiTrackTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
@@ -46,9 +46,11 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     NotificationPermission()
-                    MyAppNavigation(appViewModel = appViewModel) { code: String ->
-                        LanguageChange(code)
-                    }
+                    MainScreen(
+                        appViewModel = appViewModel,
+                        modifier = Modifier,
+                        languageChange = { code: String -> LanguageChange(code)}
+                    )
                 }
             }
         }
