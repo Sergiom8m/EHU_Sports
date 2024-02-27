@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -30,16 +31,16 @@ fun AddActivity(
     navController: NavController,
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ){
-    var routeName by remember { mutableStateOf("") }
-    var routeDistance by remember { mutableStateOf("") }
-    var selectedSport by remember { mutableStateOf("") }
+    var routeName by rememberSaveable { mutableStateOf("") }
+    var routeDistance by rememberSaveable { mutableStateOf("") }
+    var selectedSport by rememberSaveable { mutableStateOf("") }
     val sports = listOf(
         stringResource(id = R.string.walking),
         stringResource(id = R.string.running),
         stringResource(id = R.string.cycling)
     )
     val focusManager = LocalFocusManager.current
-    val expanded = remember { mutableStateOf(false) }
+    val expanded = rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = modifier.padding(16.dp),

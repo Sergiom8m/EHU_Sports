@@ -16,7 +16,11 @@
     <string name="walking">Walking</string>
     <string name="add">Add</string>
     <string name="route_name">Route\'s name</string>
-    <string name="route_dist">Route\'s distance (in km)</string>
+    <string name="route_dist">Route\'s distance</string>
     <string name="select_sport">Choose a sport</string>
+    <string name="walk_routes">YOUR WALKING ROUTES</string>
+    <string name="run_routes">YOUR RUNNING ROUTES</string>
+    <string name="cyc_routes">YOUR CYCLING ROUTES</string>
+    <string name="your_stats">YOUR STATISTICS</string>
 
 </resources>

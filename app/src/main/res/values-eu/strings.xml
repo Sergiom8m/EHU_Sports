@@ -16,7 +16,11 @@
     <string name="walking">Ibilaldia</string>
     <string name="add">Gehitu</string>
     <string name="route_name">Ibilbidearen izena</string>
-    <string name="route_dist">Ibilbidearen luzeera (km-tan)</string>
+    <string name="route_dist">Ibilbidearen luzera</string>
     <string name="select_sport">Kirol bat aukeratu</string>
+    <string name="walk_routes">ZURE OINEZKO IBILBIDEAK</string>
+    <string name="run_routes">ZURE KORRIKA IBILBIDEAK</string>
+    <string name="cyc_routes">ZURE BIZIKLETA IBILBIDEAK</string>
+    <string name="your_stats">ZURE ESTATISTIKAK</string>
 
 </resources>
