@@ -52,7 +52,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.menditrack.AppViewModel
+import com.example.menditrack.InfoDialog
 import com.example.menditrack.R
+import com.example.menditrack.SettingsDialog
 import com.example.menditrack.data.Design
 import com.example.menditrack.data.Language
 import com.example.menditrack.navigation.AppScreens
@@ -177,59 +179,3 @@ fun TopBar(appViewModel: AppViewModel, modifier: Modifier, context: Context) {
     
 }
 
-@Composable
-fun SettingsDialog(showSettings: Boolean, appViewModel: AppViewModel, onConfirm: () -> Unit) {
-    if (showSettings) {
-        AlertDialog(
-            onDismissRequest = { /*TODO*/ },
-            confirmButton = { TextButton(onClick = { onConfirm() }) {
-                Text(text = stringResource(R.string.accept))
-            }},
-            title = { Text(text = stringResource(id = R.string.settings)) },
-            text = {
-                Column (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ){
-                    for (language in Language.entries){
-                        Button(
-                            onClick = {
-                                onConfirm()
-                                appViewModel.setLanguage(language)
-                            },
-                            Modifier.fillMaxWidth()
-                        ) {
-                            Text(text = language.type)
-                        }
-                    }
-                }
-            }
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun InfoDialog(showInfo: Boolean, onConfirm: () -> Unit) {
-    if (showInfo) {
-        AlertDialog(
-            onDismissRequest = { /*TODO*/ },
-            confirmButton = { TextButton(onClick = { onConfirm() }) {
-                Text(text = stringResource(R.string.accept))
-            }},
-            title = { Text(text = stringResource(id = R.string.app_name)) },
-            text = { Text(text = stringResource(id = R.string.app_desc)) }
-            
-        )
-    }
-}
-
-
-@Composable
-fun BodyContent(navController: NavController, appViewModel: AppViewModel, modifier: Modifier) {
-
-
-}
