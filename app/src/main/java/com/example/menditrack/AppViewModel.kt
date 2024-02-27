@@ -11,8 +11,20 @@ class AppViewModel: ViewModel() {
 
     var actual_language by mutableStateOf(Language.ES)
         private set
+
+    var showAddButton by mutableStateOf(true)
+        private set
+
+    var enableNavigationButtons by mutableStateOf(true)
+
+
     fun setLanguage(language: Language) {
         actual_language = language
     }
+
+    fun setAddButtonVisibility(visible: Boolean){
+        showAddButton = visible
+    }
+
 
 }

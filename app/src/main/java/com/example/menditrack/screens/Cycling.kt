@@ -9,7 +9,6 @@ import com.example.menditrack.AppViewModel
 
 @Composable
 fun Cycling(
-    innerPadding: PaddingValues,
     appViewModel: AppViewModel,
     navController: NavController,
     modifier: Modifier = Modifier

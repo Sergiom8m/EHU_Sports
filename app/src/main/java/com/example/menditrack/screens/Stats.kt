@@ -10,7 +10,6 @@ import com.example.menditrack.navigation.AppScreens
 
 @Composable
 fun Stats(
-    innerPadding: PaddingValues,
     appViewModel: AppViewModel,
     navController: NavController,
     modifier: Modifier = Modifier

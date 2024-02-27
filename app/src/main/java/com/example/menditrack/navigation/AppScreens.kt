@@ -5,4 +5,6 @@ sealed class AppScreens(val route: String) {
     object Running: AppScreens("running")
     object Cycling: AppScreens("cycling")
     object Stats: AppScreens("stats")
+
+    object Add: AppScreens("add")
 }
