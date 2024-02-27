@@ -15,5 +15,8 @@
     <string name="running">Carrera</string>
     <string name="walking">Caminata</string>
     <string name="add">Añadir</string>
+    <string name="route_name">Nombre de la ruta</string>
+    <string name="route_dist">Distancia de la ruta (en km)</string>
+    <string name="select_sport">"Seleccione un deporte "</string>
 
 </resources>

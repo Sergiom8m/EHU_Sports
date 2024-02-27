@@ -21,10 +21,7 @@ fun SettingsDialog(showSettings: Boolean, appViewModel: AppViewModel, onConfirm:
     if (showSettings) {
         AlertDialog(
             onDismissRequest = { /*TODO*/ },
-            confirmButton = { TextButton(onClick = { onConfirm() }) {
-                Text(text = stringResource(R.string.accept))
-            }
-            },
+            confirmButton = { /*TODO*/ },
             title = { Text(text = stringResource(id = R.string.settings)) },
             text = {
                 Column (
@@ -38,7 +35,7 @@ fun SettingsDialog(showSettings: Boolean, appViewModel: AppViewModel, onConfirm:
                         Button(
                             onClick = {
                                 onConfirm()
-                                appViewModel.setLanguage(language)
+                                appViewModel.actual_language = language
                             },
                             Modifier.fillMaxWidth()
                         ) {

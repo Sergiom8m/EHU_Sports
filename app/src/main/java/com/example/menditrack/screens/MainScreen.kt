@@ -96,7 +96,7 @@ fun Button(navController: NavController, appViewModel: AppViewModel, modifier: M
     FloatingActionButton(
         onClick = {
             navController.navigate(AppScreens.Add.route)
-            appViewModel.setAddButtonVisibility(false)
+            appViewModel.showAddButton = false
           },
         containerColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.secondary,

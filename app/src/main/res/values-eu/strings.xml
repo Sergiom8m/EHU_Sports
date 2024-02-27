@@ -15,5 +15,8 @@
     <string name="running">Korrika</string>
     <string name="walking">Ibilaldia</string>
     <string name="add">Gehitu</string>
+    <string name="route_name">Ibilbidearen izena</string>
+    <string name="route_dist">Ibilbidearen luzeera (km-tan)</string>
+    <string name="select_sport">Kirol bat aukeratu</string>
 
 </resources>
