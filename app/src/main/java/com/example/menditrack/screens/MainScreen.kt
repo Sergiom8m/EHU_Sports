@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -13,8 +14,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -29,11 +28,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
@@ -118,10 +119,10 @@ fun BottomBar(navController: NavController, appViewModel: AppViewModel, modifier
         backgroundColor = MaterialTheme.colorScheme.primary
     ) {
         val items = listOf(
-            Design(AppScreens.Walking, stringResource(id = R.string.walking ), Icons.Filled.Place),
-            Design(AppScreens.Running, stringResource(id = R.string.running), Icons.Filled.Place),
-            Design(AppScreens.Cycling, stringResource(id = R.string.cycling), Icons.Filled.Place),
-            Design(AppScreens.Stats, stringResource(id = R.string.stats), Icons.Filled.Place)
+            Design(AppScreens.Walking, painterResource(id = R.drawable.walk)),
+            Design(AppScreens.Running, painterResource(id = R.drawable.run)),
+            Design(AppScreens.Cycling, painterResource(id = R.drawable.bicycle)),
+            Design(AppScreens.Stats, painterResource(id = R.drawable.stats))
         )
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -130,14 +131,17 @@ fun BottomBar(navController: NavController, appViewModel: AppViewModel, modifier
         items.forEach { screen ->
             BottomNavigationItem(
                 selectedContentColor = MaterialTheme.colorScheme.onPrimary,
-                icon = { Icon(screen.icon, contentDescription = null, tint = Color.White) },
-                label = {
-                    Text(
-                        screen.name,
-                        color = Color.White,
-                        overflow = TextOverflow.Visible
+                icon = {
+                    Icon(screen.icon,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier
+                            .size(29.dp)
+                            .padding(1.dp)
                     )
+
                 },
+                label = {},
                 selected = currentDestination?.hierarchy?.any { it.route == screen.screen.route } == true,
                 onClick = {
                     if (enableButtons) {

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -45,5 +46,19 @@ fun Stats(
                 lineHeight = 24.sp
             )
         }
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // Aquí puedes agregar tus estadísticas, como el total de actividades, la distancia total recorrida, etc.
+            Text(text = "Total Walking Activities: ${appViewModel.walk_activities.size}")
+            Text(text = "Total Running Activities: ${appViewModel.run_activities.size}")
+            Text(text = "Total Cycling Activities: ${appViewModel.cyc_activities.size}")
+
+            // También puedes agregar gráficos u otros elementos visuales para representar las estadísticas.
+        }
+
     }
 }
