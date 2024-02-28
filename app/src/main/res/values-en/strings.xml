@@ -34,6 +34,7 @@
     <string name="grade">Grade</string>
     <string name="difficulty">Difficulty</string>
     <string name="distance">Distance</string>
+    <string name="download">Download</string>
 
 
 </resources>

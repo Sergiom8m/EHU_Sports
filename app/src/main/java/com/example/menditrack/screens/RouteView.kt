@@ -1,11 +1,13 @@
 package com.example.menditrack.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -29,8 +31,16 @@ import com.example.menditrack.AppViewModel
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.graphics.vector.VectorProperty
+import androidx.compose.ui.res.painterResource
 import com.example.menditrack.R
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun RouteView(
     appViewModel: AppViewModel,
@@ -43,67 +53,78 @@ fun RouteView(
     val activityGrade = appViewModel.activityToShow.value?.grade
     val activityDifficulty = appViewModel.activityToShow.value?.difficulty
 
-    Column(
-        modifier = modifier.padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
+    Scaffold (
+        modifier = Modifier.fillMaxSize(),
+        floatingActionButton = { DownloadButton()},
+        floatingActionButtonPosition = FabPosition.Center
+    ){
 
-        Box(
-            modifier = Modifier
-                .background(
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .padding(7.dp)
-                .fillMaxWidth()
+        Column(
+            modifier = modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Row (
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                IconButton(
-                    onClick = { navController.navigateUp()
-                    }
-                ) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
-                }
-                Spacer(modifier = Modifier.width(8.dp))
 
-                if (activityName != null) {
-                    Text(
-                        text = activityName,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontWeight = FontWeight.Bold
+            Box(
+                modifier = Modifier
+                    .background(
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = RoundedCornerShape(8.dp)
                     )
+                    .padding(7.dp)
+                    .fillMaxWidth()
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(
+                        onClick = { navController.navigateUp() }
+                    ) {
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.secondary
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    if (activityName != null) {
+                        Text(
+                            text = activityName,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
-
             }
-        }
-        Divider()
 
-        Text(
-            text = "${stringResource(id = R.string.distance)}: $activityDist km",
-            color = MaterialTheme.colorScheme.tertiary,
-            fontSize = 14.sp,
-            modifier = Modifier.padding(start = 16.dp)
-        )
-        Text(
-            text = "${stringResource(id = R.string.start_point)}: $activityInitPoint",
-            color = MaterialTheme.colorScheme.tertiary,
-            fontSize = 14.sp,
-            modifier = Modifier.padding(start = 16.dp)
-        )
-        Text(
-            text = "${stringResource(id = R.string.grade)}: $activityGrade",
-            color = MaterialTheme.colorScheme.tertiary,
-            fontSize = 14.sp,
-            modifier = Modifier.padding(start = 16.dp)
-        )
-        Text(
-            text = "${stringResource(id = R.string.difficulty)}: $activityDifficulty",
-            color = MaterialTheme.colorScheme.tertiary,
-            fontSize = 14.sp,
-            modifier = Modifier.padding(start = 16.dp)
-        )
+
+            Divider()
+
+            Text(
+                text = "${stringResource(id = R.string.distance)}: $activityDist km",
+                color = MaterialTheme.colorScheme.tertiary,
+                fontSize = 14.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+            Text(
+                text = "${stringResource(id = R.string.start_point)}: $activityInitPoint",
+                color = MaterialTheme.colorScheme.tertiary,
+                fontSize = 14.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+            Text(
+                text = "${stringResource(id = R.string.grade)}: $activityGrade",
+                color = MaterialTheme.colorScheme.tertiary,
+                fontSize = 14.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+            Text(
+                text = "${stringResource(id = R.string.difficulty)}: $activityDifficulty",
+                color = MaterialTheme.colorScheme.tertiary,
+                fontSize = 14.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
 
     }
 
@@ -119,4 +140,25 @@ fun RouteView(
     }
 
 }
+
+@Composable
+fun DownloadButton() {
+    ExtendedFloatingActionButton(
+        onClick = { /*TODO*/ },
+        icon = {
+            Icon(
+                painterResource(id = R.drawable.download),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.secondary
+            )
+       },
+        text = {
+            Text(
+                text = stringResource(id = R.string.download),
+                color = MaterialTheme.colorScheme.secondary
+            )
+        }
+    )
+}
+
 

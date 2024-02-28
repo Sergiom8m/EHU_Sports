@@ -34,6 +34,7 @@
     <string name="grade">Desnivel</string>
     <string name="difficulty">Dificultad</string>
     <string name="distance">Distancia</string>
+    <string name="download">Descargar</string>
 
 
 </resources>
