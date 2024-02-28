@@ -33,6 +33,7 @@ import com.example.menditrack.R
 import com.example.menditrack.data.SportActivity
 import androidx.compose.material3.Button
 import androidx.compose.runtime.saveable.rememberSaveable
+import com.example.menditrack.navigation.AppScreens
 
 @Composable
 fun Running(
@@ -69,7 +70,8 @@ fun Running(
                         .fillMaxWidth()
                         .padding(8.dp)
                         .clickable {
-                            navController.navigateUp()
+                            navController.navigate(AppScreens.RouteView.route)
+                            appViewModel.activityToShow = mutableStateOf(activity)
                         }
                 ) {
                     Column(

@@ -15,6 +15,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
+import com.example.menditrack.navigation.AppScreens
 
 @Composable
 fun Cycling(
@@ -62,7 +64,8 @@ fun Cycling(
                         .fillMaxWidth()
                         .padding(8.dp)
                         .clickable{
-                            navController.navigateUp()
+                            navController.navigate(AppScreens.RouteView.route)
+                            appViewModel.activityToShow = mutableStateOf(activity)
                         }
                 ) {
                     Column(
