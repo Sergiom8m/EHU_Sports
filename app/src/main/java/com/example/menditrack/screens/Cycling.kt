@@ -5,7 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,6 +29,11 @@ import androidx.navigation.NavController
 import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
 import com.example.menditrack.navigation.AppScreens
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 
 @Composable
 fun Cycling(
@@ -63,24 +69,57 @@ fun Cycling(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .clickable{
+                        .clickable {
                             navController.navigate(AppScreens.RouteView.route)
                             appViewModel.activityToShow = mutableStateOf(activity)
                         }
                 ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(
-                            text = activity.name,
-                            style = MaterialTheme.typography.bodySmall,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = "${stringResource(id = R.string.route_dist)}: ${activity.distance.toString()} km",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Color.Gray
-                        )
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = activity.name,
+                                style = MaterialTheme.typography.bodySmall,
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 1,
+                            )
+                            Text(
+                                text = "${stringResource(id = R.string.route_dist)}: ${activity.distance.toString()} km",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color.Gray
+                            )
+                        }
+                        Spacer(modifier = Modifier.padding(5.dp))
+                        Row(
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            IconButton(
+                                onClick = { }
+                            ) {
+                                Icon(
+                                    painterResource(id = R.drawable.edit),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primaryContainer
+                                )
+                            }
+                            Spacer(modifier = Modifier.padding(5.dp))
+                            IconButton(
+                                onClick = {  }
+                            ) {
+                                Icon(
+                                    painterResource(id = R.drawable.delete),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primaryContainer
+                                )
+                            }
+                        }
+
                     }
                 }
             }
