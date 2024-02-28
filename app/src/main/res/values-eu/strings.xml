@@ -32,5 +32,7 @@
     <string name="select_diff">Zailtasun bat aukeratu</string>
     <string name="start_point">Hasiera puntua</string>
     <string name="grade">Desnibela</string>
+    <string name="difficulty">Zailtasuna</string>
+    <string name="distance">Distantzia</string>
 
 </resources>

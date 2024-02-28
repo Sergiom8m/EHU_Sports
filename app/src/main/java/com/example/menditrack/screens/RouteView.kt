@@ -27,7 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.menditrack.AppViewModel
 import androidx.compose.material3.IconButton
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import com.example.menditrack.R
 
 @Composable
 fun RouteView(
@@ -79,25 +81,25 @@ fun RouteView(
         Divider()
 
         Text(
-            text = "Distance: $activityDist km",
+            text = "${stringResource(id = R.string.distance)}: $activityDist km",
             color = MaterialTheme.colorScheme.tertiary,
             fontSize = 14.sp,
             modifier = Modifier.padding(start = 16.dp)
         )
         Text(
-            text = "Initial Point: $activityInitPoint",
+            text = "${stringResource(id = R.string.start_point)}: $activityInitPoint",
             color = MaterialTheme.colorScheme.tertiary,
             fontSize = 14.sp,
             modifier = Modifier.padding(start = 16.dp)
         )
         Text(
-            text = "Grade: $activityGrade",
+            text = "${stringResource(id = R.string.grade)}: $activityGrade",
             color = MaterialTheme.colorScheme.tertiary,
             fontSize = 14.sp,
             modifier = Modifier.padding(start = 16.dp)
         )
         Text(
-            text = "Difficulty: $activityDifficulty",
+            text = "${stringResource(id = R.string.difficulty)}: $activityDifficulty",
             color = MaterialTheme.colorScheme.tertiary,
             fontSize = 14.sp,
             modifier = Modifier.padding(start = 16.dp)

@@ -32,6 +32,8 @@
     <string name="select_diff">Seleccione una dificultad</string>
     <string name="start_point">Punto de inicio</string>
     <string name="grade">Desnivel</string>
+    <string name="difficulty">Dificultad</string>
+    <string name="distance">Distancia</string>
 
 
 </resources>

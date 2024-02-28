@@ -32,6 +32,8 @@
     <string name="select_diff">Choose a difficulty</string>
     <string name="start_point">Starting point</string>
     <string name="grade">Grade</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="distance">Distance</string>
 
 
 </resources>
