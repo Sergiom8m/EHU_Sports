@@ -5,6 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -32,7 +34,11 @@ import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
 import com.example.menditrack.data.SportActivity
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.res.painterResource
 import com.example.menditrack.navigation.AppScreens
 
 @Composable
@@ -41,6 +47,13 @@ fun Running(
     navController: NavController,
     modifier: Modifier = Modifier
 ){
+
+    val change by appViewModel.change.collectAsState()
+
+    if (change) {
+        appViewModel.changeComplete()
+    }
+
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
@@ -74,23 +87,55 @@ fun Running(
                             appViewModel.activityToShow = mutableStateOf(activity)
                         }
                 ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(
-                            text = activity.name,
-                            style = MaterialTheme.typography.bodySmall,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = "${stringResource(id = R.string.route_dist)}: ${activity.distance.toString()} km",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Color.Gray
-                        )
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = activity.name,
+                                style = MaterialTheme.typography.bodySmall,
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 1,
+                            )
+                            Text(
+                                text = "${stringResource(id = R.string.route_dist)}: ${activity.distance.toString()} km",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color.Gray
+                            )
+                        }
+                        Spacer(modifier = Modifier.padding(5.dp))
+                        Row(
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            IconButton(
+                                onClick = {  }
+                            ) {
+                                Icon(
+                                    painterResource(id = R.drawable.edit),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primaryContainer
+                                )
+                            }
+                            Spacer(modifier = Modifier.padding(5.dp))
+                            IconButton(
+                                onClick = { appViewModel.deleteActivity(activity, "Running") }
+                            ) {
+                                Icon(
+                                    painterResource(id = R.drawable.delete),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primaryContainer
+                                )
+                            }
+                        }
+
                     }
                 }
             }
         }
-
     }
 }

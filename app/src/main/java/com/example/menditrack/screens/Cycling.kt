@@ -29,11 +29,11 @@ import androidx.navigation.NavController
 import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
 import com.example.menditrack.navigation.AppScreens
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextOverflow
 
 @Composable
 fun Cycling(
@@ -41,6 +41,13 @@ fun Cycling(
     navController: NavController,
     modifier: Modifier = Modifier
 ){
+
+    val change by appViewModel.change.collectAsState()
+
+    if (change) {
+        appViewModel.changeComplete()
+    }
+
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
@@ -100,7 +107,7 @@ fun Cycling(
                             horizontalArrangement = Arrangement.End
                         ) {
                             IconButton(
-                                onClick = { }
+                                onClick = {  }
                             ) {
                                 Icon(
                                     painterResource(id = R.drawable.edit),
@@ -110,7 +117,7 @@ fun Cycling(
                             }
                             Spacer(modifier = Modifier.padding(5.dp))
                             IconButton(
-                                onClick = {  }
+                                onClick = { appViewModel.deleteActivity(activity, "Cycling") }
                             ) {
                                 Icon(
                                     painterResource(id = R.drawable.delete),

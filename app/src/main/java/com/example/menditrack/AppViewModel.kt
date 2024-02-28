@@ -10,10 +10,16 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModel
 import com.example.menditrack.data.Language
 import com.example.menditrack.data.SportActivity
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 
 class AppViewModel: ViewModel() {
 
+
+    private val _change = MutableStateFlow(false)
+    val change: StateFlow<Boolean>
+        get() = _change
 
     var actual_language by mutableStateOf(Language.ES)
     var showAddButton by mutableStateOf(true)
@@ -86,5 +92,24 @@ class AppViewModel: ViewModel() {
             .build()
 
         notificationManager.notify(1, notification)
+    }
+
+    fun deleteActivity(activity: SportActivity, type: String) {
+        when (type) {
+            "Walking" -> walk_activities.remove(activity)
+            "Running" -> run_activities.remove(activity)
+            "Cycling" -> cyc_activities.remove(activity)
+        }
+        this.triggerchange()
+
+    }
+
+    private fun triggerchange() {
+        _change.value = true
+    }
+
+    // Esta función se llama cuando se ha completado la actualización
+    fun changeComplete() {
+        _change.value = false
     }
 }
