@@ -3,12 +3,18 @@ package com.example.menditrack.screens
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.res.Configuration
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.magnifier
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.NavigationRail
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Build
@@ -19,6 +25,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -28,9 +35,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -66,33 +75,139 @@ fun MainScreen(
     val showAddButton = appViewModel.showAddButton
     val showSettingButton = appViewModel.showSettingButton
     val enableButtons = appViewModel.enableNavigationButtons
+    var context = LocalContext.current
 
-    Scaffold (
-        topBar = {
-            if (showSettingButton) {
-                TopBar(navController, appViewModel, modifier, LocalContext.current)
+    val configuration = LocalConfiguration.current
+    val isVertical = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+
+    if (isVertical) {
+
+        Scaffold(
+            topBar = {
+                if (showSettingButton) {
+                    TopBar(navController, appViewModel, modifier, context)
+                }
+            },
+            bottomBar = {
+                if (showSettingButton) {
+                    BottomBar(navController, appViewModel, modifier, enableButtons)
+                }
+            },
+            floatingActionButton = {
+
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                if (navBackStackEntry?.destination?.route != AppScreens.Stats.route && showAddButton) {
+                    Button(navController, appViewModel, modifier)
+                }
             }
-         },
-        bottomBar = { BottomBar(navController, appViewModel, modifier, enableButtons) },
-        floatingActionButton = {
-
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            if (navBackStackEntry?.destination?.route != AppScreens.Stats.route && showAddButton) {
-                Button(navController, appViewModel, modifier)
+        ) { innerPadding ->
+            NavHost(
+                modifier = Modifier.padding(innerPadding),
+                navController = navController,
+                startDestination = AppScreens.Stats.route
+            ) {
+                composable(AppScreens.Walking.route) { Walking(appViewModel, navController) }
+                composable(AppScreens.Running.route) { Running(appViewModel, navController) }
+                composable(AppScreens.Cycling.route) { Cycling(appViewModel, navController) }
+                composable(AppScreens.Stats.route) { Stats(appViewModel, navController) }
+                composable(AppScreens.Add.route) { AddActivity(appViewModel, navController) }
+                composable(AppScreens.RouteView.route) { RouteView(appViewModel, navController) }
             }
         }
-    ) { innerPadding ->
-        NavHost(
-            modifier = Modifier.padding(innerPadding),
-            navController = navController,
-            startDestination = AppScreens.Stats.route
+    }
+    else {
+        Scaffold(
+            floatingActionButton = {
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                if (navBackStackEntry?.destination?.route != AppScreens.Stats.route && showAddButton) {
+                    Button(navController, appViewModel, modifier)
+                }
+            }
         ){
-            composable(AppScreens.Walking.route) { Walking(appViewModel, navController) }
-            composable(AppScreens.Running.route) { Running(appViewModel, navController) }
-            composable(AppScreens.Cycling.route) {Cycling(appViewModel, navController)}
-            composable(AppScreens.Stats.route) { Stats(appViewModel, navController) }
-            composable(AppScreens.Add.route)  {AddActivity(appViewModel, navController) }
-            composable(AppScreens.RouteView.route) { RouteView(appViewModel, navController)}
+            Row {
+                NavigationRail(
+                    backgroundColor = MaterialTheme.colorScheme.primary,
+                    elevation = 2.dp,
+                    modifier = modifier
+                        .fillMaxHeight()
+                        .align(Alignment.Top)
+                ) {
+                    NavigationRailItem(
+                        selected = false,
+                        onClick = { navController.navigate(AppScreens.Walking.route) },
+                        icon = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.walk),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.secondary,
+                            )
+                        },
+                    )
+                    NavigationRailItem(
+                        selected = false,
+                        onClick = { navController.navigate(AppScreens.Running.route) },
+                        icon = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.run),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.secondary
+                            )
+                        }
+                    )
+                    NavigationRailItem(
+                        selected = false,
+                        onClick = { navController.navigate(AppScreens.Cycling.route) },
+                        icon = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.bicycle),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.secondary
+                            )
+                        }
+                    )
+                    NavigationRailItem(
+                        selected = false,
+                        onClick = { navController.navigate(AppScreens.Cycling.route) },
+                        icon = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.stats),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.secondary
+                            )
+                        }
+                    )
+
+                    NavigationRailItem(
+                        selected = false,
+                        onClick = { (context as? Activity)?.finish() },
+                        icon = {
+                            Icon(
+                                Icons.Filled.ExitToApp,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.secondary
+                            )
+                        },
+                    )
+
+                }
+
+                NavHost(
+                    navController = navController,
+                    startDestination = AppScreens.Stats.route
+                ) {
+                    composable(AppScreens.Walking.route) { Walking(appViewModel, navController) }
+                    composable(AppScreens.Running.route) { Running(appViewModel, navController) }
+                    composable(AppScreens.Cycling.route) { Cycling(appViewModel, navController) }
+                    composable(AppScreens.Stats.route) { Stats(appViewModel, navController) }
+                    composable(AppScreens.Add.route) { AddActivity(appViewModel, navController) }
+                    composable(AppScreens.RouteView.route) {
+                        RouteView(
+                            appViewModel,
+                            navController
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -117,7 +232,7 @@ fun Button(navController: NavController, appViewModel: AppViewModel, modifier: M
 @Composable
 fun BottomBar(navController: NavController, appViewModel: AppViewModel, modifier: Modifier, enableButtons: Boolean) {
     BottomNavigation(
-        backgroundColor = MaterialTheme.colorScheme.primary
+        backgroundColor = MaterialTheme.colorScheme.primary,
     ) {
         val items = listOf(
             Design(AppScreens.Walking, painterResource(id = R.drawable.walk)),
@@ -136,13 +251,9 @@ fun BottomBar(navController: NavController, appViewModel: AppViewModel, modifier
                     Icon(screen.icon,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier
-                            .size(29.dp)
-                            .padding(1.dp)
                     )
 
                 },
-                label = {},
                 selected = currentDestination?.hierarchy?.any { it.route == screen.screen.route } == true,
                 onClick = {
                     if (enableButtons) {
@@ -155,7 +266,8 @@ fun BottomBar(navController: NavController, appViewModel: AppViewModel, modifier
                         }
                     }
                 },
-                enabled = enableButtons
+                enabled = enableButtons,
+
             )
         }
     }
