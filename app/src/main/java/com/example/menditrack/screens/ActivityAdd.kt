@@ -3,7 +3,6 @@ package com.example.menditrack.screens
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -51,6 +50,9 @@ fun AddActivity(
     val expanded = rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
     val errorMessage = stringResource(id = R.string.wrong_data)
+    var title = stringResource(id = R.string.notif_title)
+    var content = stringResource(id = R.string.notif_body, selectedSport, routeName)
+
 
     Column(
         modifier = modifier.padding(16.dp),
@@ -148,6 +150,11 @@ fun AddActivity(
                     appViewModel.add_activity(routeName, routeDistance.toDouble(), selectedSport)
                     appViewModel.showAddButton = true
                     navController.navigateUp()
+                    appViewModel.sendAddNotification(
+                        context,
+                        title,
+                        content
+                    )
                 } else {
                     Toast.makeText(
                         context,

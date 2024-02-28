@@ -24,5 +24,8 @@
     <string name="your_stats">YOUR STATISTICS</string>
     <string name="wrong_data">The data does not satisfy the requirements</string>
     <string name="add_route">ADD ROUTE</string>
+    <string name="notif_title">Route saved!</string>
+    <string name="notif_body">Route saved for %1$s with the name: %2$s</string>
+
 
 </resources>

@@ -24,5 +24,8 @@
     <string name="your_stats">TUS ESTADÍSTICAS</string>
     <string name="wrong_data">Los datos no cumplen con los requesitos</string>
     <string name="add_route">AÑADIR RUTA</string>
+    <string name="notif_title">Ruta guardada!</string>
+    <string name="notif_body">Se ha guardado la ruta para %1$s con el nombre: %2$s</string>
+
 
 </resources>

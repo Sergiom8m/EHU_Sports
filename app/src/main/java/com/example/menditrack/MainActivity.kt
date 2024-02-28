@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("Menditrack", "Init")
+        createNotificationChannel()
         super.onCreate(savedInstanceState)
 
         setContent {
@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
         Log.d("Menditrack", "Language changed")
     }
 
-    private fun CreateNotificationChannel() {
+    private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is not in the Support Library.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
