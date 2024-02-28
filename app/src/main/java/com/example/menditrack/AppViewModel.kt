@@ -2,12 +2,10 @@ package com.example.menditrack
 
 import android.app.NotificationManager
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.stringResource
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModel
 import com.example.menditrack.data.Language
@@ -19,7 +17,7 @@ class AppViewModel: ViewModel() {
 
     var actual_language by mutableStateOf(Language.ES)
     var showAddButton by mutableStateOf(true)
-    var showSettingButton by  mutableStateOf(true)
+    var showNavBars by  mutableStateOf(true)
     var enableNavigationButtons by mutableStateOf(true)
 
     var walk_activities: MutableList<SportActivity> = mutableListOf()
@@ -30,38 +28,38 @@ class AppViewModel: ViewModel() {
 
     init {
         // Actividades de prueba para caminar
-        add_activity("Morning Walk", 2.5, "Walking")
-        add_activity("Evening Stroll", 1.8, "Walking")
-        add_activity("Morning Walk", 2.5, "Walking")
-        add_activity("Evening Stroll", 1.8, "Walking")
+        add_activity("Morning Walk", 2.5, "Bilbao", 3.5, "Easy", "Walking")
+        add_activity("Evening Stroll", 1.8, "Madrid", 2.8, "Moderate", "Walking")
+        add_activity("Morning Walk", 2.5, "Barcelona", 3.2, "Easy", "Walking")
+        add_activity("Evening Stroll", 1.8, "Valencia", 2.5, "Moderate", "Walking")
 
         // Actividades de prueba para correr
-        add_activity("Afternoon Run", 5.0, "Running")
-        add_activity("Weekend Jog", 3.2, "Running")
-        add_activity("Weekend Jog", 3.2, "Running")
+        add_activity("Afternoon Run", 5.0, "Sevilla", 4.0, "Hard", "Running")
+        add_activity("Weekend Jog", 3.2, "Granada", 3.7, "Moderate", "Running")
+        add_activity("Weekend Jog", 3.2, "Málaga", 3.7, "Moderate", "Running")
 
         // Actividades de prueba para ciclismo
-        add_activity("Bike Ride to Work", 8.7, "Cycling")
-        add_activity("Mountain Biking Trail", 12.4, "Cycling")
-        add_activity("Mountain Biking Trail", 12.4, "Cycling")
-        add_activity("Mountain Biking Trail", 12.4, "Cycling")
-        add_activity("Mountain Biking Trail", 12.4, "Cycling")
-        add_activity("Mountain Biking Trail", 12.4, "Cycling")
-
+        add_activity("Bike Ride to Work", 8.7, "Vitoria-Gasteiz", 5.0, "Hard", "Cycling")
+        add_activity("Mountain Biking Trail", 12.4, "San Sebastián", 6.5, "Hard", "Cycling")
+        add_activity("Mountain Biking Trail", 12.4, "Pamplona", 6.5, "Hard", "Cycling")
+        add_activity("Mountain Biking Trail", 12.4, "Bilbao", 6.5, "Hard", "Cycling")
+        add_activity("Mountain Biking Trail", 12.4, "Logroño", 6.5, "Hard", "Cycling")
+        add_activity("Mountain Biking Trail", 12.4, "Santander", 6.5, "Hard", "Cycling")
     }
 
-    fun add_activity(name: String, distance: Double, type: String){
+
+    fun add_activity(name: String, distance: Double, initPoint: String, grade: Double, difficulty: String, type: String){
         when (type) {
             "Caminata", "Ibilaldia", "Walking"  -> {
-                val activity = SportActivity(name, distance)
+                val activity = SportActivity(name, distance, initPoint, grade, difficulty)
                 walk_activities.add(activity)
             }
             "Carrera", "Korrika", "Running" -> {
-                val activity = SportActivity(name, distance)
+                val activity = SportActivity(name, distance, initPoint, grade, difficulty)
                 run_activities.add(activity)
             }
             "Ciclismo", "Bizikleta", "Cycling" -> {
-                val activity = SportActivity(name, distance)
+                val activity = SportActivity(name, distance, initPoint, grade, difficulty)
                 cyc_activities.add(activity)
             }
         }

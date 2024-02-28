@@ -26,6 +26,12 @@
     <string name="add_route">AÑADIR RUTA</string>
     <string name="notif_title">Ruta guardada!</string>
     <string name="notif_body">Se ha guardado la ruta para %1$s con el nombre: %2$s</string>
+    <string name="hard">Dificil</string>
+    <string name="moderate">Moderado</string>
+    <string name="easy">Facil</string>
+    <string name="select_diff">Seleccione una dificultad</string>
+    <string name="start_point">Punto de inicio</string>
+    <string name="grade">Desnivel</string>
 
 
 </resources>

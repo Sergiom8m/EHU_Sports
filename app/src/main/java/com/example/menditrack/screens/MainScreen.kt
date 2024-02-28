@@ -5,19 +5,15 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.magnifier
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.NavigationRail
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -56,7 +52,6 @@ import com.example.menditrack.InfoDialog
 import com.example.menditrack.R
 import com.example.menditrack.SettingsDialog
 import com.example.menditrack.data.Design
-import com.example.menditrack.data.SportActivity
 import com.example.menditrack.navigation.AppScreens
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -73,7 +68,7 @@ fun MainScreen(
     val navController = rememberNavController()
 
     val showAddButton = appViewModel.showAddButton
-    val showSettingButton = appViewModel.showSettingButton
+    val showSettingButton = appViewModel.showNavBars
     val enableButtons = appViewModel.enableNavigationButtons
     var context = LocalContext.current
 
@@ -141,7 +136,7 @@ fun MainScreen(
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.secondary,
                             )
-                        },
+                        }
                     )
                     NavigationRailItem(
                         selected = false,
@@ -176,7 +171,6 @@ fun MainScreen(
                             )
                         }
                     )
-
                     NavigationRailItem(
                         selected = false,
                         onClick = { (context as? Activity)?.finish() },
@@ -190,7 +184,6 @@ fun MainScreen(
                     )
 
                 }
-
                 NavHost(
                     navController = navController,
                     startDestination = AppScreens.Stats.route

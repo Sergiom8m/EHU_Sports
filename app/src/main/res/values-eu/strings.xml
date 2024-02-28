@@ -26,5 +26,11 @@
     <string name="add_route">IBILBIDEA GEHITU</string>
     <string name="notif_title">Ibildidea gordeta!</string>
     <string name="notif_body">Ibilbidea gordeta %1$s-rentzat izenarekin: %2$s</string>
+    <string name="hard">Zaila</string>
+    <string name="moderate">Ertaina</string>
+    <string name="easy">Erraza</string>
+    <string name="select_diff">Zailtasun bat aukeratu</string>
+    <string name="start_point">Hasiera puntua</string>
+    <string name="grade">Desnibela</string>
 
 </resources>
