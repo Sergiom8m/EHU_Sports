@@ -171,6 +171,8 @@ fun AddActivity(
 
     DisposableEffect(Unit) {
         appViewModel.enableNavigationButtons = false
+        appViewModel.showAddButton = false
+        appViewModel.showSettingButton = false
         onDispose {
             appViewModel.enableNavigationButtons = true
             appViewModel.showSettingButton = true

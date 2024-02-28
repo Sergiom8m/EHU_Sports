@@ -3,6 +3,7 @@ package com.example.menditrack
 import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,6 +16,7 @@ import com.example.menditrack.data.SportActivity
 
 class AppViewModel: ViewModel() {
 
+
     var actual_language by mutableStateOf(Language.ES)
     var showAddButton by mutableStateOf(true)
     var showSettingButton by  mutableStateOf(true)
@@ -23,6 +25,8 @@ class AppViewModel: ViewModel() {
     var walk_activities: MutableList<SportActivity> = mutableListOf()
     var run_activities: MutableList<SportActivity> = mutableListOf()
     var cyc_activities: MutableList<SportActivity> = mutableListOf()
+
+    var activityToShow: MutableState<SportActivity?> = mutableStateOf(null)
 
     init {
         // Actividades de prueba para caminar

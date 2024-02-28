@@ -28,7 +28,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -46,6 +45,7 @@ import com.example.menditrack.InfoDialog
 import com.example.menditrack.R
 import com.example.menditrack.SettingsDialog
 import com.example.menditrack.data.Design
+import com.example.menditrack.data.SportActivity
 import com.example.menditrack.navigation.AppScreens
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -90,6 +90,7 @@ fun MainScreen(
             composable(AppScreens.Cycling.route) {Cycling(appViewModel, navController)}
             composable(AppScreens.Stats.route) { Stats(appViewModel, navController) }
             composable(AppScreens.Add.route)  {AddActivity(appViewModel, navController) }
+            composable(AppScreens.RouteView.route) { RouteView(appViewModel, navController)}
         }
     }
 }
@@ -101,8 +102,6 @@ fun Button(navController: NavController, appViewModel: AppViewModel, modifier: M
     FloatingActionButton(
         onClick = {
             navController.navigate(AppScreens.Add.route)
-            appViewModel.showAddButton = false
-            appViewModel.showSettingButton = false
           },
         containerColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.secondary,
