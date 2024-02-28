@@ -61,10 +61,15 @@ fun MainScreen(
     val navController = rememberNavController()
 
     val showAddButton = appViewModel.showAddButton
+    val showSettingButton = appViewModel.showSettingButton
     val enableButtons = appViewModel.enableNavigationButtons
 
     Scaffold (
-        topBar = { TopBar(navController, appViewModel, modifier, LocalContext.current) },
+        topBar = {
+            if (showSettingButton) {
+                TopBar(navController, appViewModel, modifier, LocalContext.current)
+            }
+         },
         bottomBar = { BottomBar(navController, appViewModel, modifier, enableButtons) },
         floatingActionButton = {
 
@@ -72,7 +77,6 @@ fun MainScreen(
             if (navBackStackEntry?.destination?.route != AppScreens.Stats.route && showAddButton) {
                 Button(navController, appViewModel, modifier)
             }
-
         }
     ) { innerPadding ->
         NavHost(
@@ -97,6 +101,7 @@ fun Button(navController: NavController, appViewModel: AppViewModel, modifier: M
         onClick = {
             navController.navigate(AppScreens.Add.route)
             appViewModel.showAddButton = false
+            appViewModel.showSettingButton = false
           },
         containerColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.secondary,

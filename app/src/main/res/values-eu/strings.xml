@@ -22,5 +22,7 @@
     <string name="run_routes">ZURE KORRIKA IBILBIDEAK</string>
     <string name="cyc_routes">ZURE BIZIKLETA IBILBIDEAK</string>
     <string name="your_stats">ZURE ESTATISTIKAK</string>
+    <string name="wrong_data">Datuek ez dituzte baldintzak betetzen</string>
+    <string name="add_route">IBILBIDEA GEHITU</string>
 
 </resources>

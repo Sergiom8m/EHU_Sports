@@ -22,5 +22,7 @@
     <string name="run_routes">YOUR RUNNING ROUTES</string>
     <string name="cyc_routes">YOUR CYCLING ROUTES</string>
     <string name="your_stats">YOUR STATISTICS</string>
+    <string name="wrong_data">The data does not satisfy the requirements</string>
+    <string name="add_route">ADD ROUTE</string>
 
 </resources>

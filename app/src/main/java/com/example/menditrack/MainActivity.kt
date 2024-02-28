@@ -49,14 +49,14 @@ class MainActivity : ComponentActivity() {
                     MainScreen(
                         appViewModel = appViewModel,
                         modifier = Modifier,
-                        languageChange = { code: String -> LanguageChange(code)}
+                        languageChange = { code: String -> languageChange(code)}
                     )
                 }
             }
         }
     }
 
-    private fun LanguageChange(code: String){
+    private fun languageChange(code: String){
         resources.configuration.setLocale(Locale(code))
         resources.updateConfiguration(resources.configuration, resources.displayMetrics)
 
