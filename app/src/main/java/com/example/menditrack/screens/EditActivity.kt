@@ -255,7 +255,14 @@ fun EditActivity(
 
         Button(
             onClick = {
-                if (isValidInput(routeName, routeDistance, selectedSport)) {
+                if (isValidInput(
+                        routeName,
+                        routeDistance,
+                        startingPoint,
+                        grade,
+                        selectedDifficulty,
+                        selectedSport)
+                ) {
                     val updatedActivity = SportActivity(
                         routeName,
                         routeDistance.toDouble(),
@@ -294,9 +301,19 @@ fun EditActivity(
 }
 
 
-private fun isValidInput(name: String, distance: String, sport: String): Boolean {
+private fun isValidInput(
+    name: String,
+    distance: String,
+    point: String,
+    grade: String,
+    diff: String,
+    sport: String): Boolean
+{
     val validName = name.isNotBlank()
     val validDistance = distance.toDoubleOrNull() != null && distance.toDouble() > 0
+    val validPoint = point.isNotBlank()
+    val validGrade = grade.toDoubleOrNull() != null && grade.toDouble() > 0
+    val validDiff = diff.isNotBlank()
     val validSport = sport.isNotBlank()
-    return validName && validDistance && validSport
+    return validName && validDistance && validPoint && validGrade && validDiff && validSport
 }
