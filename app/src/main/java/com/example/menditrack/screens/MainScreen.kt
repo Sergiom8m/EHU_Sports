@@ -106,7 +106,8 @@ fun MainScreen(
                 composable(AppScreens.Cycling.route) { Cycling(appViewModel, navController) }
                 composable(AppScreens.Stats.route) { Stats(appViewModel, navController) }
                 composable(AppScreens.Add.route) { AddActivity(appViewModel, navController) }
-                composable(AppScreens.RouteView.route) { RouteView(appViewModel, navController) }
+                composable(AppScreens.ActivityView.route) { RouteView(appViewModel, navController) }
+                composable(AppScreens.Edit.route) { EditActivity(appViewModel, navController) }
             }
         }
     }
@@ -193,7 +194,7 @@ fun MainScreen(
                     composable(AppScreens.Cycling.route) { Cycling(appViewModel, navController) }
                     composable(AppScreens.Stats.route) { Stats(appViewModel, navController) }
                     composable(AppScreens.Add.route) { AddActivity(appViewModel, navController) }
-                    composable(AppScreens.RouteView.route) {
+                    composable(AppScreens.ActivityView.route) {
                         RouteView(
                             appViewModel,
                             navController

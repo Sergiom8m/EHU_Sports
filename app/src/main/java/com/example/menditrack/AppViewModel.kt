@@ -39,6 +39,7 @@ class AppViewModel: ViewModel() {
     var cyc_activities: MutableList<SportActivity> = mutableListOf()
 
     var activityToShow: MutableState<SportActivity?> = mutableStateOf(null)
+    var activityToEdit: MutableState<SportActivity?> = mutableStateOf(null)
 
     init {
         // Actividades de prueba para caminar
@@ -62,18 +63,25 @@ class AppViewModel: ViewModel() {
     }
 
 
-    fun add_activity(name: String, distance: Double, initPoint: String, grade: Double, difficulty: String, type: String){
+    fun add_activity(
+        name: String,
+        distance: Double,
+        initPoint: String,
+        grade: Double,
+        difficulty: String,
+        type: String
+    ){
         when (type) {
             "Caminata", "Ibilaldia", "Walking"  -> {
-                val activity = SportActivity(name, distance, initPoint, grade, difficulty)
+                val activity = SportActivity(name, distance, initPoint, grade, difficulty, "Walking")
                 walk_activities.add(activity)
             }
             "Carrera", "Korrika", "Running" -> {
-                val activity = SportActivity(name, distance, initPoint, grade, difficulty)
+                val activity = SportActivity(name, distance, initPoint, grade, difficulty, "Running")
                 run_activities.add(activity)
             }
             "Ciclismo", "Bizikleta", "Cycling" -> {
-                val activity = SportActivity(name, distance, initPoint, grade, difficulty)
+                val activity = SportActivity(name, distance, initPoint, grade, difficulty, "Cycling")
                 cyc_activities.add(activity)
             }
         }
@@ -121,24 +129,46 @@ class AppViewModel: ViewModel() {
         _change.value = false
     }
 
-    fun exportRouteToTXT(route: SportActivity) {
+    fun exportRouteToTXT(activity: SportActivity) {
         val estadoAlmacenamientoExterno = Environment.getExternalStorageState()
         if (estadoAlmacenamientoExterno == Environment.MEDIA_MOUNTED) {
             val directorioDescargas = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            val archivo = File(directorioDescargas, "${route.name}.txt")
+            val archivo = File(directorioDescargas, "${activity.name}.txt")
 
 
             FileWriter(archivo).use { writer ->
                 with(writer) {
-                    append("NAME: ${route.name}\n\n")
-                    append("DISTANCE: ${route.distance} km\n")
-                    append("INIT POINT: ${route.initPoint}\n")
-                    append("GRADE: ${route.grade} m\n")
-                    append("DIFFICULTY: ${route.difficulty}\n")
+                    append("NOMBRE: ${activity.name}\n\n")
+                    append("DISTANCIA: ${activity.distance} km\n")
+                    append("PUNTO DE INICIO: ${activity.initPoint}\n")
+                    append("DESNIVEL: ${activity.grade} m\n")
+                    append("DIFICULTAD: ${activity.difficulty}\n")
                 }
             }
             Log.d("Download","Download")
 
+        }
+    }
+
+    fun updateActivity(activityToEdit: SportActivity?, updatedActivity: SportActivity) {
+        if (activityToEdit != null) {
+
+            // Eliminar la actividad de la lista original
+            when (activityToEdit.type) {
+                "Caminata", "Ibilaldia", "Walking" -> walk_activities.remove(activityToEdit)
+                "Carrera", "Korrika", "Running" -> run_activities.remove(activityToEdit)
+                "Ciclismo", "Bizikleta", "Cycling" -> cyc_activities.remove(activityToEdit)
+            }
+
+            // Agregar la actividad actualizada a la nueva lista correspondiente
+            when (updatedActivity.type) {
+                "Caminata", "Ibilaldia", "Walking" -> walk_activities.add(updatedActivity)
+                "Carrera", "Korrika", "Running" -> run_activities.add(updatedActivity)
+                "Ciclismo", "Bizikleta", "Cycling" -> cyc_activities.add(updatedActivity)
+            }
+
+            // Una vez actualizada la actividad, se puede restablecer el valor del estado de cambio
+            changeComplete()
         }
     }
 

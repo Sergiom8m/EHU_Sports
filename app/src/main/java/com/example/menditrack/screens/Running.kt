@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
@@ -19,8 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,12 +29,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
-import com.example.menditrack.data.SportActivity
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.res.painterResource
 import com.example.menditrack.navigation.AppScreens
 
@@ -83,7 +77,7 @@ fun Running(
                         .fillMaxWidth()
                         .padding(8.dp)
                         .clickable {
-                            navController.navigate(AppScreens.RouteView.route)
+                            navController.navigate(AppScreens.ActivityView.route)
                             appViewModel.activityToShow = mutableStateOf(activity)
                         }
                 ) {
@@ -113,7 +107,10 @@ fun Running(
                             horizontalArrangement = Arrangement.End
                         ) {
                             IconButton(
-                                onClick = {  }
+                                onClick = {
+                                    navController.navigate(AppScreens.Edit.route)
+                                    appViewModel.activityToEdit = mutableStateOf(activity)
+                                }
                             ) {
                                 Icon(
                                     painterResource(id = R.drawable.edit),

@@ -35,6 +35,8 @@
     <string name="difficulty">Dificultad</string>
     <string name="distance">Distancia</string>
     <string name="download">Descargar</string>
+    <string name="modify">MODIFICAR RUTA</string>
+    <string name="savechange">Guardar cambios</string>
 
 
 </resources>

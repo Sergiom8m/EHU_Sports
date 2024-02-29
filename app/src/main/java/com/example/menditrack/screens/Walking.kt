@@ -78,7 +78,7 @@ fun Walking(
                         .fillMaxWidth()
                         .padding(8.dp)
                         .clickable {
-                            navController.navigate(AppScreens.RouteView.route)
+                            navController.navigate(AppScreens.ActivityView.route)
                             appViewModel.activityToShow = mutableStateOf(activity)
                         }
                 ) {
@@ -108,7 +108,10 @@ fun Walking(
                             horizontalArrangement = Arrangement.End
                         ) {
                             IconButton(
-                                onClick = {  }
+                                onClick = {
+                                    navController.navigate(AppScreens.Edit.route)
+                                    appViewModel.activityToEdit = mutableStateOf(activity)
+                                }
                             ) {
                                 Icon(
                                     painterResource(id = R.drawable.edit),

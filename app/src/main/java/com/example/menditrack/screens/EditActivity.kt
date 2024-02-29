@@ -4,19 +4,38 @@ import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ContentAlpha
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -30,29 +49,30 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
-import androidx.compose.material.DropdownMenuItem
-
+import androidx.compose.material3.Button
+import com.example.menditrack.data.SportActivity
 
 @Composable
-fun AddActivity(
+fun EditActivity(
     appViewModel: AppViewModel,
     navController: NavController,
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ){
+    val activityToEdit = appViewModel.activityToEdit.value
 
-    var routeName by rememberSaveable { mutableStateOf("") }
-    var routeDistance by rememberSaveable { mutableStateOf("") }
-    var startingPoint by rememberSaveable { mutableStateOf("") }
-    var grade by rememberSaveable { mutableStateOf("") }
+    var routeName by rememberSaveable { mutableStateOf(activityToEdit?.name ?: "") }
+    var routeDistance by rememberSaveable { mutableStateOf(activityToEdit?.distance?.toString() ?: "") }
+    var startingPoint by rememberSaveable { mutableStateOf(activityToEdit?.initPoint ?: "") }
+    var grade by rememberSaveable { mutableStateOf(activityToEdit?.grade?.toString() ?: "") }
+    var selectedSport by rememberSaveable { mutableStateOf(activityToEdit?.type ?: "") }
+    var selectedDifficulty by rememberSaveable { mutableStateOf(activityToEdit?.difficulty ?: "") }
 
-    var selectedSport by rememberSaveable { mutableStateOf("") }
     val sports = listOf(
         stringResource(id = R.string.walking),
         stringResource(id = R.string.running),
         stringResource(id = R.string.cycling)
     )
 
-    var selectedDifficulty by rememberSaveable { mutableStateOf("") }
     val difficulties = listOf(
         stringResource(id = R.string.easy),
         stringResource(id = R.string.moderate),
@@ -64,8 +84,6 @@ fun AddActivity(
     val expandedDiff= rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
     val errorMessage = stringResource(id = R.string.wrong_data)
-    var title = stringResource(id = R.string.notif_title)
-    var content = stringResource(id = R.string.notif_body, selectedSport, routeName)
 
 
     Column(
@@ -93,7 +111,7 @@ fun AddActivity(
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = stringResource(id = R.string.add_route),
+                    text = stringResource(id = R.string.modify),
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontWeight = FontWeight.Bold
                 )
@@ -159,7 +177,7 @@ fun AddActivity(
         OutlinedTextField(
             value = routeDistance,
             onValueChange = { routeDistance = it },
-            label = { Text(stringResource(id = R.string.route_dist))},
+            label = { Text(stringResource(id = R.string.route_dist)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done,
@@ -238,14 +256,17 @@ fun AddActivity(
         Button(
             onClick = {
                 if (isValidInput(routeName, routeDistance, selectedSport)) {
-                    appViewModel.add_activity(routeName, routeDistance.toDouble(), startingPoint, grade.toDouble(), selectedDifficulty,  selectedSport)
+                    val updatedActivity = SportActivity(
+                        routeName,
+                        routeDistance.toDouble(),
+                        startingPoint,
+                        grade.toDouble(),
+                        selectedDifficulty,
+                        selectedSport
+                    )
+                    appViewModel.updateActivity(activityToEdit, updatedActivity)
                     appViewModel.showAddButton = true
                     navController.navigateUp()
-                    appViewModel.sendAddNotification(
-                        context,
-                        title,
-                        content
-                    )
                 } else {
                     Toast.makeText(
                         context,
@@ -256,7 +277,7 @@ fun AddActivity(
             },
             modifier = Modifier.align(Alignment.End)
         ) {
-            Text(stringResource(id = R.string.add))
+            Text(stringResource(id = R.string.savechange))
         }
     }
 

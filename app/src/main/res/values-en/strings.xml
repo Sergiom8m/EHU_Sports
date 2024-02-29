@@ -35,6 +35,8 @@
     <string name="difficulty">Difficulty</string>
     <string name="distance">Distance</string>
     <string name="download">Download</string>
+    <string name="modify">MODIFY ROUTE</string>
+    <string name="savechange">Save changes</string>
 
 
 </resources>

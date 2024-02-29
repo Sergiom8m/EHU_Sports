@@ -35,5 +35,7 @@
     <string name="difficulty">Zailtasuna</string>
     <string name="distance">Distantzia</string>
     <string name="download">Deskargatu</string>
+    <string name="modify">IBILIDIDEA EDITATU</string>
+    <string name="savechange">Aldaketak gorde</string>
 
 </resources>

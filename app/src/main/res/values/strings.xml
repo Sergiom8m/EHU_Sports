@@ -16,7 +16,7 @@
     <string name="walking">Caminata</string>
     <string name="add">Añadir</string>
     <string name="route_name">Nombre de la ruta</string>
-    <string name="route_dist">Distancia de la ruta)</string>
+    <string name="route_dist">Distancia de la ruta</string>
     <string name="select_sport">Seleccione un deporte</string>
     <string name="walk_routes">TUS RUTAS DE CAMINATA</string>
     <string name="run_routes">TUS RUTAS DE CARRERA</string>
@@ -35,5 +35,7 @@
     <string name="difficulty">Dificultad</string>
     <string name="distance">Distancia</string>
     <string name="download">Descargar</string>
+    <string name="modify">MODIFICAR RUTA</string>
+    <string name="savechange">Guardar cambios</string>
 
 </resources>

@@ -1,7 +1,6 @@
 package com.example.menditrack.screens
 
 import android.annotation.SuppressLint
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,15 +31,10 @@ import com.example.menditrack.AppViewModel
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.ui.graphics.vector.VectorProperty
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.menditrack.R
 import com.example.menditrack.data.SportActivity
 
@@ -52,6 +46,7 @@ fun RouteView(
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ){
     val activityToShow = appViewModel.activityToShow.value
+
     val activityName = activityToShow?.name
     val activityDist = activityToShow?.distance
     val activityInitPoint = activityToShow?.initPoint
