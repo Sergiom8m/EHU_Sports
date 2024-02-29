@@ -1,6 +1,7 @@
 package com.example.menditrack.screens
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,8 +38,11 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.graphics.vector.VectorProperty
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.menditrack.R
+import com.example.menditrack.data.SportActivity
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -47,15 +51,21 @@ fun RouteView(
     navController: NavController,
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ){
-    val activityName = appViewModel.activityToShow.value?.name
-    val activityDist = appViewModel.activityToShow.value?.distance
-    val activityInitPoint = appViewModel.activityToShow.value?.initPoint
-    val activityGrade = appViewModel.activityToShow.value?.grade
-    val activityDifficulty = appViewModel.activityToShow.value?.difficulty
+    val context = LocalContext.current
+    val activityToShow = appViewModel.activityToShow.value
+    val activityName = activityToShow?.name
+    val activityDist = activityToShow?.distance
+    val activityInitPoint = activityToShow?.initPoint
+    val activityGrade = activityToShow?.grade
+    val activityDifficulty = activityToShow?.difficulty
 
     Scaffold (
         modifier = Modifier.fillMaxSize(),
-        floatingActionButton = { DownloadButton()},
+        floatingActionButton = {
+            if (activityToShow != null) {
+                DownloadButton(appViewModel, activityToShow, context)
+            }
+        },
         floatingActionButtonPosition = FabPosition.Center
     ){
 
@@ -90,7 +100,7 @@ fun RouteView(
                     if (activityName != null) {
                         Text(
                             text = activityName,
-                            color = MaterialTheme.colorScheme.onPrimary,
+                            color = MaterialTheme.colorScheme.secondary,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -142,9 +152,9 @@ fun RouteView(
 }
 
 @Composable
-fun DownloadButton() {
+fun DownloadButton(appViewModel: AppViewModel, activity: SportActivity, context: Context) {
     ExtendedFloatingActionButton(
-        onClick = { /*TODO*/ },
+        onClick = { appViewModel.exportRouteToTXT(activity)},
         icon = {
             Icon(
                 painterResource(id = R.drawable.download),

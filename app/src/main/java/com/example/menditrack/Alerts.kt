@@ -43,7 +43,10 @@ fun SettingsDialog(showSettings: Boolean, appViewModel: AppViewModel, onConfirm:
                             },
                             Modifier.fillMaxWidth()
                         ) {
-                            Text(text = language.type)
+                            Text(
+                                text = language.type,
+                                color = MaterialTheme.colorScheme.secondary
+                            )
                         }
                     }
                 }

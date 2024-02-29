@@ -37,17 +37,10 @@ fun MendiTrackTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    if (darkTheme){
-        MaterialTheme(
-            colorScheme = DarkColorScheme,
-            typography = Typography,
-            content = content
-        )
-    } else {
-        MaterialTheme(
-            colorScheme = LightColorScheme,
-            typography = Typography,
-            content = content
-        )
-    }
+
+    MaterialTheme(
+        colorScheme = LightColorScheme,
+        typography = Typography,
+        content = content
+    )
 }

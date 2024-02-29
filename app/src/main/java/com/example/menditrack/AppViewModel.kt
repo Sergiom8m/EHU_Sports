@@ -1,7 +1,10 @@
 package com.example.menditrack
 
+import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.content.Context
+import android.os.Environment
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,8 +15,13 @@ import com.example.menditrack.data.Language
 import com.example.menditrack.data.SportActivity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.io.File
+import java.io.FileOutputStream
+import java.io.FileWriter
+import java.io.IOException
 
 
+@SuppressLint("MutableCollectionMutableState")
 class AppViewModel: ViewModel() {
 
 
@@ -112,4 +120,21 @@ class AppViewModel: ViewModel() {
     fun changeComplete() {
         _change.value = false
     }
+
+    fun exportRouteToTXT(route: SportActivity) {
+        val estadoAlmacenamientoExterno = Environment.getExternalStorageState()
+        if (estadoAlmacenamientoExterno == Environment.MEDIA_MOUNTED) {
+            val directorioDescargas = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            val archivo = File(directorioDescargas, "${route.name}.txt")
+
+
+            FileWriter(archivo).use { writer ->
+                writer.append(route.name)
+            }
+            Log.d("Download","Download")
+
+        }
+    }
+
+
 }
