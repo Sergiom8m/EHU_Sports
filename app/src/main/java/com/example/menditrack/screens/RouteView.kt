@@ -51,7 +51,6 @@ fun RouteView(
     navController: NavController,
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ){
-    val context = LocalContext.current
     val activityToShow = appViewModel.activityToShow.value
     val activityName = activityToShow?.name
     val activityDist = activityToShow?.distance
@@ -63,7 +62,7 @@ fun RouteView(
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
             if (activityToShow != null) {
-                DownloadButton(appViewModel, activityToShow, context)
+                DownloadButton(appViewModel, activityToShow)
             }
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -123,7 +122,7 @@ fun RouteView(
                 modifier = Modifier.padding(start = 16.dp)
             )
             Text(
-                text = "${stringResource(id = R.string.grade)}: $activityGrade",
+                text = "${stringResource(id = R.string.grade)}: $activityGrade m",
                 color = MaterialTheme.colorScheme.tertiary,
                 fontSize = 14.sp,
                 modifier = Modifier.padding(start = 16.dp)
@@ -152,7 +151,7 @@ fun RouteView(
 }
 
 @Composable
-fun DownloadButton(appViewModel: AppViewModel, activity: SportActivity, context: Context) {
+fun DownloadButton(appViewModel: AppViewModel, activity: SportActivity) {
     ExtendedFloatingActionButton(
         onClick = { appViewModel.exportRouteToTXT(activity)},
         icon = {

@@ -129,7 +129,13 @@ class AppViewModel: ViewModel() {
 
 
             FileWriter(archivo).use { writer ->
-                writer.append(route.name)
+                with(writer) {
+                    append("NAME: ${route.name}\n\n")
+                    append("DISTANCE: ${route.distance} km\n")
+                    append("INIT POINT: ${route.initPoint}\n")
+                    append("GRADE: ${route.grade} m\n")
+                    append("DIFFICULTY: ${route.difficulty}\n")
+                }
             }
             Log.d("Download","Download")
 
