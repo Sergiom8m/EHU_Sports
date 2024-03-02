@@ -1,6 +1,7 @@
 package com.example.menditrack.model
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -14,4 +15,7 @@ interface ActivityDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun addActivity(activity: SportActivity)
+
+    @Delete
+    suspend fun deleteActivity(activity: SportActivity)
 }

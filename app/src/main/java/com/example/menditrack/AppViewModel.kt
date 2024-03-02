@@ -46,7 +46,10 @@ class AppViewModel @Inject constructor(
         catch (e: Exception){
             Log.d("BASE DE DATOS", e.toString())
         }
+    }
 
+    suspend fun deleteActivity(activity: SportActivity){
+        activityRepository.deleteActivity(activity)
     }
 
     fun sendAddNotification(

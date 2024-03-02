@@ -34,6 +34,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun Cycling(
@@ -116,7 +119,11 @@ fun Cycling(
                             }
                             Spacer(modifier = Modifier.padding(5.dp))
                             IconButton(
-                                onClick = {  }
+                                onClick = {
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        appViewModel.deleteActivity(activity)
+                                    }
+                                }
                             ) {
                                 Icon(
                                     painterResource(id = R.drawable.delete),

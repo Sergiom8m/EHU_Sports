@@ -7,6 +7,7 @@ import javax.inject.Singleton
 interface IActivityRepository{
     fun getAllActivities(): Flow<List<SportActivity>>
     suspend fun addActivity(activity: SportActivity)
+    suspend fun deleteActivity(activity: SportActivity)
 }
 
 @Singleton
@@ -20,6 +21,10 @@ class ActivityRepository @Inject constructor(
 
     override suspend fun addActivity(activity: SportActivity){
         activityDao. addActivity(activity)
+    }
+
+    override suspend fun deleteActivity(activity: SportActivity) {
+        activityDao.deleteActivity(activity)
     }
 
 
