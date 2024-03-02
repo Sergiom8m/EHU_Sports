@@ -16,17 +16,19 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModel
 import com.example.menditrack.screens.MainScreen
 import com.example.menditrack.ui.theme.MendiTrackTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     // Instanciar el ViewModel
-    val appViewModel by viewModels<AppViewModel>()
+    private val appViewModel: AppViewModel by viewModels()
 
     // Establecer un CHANNEL_ID para el canal de notificaicones
     companion object{

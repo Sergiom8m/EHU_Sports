@@ -53,9 +53,9 @@ fun Stats(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             // Aquí puedes agregar tus estadísticas, como el total de actividades, la distancia total recorrida, etc.
-            Text(text = "Total Walking Activities: ${appViewModel.walk_activities.size}")
-            Text(text = "Total Running Activities: ${appViewModel.run_activities.size}")
-            Text(text = "Total Cycling Activities: ${appViewModel.cyc_activities.size}")
+            Text(text = "Total Walking Activities: ")
+            Text(text = "Total Running Activities: ")
+            Text(text = "Total Cycling Activities: ")
 
             // También puedes agregar gráficos u otros elementos visuales para representar las estadísticas.
         }

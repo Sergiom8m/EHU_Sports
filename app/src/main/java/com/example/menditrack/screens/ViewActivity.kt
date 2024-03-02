@@ -36,7 +36,7 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.res.painterResource
 import com.example.menditrack.R
-import com.example.menditrack.data.SportActivity
+import com.example.menditrack.model.SportActivity
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -128,6 +128,7 @@ fun RouteView(
                 fontSize = 14.sp,
                 modifier = Modifier.padding(start = 16.dp)
             )
+
         }
 
     }

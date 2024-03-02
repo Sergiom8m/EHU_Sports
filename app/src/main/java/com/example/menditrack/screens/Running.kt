@@ -42,11 +42,7 @@ fun Running(
     modifier: Modifier = Modifier
 ){
 
-    val change by appViewModel.change.collectAsState()
-
-    if (change) {
-        appViewModel.changeComplete()
-    }
+    val runActivities = appViewModel.getAllActivities().collectAsState(initial = emptyList())
 
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -71,7 +67,7 @@ fun Running(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ){
-            items(appViewModel.run_activities) { activity ->
+            items(runActivities.value) { activity ->
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -109,7 +105,6 @@ fun Running(
                             IconButton(
                                 onClick = {
                                     navController.navigate(AppScreens.Edit.route)
-                                    appViewModel.activityToEdit = mutableStateOf(activity)
                                 }
                             ) {
                                 Icon(
@@ -120,7 +115,7 @@ fun Running(
                             }
                             Spacer(modifier = Modifier.padding(5.dp))
                             IconButton(
-                                onClick = { appViewModel.deleteActivity(activity, "Running") }
+                                onClick = {  }
                             ) {
                                 Icon(
                                     painterResource(id = R.drawable.delete),

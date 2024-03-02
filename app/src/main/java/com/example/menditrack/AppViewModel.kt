@@ -1,6 +1,5 @@
 package com.example.menditrack
 
-import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Environment
@@ -12,79 +11,42 @@ import androidx.compose.runtime.setValue
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModel
 import com.example.menditrack.data.Language
-import com.example.menditrack.data.SportActivity
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.example.menditrack.model.IActivityRepository
+import com.example.menditrack.model.SportActivity
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import java.io.File
-import java.io.FileOutputStream
 import java.io.FileWriter
-import java.io.IOException
+import javax.inject.Inject
 
+@HiltViewModel
+class AppViewModel @Inject constructor(
+    private val activityRepository: IActivityRepository
+) : ViewModel() {
 
-@SuppressLint("MutableCollectionMutableState")
-class AppViewModel: ViewModel() {
-
-
-    private val _change = MutableStateFlow(false)
-    val change: StateFlow<Boolean>
-        get() = _change
 
     var actual_language by mutableStateOf(Language.ES)
     var showAddButton by mutableStateOf(true)
     var showNavBars by  mutableStateOf(true)
     var enableNavigationButtons by mutableStateOf(true)
 
-    var walk_activities: MutableList<SportActivity> = mutableListOf()
-    var run_activities: MutableList<SportActivity> = mutableListOf()
-    var cyc_activities: MutableList<SportActivity> = mutableListOf()
 
     var activityToShow: MutableState<SportActivity?> = mutableStateOf(null)
     var activityToEdit: MutableState<SportActivity?> = mutableStateOf(null)
 
-    init {
-        // Actividades de prueba para caminar
-        add_activity("Morning Walk", 2.5, "Bilbao", 3.5, "Easy", "Walking")
-        add_activity("Evening Stroll", 1.8, "Madrid", 2.8, "Moderate", "Walking")
-        add_activity("Morning Walk", 2.5, "Barcelona", 3.2, "Easy", "Walking")
-        add_activity("Evening Stroll", 1.8, "Valencia", 2.5, "Moderate", "Walking")
-
-        // Actividades de prueba para correr
-        add_activity("Afternoon Run", 5.0, "Sevilla", 4.0, "Hard", "Running")
-        add_activity("Weekend Jog", 3.2, "Granada", 3.7, "Moderate", "Running")
-        add_activity("Weekend Jog", 3.2, "Málaga", 3.7, "Moderate", "Running")
-
-        // Actividades de prueba para ciclismo
-        add_activity("Bike Ride to Work", 8.7, "Vitoria-Gasteiz", 5.0, "Hard", "Cycling")
-        add_activity("Mountain Biking Trail", 12.4, "San Sebastián", 6.5, "Hard", "Cycling")
-        add_activity("Mountain Biking Trail", 12.4, "Pamplona", 6.5, "Hard", "Cycling")
-        add_activity("Mountain Biking Trail", 12.4, "Bilbao", 6.5, "Hard", "Cycling")
-        add_activity("Mountain Biking Trail", 12.4, "Logroño", 6.5, "Hard", "Cycling")
-        add_activity("Mountain Biking Trail", 12.4, "Santander", 6.5, "Hard", "Cycling")
+    fun getAllActivities(): Flow<List<SportActivity>> {
+        return activityRepository.getAllActivities()
     }
 
-
-    fun add_activity(
-        name: String,
-        distance: Double,
-        initPoint: String,
-        grade: Double,
-        difficulty: String,
-        type: String
-    ){
-        when (type) {
-            "Caminata", "Ibilaldia", "Walking"  -> {
-                val activity = SportActivity(name, distance, initPoint, grade, difficulty, "Walking")
-                walk_activities.add(activity)
-            }
-            "Carrera", "Korrika", "Running" -> {
-                val activity = SportActivity(name, distance, initPoint, grade, difficulty, "Running")
-                run_activities.add(activity)
-            }
-            "Ciclismo", "Bizikleta", "Cycling" -> {
-                val activity = SportActivity(name, distance, initPoint, grade, difficulty, "Cycling")
-                cyc_activities.add(activity)
-            }
+    suspend fun addActivity(activity: SportActivity) {
+        try {
+            activityRepository.addActivity(activity)
+            Log.d("AÑADIDO", "AÑADIDO")
         }
+        catch (e: Exception){
+            Log.d("BASE DE DATOS", e.toString())
+        }
+
     }
 
     fun sendAddNotification(
@@ -110,24 +72,6 @@ class AppViewModel: ViewModel() {
         notificationManager.notify(1, notification)
     }
 
-    fun deleteActivity(activity: SportActivity, type: String) {
-        when (type) {
-            "Walking" -> walk_activities.remove(activity)
-            "Running" -> run_activities.remove(activity)
-            "Cycling" -> cyc_activities.remove(activity)
-        }
-        this.triggerchange()
-
-    }
-
-    private fun triggerchange() {
-        _change.value = true
-    }
-
-    // Esta función se llama cuando se ha completado la actualización
-    fun changeComplete() {
-        _change.value = false
-    }
 
     fun exportRouteToTXT(activity: SportActivity) {
         val estadoAlmacenamientoExterno = Environment.getExternalStorageState()
@@ -147,28 +91,6 @@ class AppViewModel: ViewModel() {
             }
             Log.d("Download","Download")
 
-        }
-    }
-
-    fun updateActivity(activityToEdit: SportActivity?, updatedActivity: SportActivity) {
-        if (activityToEdit != null) {
-
-            // Eliminar la actividad de la lista original
-            when (activityToEdit.type) {
-                "Caminata", "Ibilaldia", "Walking" -> walk_activities.remove(activityToEdit)
-                "Carrera", "Korrika", "Running" -> run_activities.remove(activityToEdit)
-                "Ciclismo", "Bizikleta", "Cycling" -> cyc_activities.remove(activityToEdit)
-            }
-
-            // Agregar la actividad actualizada a la nueva lista correspondiente
-            when (updatedActivity.type) {
-                "Caminata", "Ibilaldia", "Walking" -> walk_activities.add(updatedActivity)
-                "Carrera", "Korrika", "Running" -> run_activities.add(updatedActivity)
-                "Ciclismo", "Bizikleta", "Cycling" -> cyc_activities.add(updatedActivity)
-            }
-
-            // Una vez actualizada la actividad, se puede restablecer el valor del estado de cambio
-            changeComplete()
         }
     }
 

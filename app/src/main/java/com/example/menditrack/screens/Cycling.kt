@@ -42,11 +42,7 @@ fun Cycling(
     modifier: Modifier = Modifier
 ){
 
-    val change by appViewModel.change.collectAsState()
-
-    if (change) {
-        appViewModel.changeComplete()
-    }
+    val cycActivities = appViewModel.getAllActivities().collectAsState(initial = emptyList())
 
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -71,7 +67,7 @@ fun Cycling(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ){
-            items(appViewModel.cyc_activities) { activity ->
+            items(cycActivities.value) { activity ->
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -109,7 +105,7 @@ fun Cycling(
                             IconButton(
                                 onClick = {
                                     navController.navigate(AppScreens.Edit.route)
-                                    appViewModel.activityToEdit = mutableStateOf(activity)
+
                                 }
                             ) {
                                 Icon(
@@ -120,7 +116,7 @@ fun Cycling(
                             }
                             Spacer(modifier = Modifier.padding(5.dp))
                             IconButton(
-                                onClick = { appViewModel.deleteActivity(activity, "Cycling") }
+                                onClick = {  }
                             ) {
                                 Icon(
                                     painterResource(id = R.drawable.delete),

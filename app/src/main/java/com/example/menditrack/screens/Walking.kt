@@ -43,11 +43,7 @@ fun Walking(
     modifier: Modifier = Modifier
 ){
 
-    val change by appViewModel.change.collectAsState()
-
-    if (change) {
-        appViewModel.changeComplete()
-    }
+    val walkActivities = appViewModel.getAllActivities().collectAsState(initial = emptyList())
 
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -72,7 +68,7 @@ fun Walking(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ){
-            items(appViewModel.walk_activities) { activity ->
+            items(walkActivities.value) { activity ->
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -110,7 +106,6 @@ fun Walking(
                             IconButton(
                                 onClick = {
                                     navController.navigate(AppScreens.Edit.route)
-                                    appViewModel.activityToEdit = mutableStateOf(activity)
                                 }
                             ) {
                                 Icon(
@@ -121,7 +116,7 @@ fun Walking(
                             }
                             Spacer(modifier = Modifier.padding(5.dp))
                             IconButton(
-                                onClick = { appViewModel.deleteActivity(activity, "Walking") }
+                                onClick = {  }
                             ) {
                                 Icon(
                                     painterResource(id = R.drawable.delete),

@@ -31,6 +31,10 @@ import androidx.navigation.NavController
 import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
 import androidx.compose.material.DropdownMenuItem
+import com.example.menditrack.model.SportActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -245,14 +249,9 @@ fun AddActivity(
                         selectedDifficulty,
                         selectedSport)
                     ) {
-                    appViewModel.add_activity(
-                        routeName,
-                        routeDistance.toDouble(),
-                        startingPoint,
-                        grade.toDouble(),
-                        selectedDifficulty,
-                        selectedSport
-                    )
+                    CoroutineScope(Dispatchers.Main).launch {
+                        appViewModel.addActivity(SportActivity(routeName, routeDistance.toDouble(), startingPoint, grade.toDouble(), selectedDifficulty, selectedSport))
+                    }
                     appViewModel.showAddButton = true
                     navController.navigateUp()
                     appViewModel.sendAddNotification(

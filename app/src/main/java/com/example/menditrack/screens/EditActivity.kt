@@ -50,7 +50,7 @@ import androidx.navigation.NavController
 import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
 import androidx.compose.material3.Button
-import com.example.menditrack.data.SportActivity
+import com.example.menditrack.model.SportActivity
 
 @Composable
 fun EditActivity(
@@ -271,7 +271,8 @@ fun EditActivity(
                         selectedDifficulty,
                         selectedSport
                     )
-                    appViewModel.updateActivity(activityToEdit, updatedActivity)
+
+
                     appViewModel.showAddButton = true
                     navController.navigateUp()
                 } else {
