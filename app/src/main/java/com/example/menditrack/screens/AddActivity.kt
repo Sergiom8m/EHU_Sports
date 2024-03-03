@@ -250,7 +250,7 @@ fun AddActivity(
                         selectedSport)
                     ) {
                     CoroutineScope(Dispatchers.Main).launch {
-                        appViewModel.addActivity(SportActivity(routeName, routeDistance.toDouble(), startingPoint, grade.toDouble(), selectedDifficulty, selectedSport))
+                        appViewModel.addActivity(routeName, routeDistance.toDouble(), startingPoint, grade.toDouble(), selectedDifficulty, selectedSport)
                     }
                     appViewModel.showAddButton = true
                     navController.navigateUp()

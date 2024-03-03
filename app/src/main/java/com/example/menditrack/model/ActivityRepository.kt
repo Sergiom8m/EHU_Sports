@@ -5,7 +5,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 interface IActivityRepository{
-    fun getAllActivities(): Flow<List<SportActivity>>
+    fun getActivitiesByType(type: String): Flow<List<SportActivity>>
     suspend fun addActivity(activity: SportActivity)
     suspend fun deleteActivity(activity: SportActivity)
 }
@@ -15,8 +15,8 @@ class ActivityRepository @Inject constructor(
     private val activityDao: ActivityDao
 ) : IActivityRepository {
 
-    override fun getAllActivities(): Flow<List<SportActivity>> {
-        return activityDao.getAllActivities()
+    override fun getActivitiesByType(type: String): Flow<List<SportActivity>> {
+        return activityDao.getActivitiesByType(type)
     }
 
     override suspend fun addActivity(activity: SportActivity){

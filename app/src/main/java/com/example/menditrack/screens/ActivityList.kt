@@ -32,20 +32,29 @@ import com.example.menditrack.navigation.AppScreens
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun Cycling(
+fun AcitivtyList(
     appViewModel: AppViewModel,
     navController: NavController,
+    type:String,
     modifier: Modifier = Modifier
 ){
 
-    val cycActivities = appViewModel.getAllActivities().collectAsState(initial = emptyList())
+    val activities = appViewModel.getActivitiesByType(type).collectAsState(initial = emptyList())
+
+    var title = ""
+
+    when (type){
+        "walking" -> title = stringResource(id = R.string.walk_routes)
+        "running" -> title = stringResource(id = R.string.run_routes)
+        "cycling" -> title = stringResource(id = R.string.cyc_routes)
+    }
+
 
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -57,7 +66,7 @@ fun Cycling(
                 .background(MaterialTheme.colorScheme.primaryContainer)
         ) {
             Text(
-                text = stringResource(id = R.string.cyc_routes),
+                text = title,
                 Modifier.padding(16.dp),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.secondary,
@@ -70,7 +79,7 @@ fun Cycling(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ){
-            items(cycActivities.value) { activity ->
+            items(activities.value) { activity ->
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()

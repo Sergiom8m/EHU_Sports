@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ActivityDao {
 
-    @Query("SELECT * FROM activities")
-    fun getAllActivities(): Flow<List<SportActivity>>
+    @Query("SELECT * FROM activities WHERE type = :type ")
+    fun getActivitiesByType(type: String): Flow<List<SportActivity>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun addActivity(activity: SportActivity)

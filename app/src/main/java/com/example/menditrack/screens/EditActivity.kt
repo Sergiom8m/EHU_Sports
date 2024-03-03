@@ -263,14 +263,7 @@ fun EditActivity(
                         selectedDifficulty,
                         selectedSport)
                 ) {
-                    val updatedActivity = SportActivity(
-                        routeName,
-                        routeDistance.toDouble(),
-                        startingPoint,
-                        grade.toDouble(),
-                        selectedDifficulty,
-                        selectedSport
-                    )
+
 
 
                     appViewModel.showAddButton = true

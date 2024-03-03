@@ -52,6 +52,8 @@ fun RouteView(
     val activityInitPoint = activityToShow?.initPoint
     val activityGrade = activityToShow?.grade
     val activityDifficulty = activityToShow?.difficulty
+    val userLanguageDifficulty = activityDifficulty?.let { appViewModel.mapToUserLanguageDifficulty(it) }
+
 
     Scaffold (
         modifier = Modifier.fillMaxSize(),
@@ -123,7 +125,7 @@ fun RouteView(
                 modifier = Modifier.padding(start = 16.dp)
             )
             Text(
-                text = "${stringResource(id = R.string.difficulty)}: $activityDifficulty",
+                text = "${stringResource(id = R.string.difficulty)}: $userLanguageDifficulty",
                 color = MaterialTheme.colorScheme.tertiary,
                 fontSize = 14.sp,
                 modifier = Modifier.padding(start = 16.dp)

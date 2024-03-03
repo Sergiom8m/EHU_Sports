@@ -5,7 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "activities")
 data class SportActivity (
-    @PrimaryKey val name: String,
+    @PrimaryKey val id: Long,
+    val name: String,
     val distance: Double,
     val initPoint: String,
     val grade: Double,

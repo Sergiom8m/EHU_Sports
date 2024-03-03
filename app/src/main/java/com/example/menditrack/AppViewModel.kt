@@ -4,10 +4,12 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Environment
 import android.util.Log
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModel
 import com.example.menditrack.data.Language
@@ -18,6 +20,7 @@ import kotlinx.coroutines.flow.Flow
 import java.io.File
 import java.io.FileWriter
 import javax.inject.Inject
+import kotlin.random.Random
 
 @HiltViewModel
 class AppViewModel @Inject constructor(
@@ -34,12 +37,32 @@ class AppViewModel @Inject constructor(
     var activityToShow: MutableState<SportActivity?> = mutableStateOf(null)
     var activityToEdit: MutableState<SportActivity?> = mutableStateOf(null)
 
-    fun getAllActivities(): Flow<List<SportActivity>> {
-        return activityRepository.getAllActivities()
+    fun getActivitiesByType(type: String): Flow<List<SportActivity>> {
+        return activityRepository.getActivitiesByType(type)
     }
 
-    suspend fun addActivity(activity: SportActivity) {
+    suspend fun addActivity(
+        routeName: String,
+        routeDistance: Double,
+        startingPoint: String,
+        grade: Double,
+        selectedDifficulty: String,
+        selectedSport: String
+    ) {
         try {
+
+            val englishDifficulty = mapToEnglishDifficulty(selectedDifficulty)
+            val englishSport = mapToEnglishSport(selectedSport)
+
+            val activity = SportActivity(
+                generateRandomId(routeName),
+                routeName,
+                routeDistance,
+                startingPoint,
+                grade,
+                englishDifficulty,
+                englishSport
+            )
             activityRepository.addActivity(activity)
             Log.d("AÑADIDO", "AÑADIDO")
         }
@@ -93,7 +116,42 @@ class AppViewModel @Inject constructor(
                 }
             }
             Log.d("Download","Download")
+        }
+    }
 
+    fun generateRandomId(name: String): Long {
+        val hash = name.hashCode()
+
+        val random = Random(hash.toLong())
+
+        return random.nextLong()
+    }
+
+    private fun mapToEnglishDifficulty(selectedDifficulty: String): String {
+        return when (selectedDifficulty.toLowerCase()) {
+            "fácil", "erraza", "easy" -> "easy"
+            "moderado", "ertaina", "moderate" -> "moderate"
+            "difícil", "zaila", "hard" -> "hard"
+            else -> selectedDifficulty
+        }
+    }
+
+    @Composable
+    fun mapToUserLanguageDifficulty(englishDifficulty: String): String {
+        return when (englishDifficulty.toLowerCase()) {
+            "easy" -> stringResource(id = R.string.easy)
+            "moderate" -> stringResource(id = R.string.moderate)
+            "hard" -> stringResource(id = R.string.hard)
+            else -> englishDifficulty
+        }
+    }
+
+    private fun mapToEnglishSport(selectedSport: String): String {
+        return when (selectedSport.toLowerCase()) {
+            "ciclismo", "bizikleta", "cycling" -> "cycling"
+            "carrera", "korrika", "running" -> "running"
+            "caminata", "ibilaldia", "walking" -> "walking"
+            else -> selectedSport
         }
     }
 
