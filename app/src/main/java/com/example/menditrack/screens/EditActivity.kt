@@ -51,6 +51,9 @@ import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
 import androidx.compose.material3.Button
 import com.example.menditrack.model.SportActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun EditActivity(
@@ -59,6 +62,7 @@ fun EditActivity(
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ){
     val activityToEdit = appViewModel.activityToEdit.value
+    val id = activityToEdit?.id
 
     var routeName by rememberSaveable { mutableStateOf(activityToEdit?.name ?: "") }
     var routeDistance by rememberSaveable { mutableStateOf(activityToEdit?.distance?.toString() ?: "") }
@@ -135,7 +139,7 @@ fun EditActivity(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = if (selectedSport.isEmpty()) stringResource(id = R.string.select_sport) else selectedSport,
+                        text = appViewModel.mapToUserLanguageSport(selectedSport),
                         modifier = Modifier
                             .padding(vertical = 16.dp, horizontal = 12.dp)
                     )
@@ -223,7 +227,7 @@ fun EditActivity(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = if (selectedDifficulty.isEmpty()) stringResource(id = R.string.select_diff) else selectedDifficulty,
+                        text = appViewModel.mapToUserLanguageDifficulty(selectedDifficulty),
                         modifier = Modifier
                             .padding(vertical = 16.dp, horizontal = 12.dp)
                     )
@@ -264,8 +268,19 @@ fun EditActivity(
                         selectedSport)
                 ) {
 
-
-
+                    if (id != null) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            appViewModel.updateActivity(
+                                id,
+                                routeName,
+                                routeDistance.toDouble(),
+                                startingPoint,
+                                grade.toDouble(),
+                                selectedDifficulty,
+                                selectedSport
+                            )
+                        }
+                    }
                     appViewModel.showAddButton = true
                     navController.navigateUp()
                 } else {

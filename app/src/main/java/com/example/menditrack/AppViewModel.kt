@@ -75,6 +75,22 @@ class AppViewModel @Inject constructor(
         activityRepository.deleteActivity(activity)
     }
 
+    suspend fun updateActivity(
+        id: Long,
+        routeName: String,
+        routeDistance: Double,
+        startingPoint: String,
+        grade: Double,
+        selectedDifficulty: String,
+        selectedSport: String
+    ){
+        val englishDifficulty = mapToEnglishDifficulty(selectedDifficulty)
+        val englishSport = mapToEnglishSport(selectedSport)
+
+        val updatedActivity = SportActivity(id, routeName, routeDistance, startingPoint, grade, englishDifficulty, englishSport)
+        activityRepository.updateActivity(updatedActivity)
+    }
+
     fun sendAddNotification(
         context: Context,
         title: String,
@@ -108,11 +124,11 @@ class AppViewModel @Inject constructor(
 
             FileWriter(archivo).use { writer ->
                 with(writer) {
-                    append("NOMBRE: ${activity.name}\n\n")
-                    append("DISTANCIA: ${activity.distance} km\n")
-                    append("PUNTO DE INICIO: ${activity.initPoint}\n")
-                    append("DESNIVEL: ${activity.grade} m\n")
-                    append("DIFICULTAD: ${activity.difficulty}\n")
+                    append("NAME: ${activity.name}\n\n")
+                    append("DISTANCE: ${activity.distance} km\n")
+                    append("START POINT: ${activity.initPoint}\n")
+                    append("GRADE: ${activity.grade} m\n")
+                    append("DIFFICULTY: ${activity.difficulty}\n")
                 }
             }
             Log.d("Download","Download")
@@ -136,6 +152,15 @@ class AppViewModel @Inject constructor(
         }
     }
 
+    private fun mapToEnglishSport(selectedSport: String): String {
+        return when (selectedSport.toLowerCase()) {
+            "ciclismo", "bizikleta", "cycling" -> "cycling"
+            "carrera", "korrika", "running" -> "running"
+            "caminata", "ibilaldia", "walking" -> "walking"
+            else -> selectedSport
+        }
+    }
+
     @Composable
     fun mapToUserLanguageDifficulty(englishDifficulty: String): String {
         return when (englishDifficulty.toLowerCase()) {
@@ -146,14 +171,17 @@ class AppViewModel @Inject constructor(
         }
     }
 
-    private fun mapToEnglishSport(selectedSport: String): String {
-        return when (selectedSport.toLowerCase()) {
-            "ciclismo", "bizikleta", "cycling" -> "cycling"
-            "carrera", "korrika", "running" -> "running"
-            "caminata", "ibilaldia", "walking" -> "walking"
-            else -> selectedSport
+    @Composable
+    fun mapToUserLanguageSport(englishSport: String): String {
+        return when (englishSport.toLowerCase()) {
+            "running" -> stringResource(id = R.string.running)
+            "walking" -> stringResource(id = R.string.walking)
+            "cycling" -> stringResource(id = R.string.cycling)
+            else -> englishSport
         }
     }
+
+
 
 
 }

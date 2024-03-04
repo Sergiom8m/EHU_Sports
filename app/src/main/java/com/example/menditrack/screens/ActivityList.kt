@@ -117,7 +117,7 @@ fun AcitivtyList(
                             IconButton(
                                 onClick = {
                                     navController.navigate(AppScreens.Edit.route)
-
+                                    appViewModel.activityToEdit = mutableStateOf(activity)
                                 }
                             ) {
                                 Icon(

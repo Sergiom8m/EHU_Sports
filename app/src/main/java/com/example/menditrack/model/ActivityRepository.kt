@@ -8,6 +8,7 @@ interface IActivityRepository{
     fun getActivitiesByType(type: String): Flow<List<SportActivity>>
     suspend fun addActivity(activity: SportActivity)
     suspend fun deleteActivity(activity: SportActivity)
+    suspend fun updateActivity(activity: SportActivity)
 }
 
 @Singleton
@@ -27,10 +28,9 @@ class ActivityRepository @Inject constructor(
         activityDao.deleteActivity(activity)
     }
 
-
-
-
-
+    override suspend fun updateActivity(activity: SportActivity) {
+        activityDao.updateActivity(activity)
+    }
 
 
 }
