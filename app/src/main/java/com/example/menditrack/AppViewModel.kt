@@ -50,7 +50,6 @@ class AppViewModel @Inject constructor(
         selectedSport: String
     ) {
         try {
-
             val englishDifficulty = mapToEnglishDifficulty(selectedDifficulty)
             val englishSport = mapToEnglishSport(selectedSport)
 
@@ -64,7 +63,6 @@ class AppViewModel @Inject constructor(
                 englishSport
             )
             activityRepository.addActivity(activity)
-            Log.d("AÑADIDO", "AÑADIDO")
         }
         catch (e: Exception){
             Log.d("BASE DE DATOS", e.toString())

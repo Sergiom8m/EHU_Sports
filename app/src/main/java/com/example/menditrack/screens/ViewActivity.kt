@@ -1,6 +1,7 @@
 package com.example.menditrack.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.ui.res.painterResource
 import com.example.menditrack.R
 import com.example.menditrack.model.SportActivity
@@ -47,14 +49,6 @@ fun RouteView(
 ){
     val activityToShow = appViewModel.activityToShow.value
 
-    val activityName = activityToShow?.name
-    val activityDist = activityToShow?.distance
-    val activityInitPoint = activityToShow?.initPoint
-    val activityGrade = activityToShow?.grade
-    val activityDifficulty = activityToShow?.difficulty
-    val userLanguageDifficulty = activityDifficulty?.let { appViewModel.mapToUserLanguageDifficulty(it) }
-
-
     Scaffold (
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
@@ -64,12 +58,10 @@ fun RouteView(
         },
         floatingActionButtonPosition = FabPosition.Center
     ){
-
         Column(
             modifier = modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-
             Box(
                 modifier = Modifier
                     .background(
@@ -93,9 +85,9 @@ fun RouteView(
                     }
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    if (activityName != null) {
+                    if (activityToShow != null) {
                         Text(
-                            text = activityName,
+                            text = activityToShow.name ?: "",
                             color = MaterialTheme.colorScheme.secondary,
                             fontWeight = FontWeight.Bold
                         )
@@ -103,36 +95,13 @@ fun RouteView(
                 }
             }
 
-
             Divider()
 
-            Text(
-                text = "${stringResource(id = R.string.distance)}: $activityDist km",
-                color = MaterialTheme.colorScheme.tertiary,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(start = 16.dp)
-            )
-            Text(
-                text = "${stringResource(id = R.string.start_point)}: $activityInitPoint",
-                color = MaterialTheme.colorScheme.tertiary,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(start = 16.dp)
-            )
-            Text(
-                text = "${stringResource(id = R.string.grade)}: $activityGrade m",
-                color = MaterialTheme.colorScheme.tertiary,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(start = 16.dp)
-            )
-            Text(
-                text = "${stringResource(id = R.string.difficulty)}: $userLanguageDifficulty",
-                color = MaterialTheme.colorScheme.tertiary,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(start = 16.dp)
-            )
-
+            InfoRow("${stringResource(id = R.string.distance)}:", "${activityToShow?.distance ?: 0} km")
+            InfoRow("${stringResource(id = R.string.start_point)}:",activityToShow?.initPoint ?: "")
+            InfoRow("${stringResource(id = R.string.grade)}:", "${activityToShow?.grade ?: 0} m")
+            InfoRow("${stringResource(id = R.string.difficulty)}:", appViewModel.mapToUserLanguageDifficulty(activityToShow?.difficulty ?: ""))
         }
-
     }
 
     DisposableEffect(Unit) {
@@ -149,6 +118,32 @@ fun RouteView(
 }
 
 @Composable
+fun InfoRow(boldText: String, normalText: String) {
+    Surface(
+        shape = MaterialTheme.shapes.medium,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = boldText,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(end = 8.dp)
+            )
+            Text(
+                text = normalText,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+    }
+}
+
+
+@Composable
 fun DownloadButton(appViewModel: AppViewModel, activity: SportActivity) {
     ExtendedFloatingActionButton(
         onClick = { appViewModel.exportRouteToTXT(activity)},
@@ -158,7 +153,7 @@ fun DownloadButton(appViewModel: AppViewModel, activity: SportActivity) {
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.secondary
             )
-       },
+        },
         text = {
             Text(
                 text = stringResource(id = R.string.download),
@@ -167,5 +162,6 @@ fun DownloadButton(appViewModel: AppViewModel, activity: SportActivity) {
         }
     )
 }
+
 
 
