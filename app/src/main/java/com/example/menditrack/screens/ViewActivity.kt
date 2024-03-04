@@ -1,6 +1,11 @@
 package com.example.menditrack.screens
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Environment
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -36,9 +42,14 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
+import androidx.core.content.ContextCompat.startActivity
 import com.example.menditrack.R
 import com.example.menditrack.model.SportActivity
+import java.io.File
+import java.io.FileWriter
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -48,6 +59,7 @@ fun RouteView(
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ){
     val activityToShow = appViewModel.activityToShow.value
+    val context = LocalContext.current
 
     Scaffold (
         modifier = Modifier.fillMaxSize(),
@@ -72,7 +84,8 @@ fun RouteView(
                     .fillMaxWidth()
             ) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     IconButton(
                         onClick = { navController.navigateUp() }
@@ -89,9 +102,21 @@ fun RouteView(
                         Text(
                             text = activityToShow.name ?: "",
                             color = MaterialTheme.colorScheme.secondary,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.weight(1f)
                         )
                     }
+
+                    IconButton(
+                        onClick = { openGoogleMaps(activityToShow!!.initPoint, context) },
+                    ) {
+                        Icon(
+                            Icons.Default.LocationOn,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.secondary
+                        )
+                    }
+
                 }
             }
 
@@ -163,5 +188,12 @@ fun DownloadButton(appViewModel: AppViewModel, activity: SportActivity) {
     )
 }
 
+
+fun openGoogleMaps(startPoint: String, context: Context) {
+    val gmmIntentUri = Uri.parse("geo:0,0?q=$startPoint")
+    val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+    mapIntent.setPackage("com.google.android.apps.maps")
+    startActivity( context, mapIntent, null)
+}
 
 

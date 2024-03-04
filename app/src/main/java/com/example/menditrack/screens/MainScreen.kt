@@ -101,9 +101,9 @@ fun MainScreen(
                 navController = navController,
                 startDestination = AppScreens.Stats.route
             ) {
-                composable(AppScreens.Walking.route) { AcitivtyList(appViewModel, navController, "walking") }
-                composable(AppScreens.Running.route) { AcitivtyList(appViewModel, navController, "running") }
-                composable(AppScreens.Cycling.route) { AcitivtyList(appViewModel, navController, "cycling") }
+                composable(AppScreens.Walking.route) { AcitivtyList(appViewModel, navController, "Walking") }
+                composable(AppScreens.Running.route) { AcitivtyList(appViewModel, navController, "Running") }
+                composable(AppScreens.Cycling.route) { AcitivtyList(appViewModel, navController, "Cycling") }
                 composable(AppScreens.Stats.route) { Stats(appViewModel, navController) }
                 composable(AppScreens.Add.route) { AddActivity(appViewModel, navController) }
                 composable(AppScreens.ActivityView.route) { RouteView(appViewModel, navController) }
@@ -189,9 +189,9 @@ fun MainScreen(
                     navController = navController,
                     startDestination = AppScreens.Stats.route
                 ) {
-                    composable(AppScreens.Walking.route) { AcitivtyList(appViewModel, navController, "walking") }
-                    composable(AppScreens.Running.route) { AcitivtyList(appViewModel, navController, "running") }
-                    composable(AppScreens.Cycling.route) { AcitivtyList(appViewModel, navController, "cycling") }
+                    composable(AppScreens.Walking.route) { AcitivtyList(appViewModel, navController, "Walking") }
+                    composable(AppScreens.Running.route) { AcitivtyList(appViewModel, navController, "Running") }
+                    composable(AppScreens.Cycling.route) { AcitivtyList(appViewModel, navController, "Cycling") }
                     composable(AppScreens.Stats.route) { Stats(appViewModel, navController) }
                     composable(AppScreens.Add.route) { AddActivity(appViewModel, navController) }
                     composable(AppScreens.ActivityView.route) {

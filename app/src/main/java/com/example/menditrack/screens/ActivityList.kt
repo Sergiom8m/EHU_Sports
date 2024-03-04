@@ -50,9 +50,9 @@ fun AcitivtyList(
     var title = ""
 
     when (type){
-        "walking" -> title = stringResource(id = R.string.walk_routes)
-        "running" -> title = stringResource(id = R.string.run_routes)
-        "cycling" -> title = stringResource(id = R.string.cyc_routes)
+        "Walking" -> title = stringResource(id = R.string.walk_routes)
+        "Running" -> title = stringResource(id = R.string.run_routes)
+        "Cycling" -> title = stringResource(id = R.string.cyc_routes)
     }
 
 

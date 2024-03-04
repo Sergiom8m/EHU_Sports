@@ -129,7 +129,6 @@ class AppViewModel @Inject constructor(
                     append("DIFFICULTY: ${activity.difficulty}\n")
                 }
             }
-            Log.d("Download","Download")
         }
     }
 
@@ -143,18 +142,18 @@ class AppViewModel @Inject constructor(
 
     private fun mapToEnglishDifficulty(selectedDifficulty: String): String {
         return when (selectedDifficulty.toLowerCase()) {
-            "fácil", "erraza", "easy" -> "easy"
-            "moderado", "ertaina", "moderate" -> "moderate"
-            "difícil", "zaila", "hard" -> "hard"
+            "fácil", "erraza", "easy" -> "Easy"
+            "moderado", "ertaina", "moderate" -> "Moderate"
+            "difícil", "zaila", "hard" -> "Hard"
             else -> selectedDifficulty
         }
     }
 
     private fun mapToEnglishSport(selectedSport: String): String {
         return when (selectedSport.toLowerCase()) {
-            "ciclismo", "bizikleta", "cycling" -> "cycling"
-            "carrera", "korrika", "running" -> "running"
-            "caminata", "ibilaldia", "walking" -> "walking"
+            "ciclismo", "bizikleta", "cycling" -> "Cycling"
+            "carrera", "korrika", "running" -> "Running"
+            "caminata", "ibilaldia", "walking" -> "Walking"
             else -> selectedSport
         }
     }
@@ -172,9 +171,9 @@ class AppViewModel @Inject constructor(
     @Composable
     fun mapToUserLanguageSport(englishSport: String): String {
         return when (englishSport.toLowerCase()) {
-            "running" -> stringResource(id = R.string.running)
-            "walking" -> stringResource(id = R.string.walking)
-            "cycling" -> stringResource(id = R.string.cycling)
+            "Running" -> stringResource(id = R.string.running)
+            "Walking" -> stringResource(id = R.string.walking)
+            "Cycling" -> stringResource(id = R.string.cycling)
             else -> englishSport
         }
     }
