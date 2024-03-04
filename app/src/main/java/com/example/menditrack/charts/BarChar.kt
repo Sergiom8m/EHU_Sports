@@ -36,7 +36,7 @@ fun BarGraph(
     height: Dp,
     roundType: BarType,
     barWidth: Dp,
-    barColor: Color,
+    barColor: List<Color>,
     barArrangement: Arrangement.Horizontal
 ) {
 
@@ -86,7 +86,9 @@ fun BarGraph(
     val horizontalLineHeight = 5.dp
 
     Box(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
         contentAlignment = Alignment.TopStart
     ) {
 
@@ -184,7 +186,7 @@ fun BarGraph(
                                     .clip(barShap)
                                     .fillMaxWidth()
                                     .fillMaxHeight(graphBarHeight)
-                                    .background(barColor)
+                                    .background(barColor[index])
                             )
                         }
 

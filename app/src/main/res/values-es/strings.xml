@@ -37,6 +37,9 @@
     <string name="download">Descargar</string>
     <string name="modify">MODIFICAR RUTA</string>
     <string name="savechange">Guardar cambios</string>
+    <string name="num_activity">Número total de actividades</string>
+    <string name="dist_activity">Distancia total recorrida</string>
+    <string name="noData">No hay información disponible</string>
 
 
 </resources>

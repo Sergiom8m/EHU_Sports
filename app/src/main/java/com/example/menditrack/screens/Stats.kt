@@ -30,6 +30,7 @@ import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
 import com.example.menditrack.charts.PieChart
 import com.example.menditrack.data.BarType
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
 fun Stats(
@@ -71,28 +72,24 @@ fun Stats(
         ) {
 
             // Total de actividades por tipo
-            Section("Total Walking Activities")
+            Title(stringResource(id = R.string.num_activity))
 
-            if ( totalCyclingActivities.size > 0 || totalRunningActivities.size > 0 || totalRunningActivities.size > 0) {
+            if ( totalCyclingActivities.size > 0 || totalRunningActivities.size > 0 || totalWalkingActivities.size > 0) {
 
                 PieChart(
                     data = mapOf(
-                        Pair("Cycling", totalCyclingActivities.size),
-                        Pair("Running", totalRunningActivities.size),
-                        Pair("Walking", totalWalkingActivities.size)
+                        Pair( stringResource(id = R.string.cycling), totalCyclingActivities.size),
+                        Pair( stringResource(id = R.string.running), totalRunningActivities.size),
+                        Pair( stringResource(id = R.string.walking), totalWalkingActivities.size)
                     )
                 )
             }
             else{
-                Text(
-                    text = "No data available",
-                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
-                    color = MaterialTheme.colorScheme.error
-                )
+                NoData()
             }
 
             // Distancia total por deporte
-            Section("Total Distance Walking:")
+            Title(stringResource(id = R.string.dist_activity))
 
             // Gráfico de barras
             val dataList = listOf(totalDistanceCycling, totalDistanceRunning, totalDistanceWalking)
@@ -102,22 +99,26 @@ fun Stats(
             if (maxValue != 0) {
                 BarGraph(
                     graphBarData = floatValue,
-                    xAxisScaleData = listOf("Cycling", "Running", "Walking"),
+                    xAxisScaleData = listOf(
+                        stringResource(id = R.string.cycling),
+                        stringResource(id = R.string.running),
+                        stringResource(id = R.string.walking)
+                    ),
                     barData_ = dataList,
-                    height = 300.dp,
+                    height = 200.dp,
                     roundType = BarType.TOP_CURVED,
                     barWidth = 20.dp,
-                    barColor = MaterialTheme.colorScheme.primary,
+                    barColor = listOf(
+                        MaterialTheme.colorScheme.primary,
+                        MaterialTheme.colorScheme.secondaryContainer,
+                        MaterialTheme.colorScheme.tertiaryContainer
+                    ),
                     barArrangement = Arrangement.SpaceEvenly
                 )
             }
 
             else{
-                Text(
-                    text = "No data available",
-                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
-                    color = MaterialTheme.colorScheme.error
-                )
+                NoData()
             }
 
         }
@@ -126,11 +127,28 @@ fun Stats(
 }
 
 @Composable
-fun Section(boldText: String) {
+fun NoData(){
+    Column (
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        Text(
+            text = stringResource(id = R.string.noData),
+            modifier = Modifier
+                .padding(vertical = 8.dp, horizontal = 16.dp)
+                .align(Alignment.CenterHorizontally),
+            color = MaterialTheme.colorScheme.error
+        )
+    }
+}
+
+@Composable
+fun Title(boldText: String) {
     Surface(
         shape = MaterialTheme.shapes.medium,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)),
         modifier = Modifier.fillMaxWidth(),
+        color = MaterialTheme.colorScheme.primaryContainer
 
     ) {
         Row(
@@ -141,7 +159,8 @@ fun Section(boldText: String) {
             Text(
                 text = boldText,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(end = 8.dp)
+                modifier = Modifier.padding(end = 8.dp),
+                color = MaterialTheme.colorScheme.secondary
             )
         }
     }

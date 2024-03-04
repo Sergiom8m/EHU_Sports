@@ -163,7 +163,7 @@ fun MainScreen(
                     )
                     NavigationRailItem(
                         selected = false,
-                        onClick = { navController.navigate(AppScreens.Cycling.route) },
+                        onClick = { navController.navigate(AppScreens.Stats.route) },
                         icon = {
                             Icon(
                                 painter = painterResource(id = R.drawable.stats),

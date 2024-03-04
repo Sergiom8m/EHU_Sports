@@ -37,5 +37,8 @@
     <string name="download">Deskargatu</string>
     <string name="modify">IBILIDIDEA EDITATU</string>
     <string name="savechange">Aldaketak gorde</string>
+    <string name="num_activity">Kirol jarduera kopuru totala</string>
+    <string name="dist_activity">Egindako distantzia totala</string>
+    <string name="noData">Ez dago informaziorik eskuragarri</string>
 
 </resources>

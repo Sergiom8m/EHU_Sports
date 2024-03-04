@@ -37,6 +37,9 @@
     <string name="download">Download</string>
     <string name="modify">MODIFY ROUTE</string>
     <string name="savechange">Save changes</string>
+    <string name="num_activity">Total number of activities</string>
+    <string name="dist_activity">Total distance traveled</string>
+    <string name="noData">There is not information available</string>
 
 
 </resources>
