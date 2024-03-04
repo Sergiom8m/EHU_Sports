@@ -38,9 +38,9 @@ fun Stats(
     navController: NavController,
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ){
-    val totalWalkingActivities by appViewModel.getActivitiesByType("walking").collectAsState(initial = emptyList())
-    val totalRunningActivities by appViewModel.getActivitiesByType("running").collectAsState(initial = emptyList())
-    val totalCyclingActivities by appViewModel.getActivitiesByType("cycling").collectAsState(initial = emptyList())
+    val totalWalkingActivities by appViewModel.getActivitiesByType("Walking").collectAsState(initial = emptyList())
+    val totalRunningActivities by appViewModel.getActivitiesByType("Running").collectAsState(initial = emptyList())
+    val totalCyclingActivities by appViewModel.getActivitiesByType("Cycling").collectAsState(initial = emptyList())
 
     val totalDistanceWalking = totalWalkingActivities.sumByDouble { it.distance }.toInt()
     val totalDistanceRunning = totalRunningActivities.sumByDouble { it.distance }.toInt()
