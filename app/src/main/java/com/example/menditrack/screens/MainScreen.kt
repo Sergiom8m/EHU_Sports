@@ -27,7 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -53,6 +52,7 @@ import com.example.menditrack.InfoDialog
 import com.example.menditrack.PreferencesViewModel
 import com.example.menditrack.R
 import com.example.menditrack.SettingsDialog
+import com.example.menditrack.ShowThemes
 import com.example.menditrack.data.Design
 import com.example.menditrack.data.Language
 import com.example.menditrack.navigation.AppScreens
@@ -65,9 +65,12 @@ fun MainScreen(
     modifier: Modifier,
 ){
     val context = LocalContext.current
-    val idioma by prefViewModel.lang.collectAsState(initial = prefViewModel.currentSetLang)
     val onLanguageChange:(Language)-> Unit = {
         prefViewModel.changeLang(it, context)
+    }
+
+    val onThemeChange:(Int)-> Unit = {
+        prefViewModel.changeTheme(it)
     }
 
     val navController = rememberNavController()
@@ -85,7 +88,7 @@ fun MainScreen(
         Scaffold(
             topBar = {
                 if (showSettingButton) {
-                    TopBar(context, onLanguageChange, modifier)
+                    TopBar(context, onLanguageChange, onThemeChange, modifier)
                 }
             },
             bottomBar = {
@@ -274,10 +277,16 @@ fun BottomBar(navController: NavController, appViewModel: AppViewModel, modifier
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(context: Context, onLanguageChange: (Language) -> Unit, modifier: Modifier) {
+fun TopBar(
+    context: Context,
+    onLanguageChange: (Language) -> Unit,
+    onThemeChange: (Int) -> Unit,
+    modifier: Modifier
+) {
     
     var showInfo by rememberSaveable { mutableStateOf(false) }
     var showSettings by rememberSaveable { mutableStateOf(false) }
+    var showThemes by rememberSaveable { mutableStateOf(false) }
     
     TopAppBar(
         modifier = modifier.fillMaxWidth(),
@@ -300,6 +309,14 @@ fun TopBar(context: Context, onLanguageChange: (Language) -> Unit, modifier: Mod
         },
 
         actions = {
+
+        IconButton(onClick = { showThemes = true }) {
+            Icon(
+                painter = painterResource(id = R.drawable.palette),
+                contentDescription = stringResource(id = R.string.info),
+                tint = Color(0xFFFFFFFF)
+            )
+        }
             IconButton(onClick = { showInfo = true }) {
                 Icon(
                     imageVector = Icons.Filled.Info,
@@ -318,6 +335,6 @@ fun TopBar(context: Context, onLanguageChange: (Language) -> Unit, modifier: Mod
     )
     InfoDialog(showInfo) { showInfo = false }
     SettingsDialog(showSettings, onLanguageChange) { showSettings = false }
-    
+    ShowThemes(showThemes, onThemeChange) { showThemes = false }
 }
 

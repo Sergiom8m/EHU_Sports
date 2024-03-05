@@ -40,5 +40,6 @@
     <string name="num_activity">Kirol jarduera kopuru totala</string>
     <string name="dist_activity">Egindako distantzia totala</string>
     <string name="noData">Ez dago informaziorik eskuragarri</string>
+    <string name="themeAlert">Kolore hautaketa</string>
 
 </resources>

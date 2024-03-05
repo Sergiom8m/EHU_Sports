@@ -68,3 +68,45 @@ fun InfoDialog(showInfo: Boolean, onConfirm: () -> Unit) {
     }
 }
 
+@Composable
+fun ShowThemes(showThemes: Boolean, onThemeChange: (Int) -> Unit, onConfirm: () -> Unit) {
+    if (showThemes) {
+        AlertDialog(
+            onDismissRequest = { /* TODO */ },
+            confirmButton = { /* TODO */ },
+            title = { Text(text = stringResource(id = R.string.themeAlert)) },
+            text = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    val themes = listOf(
+                        "Theme 1",
+                        "Theme 2",
+                        "Theme 3"
+                    )
+
+                    // Crear un botón para cada tema
+                    themes.forEachIndexed { index, theme ->
+                        Button(
+                            onClick = {
+                                onConfirm()
+                                onThemeChange(index)
+                            },
+                            Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                text = theme,
+                                color = MaterialTheme.colorScheme.secondary
+                            )
+                        }
+                    }
+                }
+            }
+        )
+    }
+}
+
