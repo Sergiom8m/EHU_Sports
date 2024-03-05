@@ -5,6 +5,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsEndWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -29,6 +32,8 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -36,7 +41,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun PieChart(
-    data: Map<String, Int>,
+    data: Map<Painter, Int>,
     radiusOuter: Dp = 55.dp,
     chartBarWidth: Dp = 35.dp,
     animDuration: Int = 1000,
@@ -138,7 +143,7 @@ fun PieChart(
 
 @Composable
 fun DetailsPieChart(
-    data: Map<String, Int>,
+    data: Map<Painter, Int>,
     colors: List<Color>
 ) {
     Column(
@@ -158,7 +163,7 @@ fun DetailsPieChart(
 
 @Composable
 fun DetailsPieChartItem(
-    data: Pair<String, Int>,
+    data: Pair<Painter, Int>,
     height: Dp = 25.dp,
     color: Color
 ) {
@@ -171,7 +176,8 @@ fun DetailsPieChartItem(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
             Box(
@@ -183,16 +189,16 @@ fun DetailsPieChartItem(
                     .size(height)
             )
 
-            Spacer(modifier = Modifier.width(20.dp)) // Añadimos un espacio horizontal
+            Spacer(modifier = Modifier.width(5.dp))
 
-            // Cambiamos de Column a Row para que las etiquetas vayan en horizontal
-            Text(
-                modifier = Modifier.weight(1f),
-                text = data.first,
-                fontWeight = FontWeight.Medium,
-                fontSize = 18.sp,
-                color = Color.Black
+            Icon(
+                painter = data.first,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primaryContainer
             )
+
+            Spacer(modifier = Modifier.weight(1f))
+
             Text(
                 modifier = Modifier.padding(start = 15.dp),
                 text = data.second.toString(),

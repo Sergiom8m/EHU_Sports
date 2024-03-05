@@ -22,7 +22,8 @@ object appModule {
     @Singleton
     @Provides
     fun provideDatabase(@ApplicationContext app: Context)=
-        Room.databaseBuilder(app, Database::class.java,"ehuSportsDB.db").fallbackToDestructiveMigration()
+        Room.databaseBuilder(app, Database::class.java,"ehuSportsDB")
+            .createFromAsset("database/ehuSports.db")
             .build()
 
     @Singleton

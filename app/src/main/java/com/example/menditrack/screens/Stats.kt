@@ -20,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -30,7 +31,6 @@ import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
 import com.example.menditrack.charts.PieChart
 import com.example.menditrack.data.BarType
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
 fun Stats(
@@ -74,13 +74,17 @@ fun Stats(
             // Total de actividades por tipo
             Title(stringResource(id = R.string.num_activity))
 
+            val walkingIcon = painterResource(id = R.drawable.walk)
+            val runningIcon = painterResource(id = R.drawable.run)
+            val cyclingIcon = painterResource(id = R.drawable.bicycle)
+
             if ( totalCyclingActivities.size > 0 || totalRunningActivities.size > 0 || totalWalkingActivities.size > 0) {
 
                 PieChart(
                     data = mapOf(
-                        Pair( stringResource(id = R.string.cycling), totalCyclingActivities.size),
-                        Pair( stringResource(id = R.string.running), totalRunningActivities.size),
-                        Pair( stringResource(id = R.string.walking), totalWalkingActivities.size)
+                        Pair(cyclingIcon, totalCyclingActivities.size),
+                        Pair(runningIcon, totalRunningActivities.size),
+                        Pair(walkingIcon, totalWalkingActivities.size)
                     )
                 )
             }
