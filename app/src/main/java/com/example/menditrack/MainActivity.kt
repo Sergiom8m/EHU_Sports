@@ -5,32 +5,30 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.ViewModel
 import com.example.menditrack.screens.MainScreen
 import com.example.menditrack.ui.theme.MendiTrackTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     // Instanciar el ViewModel
-    private val appViewModel: AppViewModel by viewModels()
+    private val appViewModel by viewModels<AppViewModel> ()
+    val preferencesViewModel by viewModels<PreferencesViewModel> ()
 
-    // Establecer un CHANNEL_ID para el canal de notificaicones
+    // Establecer un CHANNEL_ID para el canal de notificaciones
     companion object{
         const val CHANNEL_ID = "Menditrack_Channel"
     }
@@ -50,21 +48,12 @@ class MainActivity : ComponentActivity() {
                     NotificationPermission()
                     MainScreen(
                         appViewModel = appViewModel,
-                        modifier = Modifier,
-                        languageChange = { code: String -> languageChange(code)}
+                        prefViewModel = preferencesViewModel,
+                        modifier = Modifier
                     )
                 }
             }
         }
-    }
-
-    private fun languageChange(code: String){
-        resources.configuration.setLocale(Locale(code))
-        resources.updateConfiguration(resources.configuration, resources.displayMetrics)
-
-        resources.configuration.locale = Locale(code)
-        resources.updateConfiguration(resources.configuration, resources.displayMetrics)
-        Log.d("Menditrack", "Language changed")
     }
 
     private fun createNotificationChannel() {

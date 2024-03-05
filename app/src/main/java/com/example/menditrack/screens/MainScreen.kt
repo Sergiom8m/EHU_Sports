@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -49,28 +50,32 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.menditrack.AppViewModel
 import com.example.menditrack.InfoDialog
+import com.example.menditrack.PreferencesViewModel
 import com.example.menditrack.R
 import com.example.menditrack.SettingsDialog
 import com.example.menditrack.data.Design
+import com.example.menditrack.data.Language
 import com.example.menditrack.navigation.AppScreens
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
     appViewModel: AppViewModel,
+    prefViewModel: PreferencesViewModel,
     modifier: Modifier,
-    languageChange: (String) -> Unit
 ){
-
-    val language = appViewModel.actual_language
-    languageChange(language.code)
+    val context = LocalContext.current
+    val idioma by prefViewModel.lang.collectAsState(initial = prefViewModel.currentSetLang)
+    val onLanguageChange:(Language)-> Unit = {
+        prefViewModel.changeLang(it, context)
+    }
 
     val navController = rememberNavController()
 
     val showAddButton = appViewModel.showAddButton
     val showSettingButton = appViewModel.showNavBars
     val enableButtons = appViewModel.enableNavigationButtons
-    var context = LocalContext.current
+
 
     val configuration = LocalConfiguration.current
     val isVertical = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
@@ -80,7 +85,7 @@ fun MainScreen(
         Scaffold(
             topBar = {
                 if (showSettingButton) {
-                    TopBar(navController, appViewModel, modifier, context)
+                    TopBar(context, onLanguageChange, modifier)
                 }
             },
             bottomBar = {
@@ -269,7 +274,7 @@ fun BottomBar(navController: NavController, appViewModel: AppViewModel, modifier
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(navController: NavController, appViewModel: AppViewModel ,modifier: Modifier, context: Context) {
+fun TopBar(context: Context, onLanguageChange: (Language) -> Unit, modifier: Modifier) {
     
     var showInfo by rememberSaveable { mutableStateOf(false) }
     var showSettings by rememberSaveable { mutableStateOf(false) }
@@ -312,7 +317,7 @@ fun TopBar(navController: NavController, appViewModel: AppViewModel ,modifier: M
         }
     )
     InfoDialog(showInfo) { showInfo = false }
-    SettingsDialog(showSettings, appViewModel) { showSettings = false }
+    SettingsDialog(showSettings, onLanguageChange) { showSettings = false }
     
 }
 

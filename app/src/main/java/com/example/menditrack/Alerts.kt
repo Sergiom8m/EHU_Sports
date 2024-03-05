@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.example.menditrack.data.Language
 
 @Composable
-fun SettingsDialog(showSettings: Boolean, appViewModel: AppViewModel, onConfirm: () -> Unit) {
+fun SettingsDialog(showSettings: Boolean, onLanguageChange: (Language)-> Unit, onConfirm: () -> Unit) {
     if (showSettings) {
         AlertDialog(
             onDismissRequest = { /*TODO*/ },
@@ -36,7 +36,7 @@ fun SettingsDialog(showSettings: Boolean, appViewModel: AppViewModel, onConfirm:
                         Button(
                             onClick = {
                                 onConfirm()
-                                appViewModel.actual_language = language
+                                onLanguageChange(Language.getFromCode(language.code))
                             },
                             Modifier.fillMaxWidth()
                         ) {

@@ -6,6 +6,8 @@ import com.example.menditrack.model.ActivityDao
 import com.example.menditrack.model.ActivityRepository
 import com.example.menditrack.model.Database
 import com.example.menditrack.model.IActivityRepository
+import com.example.menditrack.preferences.IPreferencesRepository
+import com.example.menditrack.preferences.PreferencesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,4 +32,8 @@ object appModule {
     @Singleton
     @Provides
     fun provideActivityRepository(activityDao: ActivityDao): IActivityRepository = ActivityRepository(activityDao)
+
+    @Singleton
+    @Provides
+    fun provideUserPreferences(@ApplicationContext app: Context): IPreferencesRepository = PreferencesRepository(app)
 }
