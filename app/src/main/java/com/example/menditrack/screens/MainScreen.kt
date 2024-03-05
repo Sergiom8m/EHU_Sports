@@ -7,6 +7,8 @@ import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -117,39 +119,39 @@ fun MainScreen(
             ) {
                 composable(
                     AppScreens.Walking.route,
-                    enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
-                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                    enterTransition = { fadeIn(animationSpec = tween(1000)) },
+                    exitTransition = { fadeOut(animationSpec = tween(1000)) }
                 ) { AcitivtyList(appViewModel, navController, "Walking") }
 
                 composable(
                     AppScreens.Running.route,
-                    enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
-                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                    enterTransition = { fadeIn(animationSpec = tween(1000)) },
+                    exitTransition = { fadeOut(animationSpec = tween(1000)) }
                     ) { AcitivtyList(appViewModel, navController, "Running") }
 
                 composable(AppScreens.Cycling.route,
-                    enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
-                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                    enterTransition = { fadeIn(animationSpec = tween(1000)) },
+                    exitTransition = { fadeOut(animationSpec = tween(1000)) }
                 ) { AcitivtyList(appViewModel, navController, "Cycling") }
 
                 composable(AppScreens.Stats.route,
-                    enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
-                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                    enterTransition = { fadeIn(animationSpec = tween(1000)) },
+                    exitTransition = { fadeOut(animationSpec = tween(1000)) }
                 ) { Stats(appViewModel, navController) }
 
                 composable(AppScreens.Add.route,
-                    enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
-                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                    enterTransition = { fadeIn(animationSpec = tween(1000)) },
+                    exitTransition = { fadeOut(animationSpec = tween(1000)) }
                 ) { AddActivity(appViewModel, navController) }
 
                 composable(AppScreens.ActivityView.route,
-                    enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
-                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                    enterTransition = { fadeIn(animationSpec = tween(1000)) },
+                    exitTransition = { fadeOut(animationSpec = tween(1000)) }
                 ) { RouteView(appViewModel, navController) }
 
                 composable(AppScreens.Edit.route,
-                    enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
-                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                    enterTransition = { fadeIn(animationSpec = tween(1000)) },
+                    exitTransition = { fadeOut(animationSpec = tween(1000)) }
                 ) { EditActivity(appViewModel, navController) }
             }
         }
@@ -234,39 +236,39 @@ fun MainScreen(
                 ) {
                     composable(
                         AppScreens.Walking.route,
-                        enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
-                        exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                        enterTransition = { fadeIn(animationSpec = tween(1000)) },
+                        exitTransition = { fadeOut(animationSpec = tween(1000)) }
                     ) { AcitivtyList(appViewModel, navController, "Walking") }
 
                     composable(
                         AppScreens.Running.route,
-                        enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
-                        exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                        enterTransition = { fadeIn(animationSpec = tween(1000)) },
+                        exitTransition = { fadeOut(animationSpec = tween(1000)) }
                     ) { AcitivtyList(appViewModel, navController, "Running") }
 
                     composable(AppScreens.Cycling.route,
-                        enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
-                        exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                        enterTransition = { fadeIn(animationSpec = tween(1000)) },
+                        exitTransition = { fadeOut(animationSpec = tween(1000)) }
                     ) { AcitivtyList(appViewModel, navController, "Cycling") }
 
                     composable(AppScreens.Stats.route,
-                        enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
-                        exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                        enterTransition = { fadeIn(animationSpec = tween(1000)) },
+                        exitTransition = { fadeOut(animationSpec = tween(1000)) }
                     ) { Stats(appViewModel, navController) }
 
                     composable(AppScreens.Add.route,
-                        enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
-                        exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                        enterTransition = { fadeIn(animationSpec = tween(1000)) },
+                        exitTransition = { fadeOut(animationSpec = tween(1000)) }
                     ) { AddActivity(appViewModel, navController) }
 
                     composable(AppScreens.ActivityView.route,
-                        enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
-                        exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                        enterTransition = { fadeIn(animationSpec = tween(1000)) },
+                        exitTransition = { fadeOut(animationSpec = tween(1000)) }
                     ) { RouteView(appViewModel, navController) }
 
                     composable(AppScreens.Edit.route,
-                        enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
-                        exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                        enterTransition = { fadeIn(animationSpec = tween(1000)) },
+                        exitTransition = { fadeOut(animationSpec = tween(1000)) }
                     ) { EditActivity(appViewModel, navController) }
                 }
             }
