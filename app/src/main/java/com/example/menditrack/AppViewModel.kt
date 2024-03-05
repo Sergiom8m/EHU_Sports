@@ -103,7 +103,7 @@ class AppViewModel @Inject constructor(
             .setContentTitle(notificationTitle)
             .setContentText(notificationContent)
             .setAutoCancel(true)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.correct)
             .setStyle(NotificationCompat.BigTextStyle()
                 .bigText(notificationContent))
             .setPriority(NotificationCompat.PRIORITY_HIGH)

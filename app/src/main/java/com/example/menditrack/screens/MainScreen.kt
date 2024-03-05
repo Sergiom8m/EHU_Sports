@@ -4,6 +4,12 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -109,13 +115,42 @@ fun MainScreen(
                 navController = navController,
                 startDestination = AppScreens.Stats.route
             ) {
-                composable(AppScreens.Walking.route) { AcitivtyList(appViewModel, navController, "Walking") }
-                composable(AppScreens.Running.route) { AcitivtyList(appViewModel, navController, "Running") }
-                composable(AppScreens.Cycling.route) { AcitivtyList(appViewModel, navController, "Cycling") }
-                composable(AppScreens.Stats.route) { Stats(appViewModel, navController) }
-                composable(AppScreens.Add.route) { AddActivity(appViewModel, navController) }
-                composable(AppScreens.ActivityView.route) { RouteView(appViewModel, navController) }
-                composable(AppScreens.Edit.route) { EditActivity(appViewModel, navController) }
+                composable(
+                    AppScreens.Walking.route,
+                    enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                ) { AcitivtyList(appViewModel, navController, "Walking") }
+
+                composable(
+                    AppScreens.Running.route,
+                    enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                    ) { AcitivtyList(appViewModel, navController, "Running") }
+
+                composable(AppScreens.Cycling.route,
+                    enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                ) { AcitivtyList(appViewModel, navController, "Cycling") }
+
+                composable(AppScreens.Stats.route,
+                    enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                ) { Stats(appViewModel, navController) }
+
+                composable(AppScreens.Add.route,
+                    enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                ) { AddActivity(appViewModel, navController) }
+
+                composable(AppScreens.ActivityView.route,
+                    enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                ) { RouteView(appViewModel, navController) }
+
+                composable(AppScreens.Edit.route,
+                    enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                ) { EditActivity(appViewModel, navController) }
             }
         }
     }
@@ -197,17 +232,42 @@ fun MainScreen(
                     navController = navController,
                     startDestination = AppScreens.Stats.route
                 ) {
-                    composable(AppScreens.Walking.route) { AcitivtyList(appViewModel, navController, "Walking") }
-                    composable(AppScreens.Running.route) { AcitivtyList(appViewModel, navController, "Running") }
-                    composable(AppScreens.Cycling.route) { AcitivtyList(appViewModel, navController, "Cycling") }
-                    composable(AppScreens.Stats.route) { Stats(appViewModel, navController) }
-                    composable(AppScreens.Add.route) { AddActivity(appViewModel, navController) }
-                    composable(AppScreens.ActivityView.route) {
-                        RouteView(
-                            appViewModel,
-                            navController
-                        )
-                    }
+                    composable(
+                        AppScreens.Walking.route,
+                        enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+                        exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                    ) { AcitivtyList(appViewModel, navController, "Walking") }
+
+                    composable(
+                        AppScreens.Running.route,
+                        enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+                        exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                    ) { AcitivtyList(appViewModel, navController, "Running") }
+
+                    composable(AppScreens.Cycling.route,
+                        enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+                        exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                    ) { AcitivtyList(appViewModel, navController, "Cycling") }
+
+                    composable(AppScreens.Stats.route,
+                        enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+                        exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                    ) { Stats(appViewModel, navController) }
+
+                    composable(AppScreens.Add.route,
+                        enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+                        exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                    ) { AddActivity(appViewModel, navController) }
+
+                    composable(AppScreens.ActivityView.route,
+                        enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+                        exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                    ) { RouteView(appViewModel, navController) }
+
+                    composable(AppScreens.Edit.route,
+                        enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+                        exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) }
+                    ) { EditActivity(appViewModel, navController) }
                 }
             }
         }
