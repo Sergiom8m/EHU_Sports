@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
@@ -35,8 +36,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -95,14 +98,20 @@ fun MainScreen(
 
         Scaffold(
             topBar = {
-                if (showSettingButton) {
-                    TopBar(context, onLanguageChange, onThemeChange, modifier)
-                }
+                AnimatedVisibility(
+                    visible = showSettingButton,
+                    enter = fadeIn(animationSpec = tween(1000)),
+                    exit = fadeOut(animationSpec = tween(0))
+                ) { TopBar(context, onLanguageChange, onThemeChange, modifier) }
             },
             bottomBar = {
-                if (showSettingButton) {
-                    BottomBar(navController, appViewModel, modifier, enableButtons)
-                }
+                AnimatedVisibility(
+                    visible = showSettingButton,
+                    enter = fadeIn(animationSpec = tween(1000)),
+                    exit = fadeOut(animationSpec = tween(0))
+                ){ BottomBar(navController, appViewModel, modifier, enableButtons) }
+
+
             },
             floatingActionButton = {
 

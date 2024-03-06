@@ -95,7 +95,7 @@ fun AcitivtyList(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column(
-                            modifier = Modifier.padding(16.dp),
+                            modifier = Modifier.padding(16.dp).weight(1f),
                             verticalArrangement = Arrangement.Center
                         ) {
                             Text(
