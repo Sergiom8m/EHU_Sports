@@ -8,11 +8,15 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -100,15 +104,15 @@ fun MainScreen(
             topBar = {
                 AnimatedVisibility(
                     visible = showSettingButton,
-                    enter = fadeIn(animationSpec = tween(1000)),
-                    exit = fadeOut(animationSpec = tween(0))
+                    enter = slideInVertically(initialOffsetY = { it }) + expandVertically(),
+                    exit = slideOutVertically(targetOffsetY = { it }) + shrinkVertically()
                 ) { TopBar(context, onLanguageChange, onThemeChange, modifier) }
             },
             bottomBar = {
                 AnimatedVisibility(
                     visible = showSettingButton,
-                    enter = fadeIn(animationSpec = tween(1000)),
-                    exit = fadeOut(animationSpec = tween(0))
+                    enter = slideInVertically(initialOffsetY = { it }) + expandVertically(),
+                    exit = slideOutVertically(targetOffsetY = { it }) + shrinkVertically()
                 ){ BottomBar(navController, appViewModel, modifier, enableButtons) }
 
 

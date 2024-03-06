@@ -171,9 +171,9 @@ class AppViewModel @Inject constructor(
     @Composable
     fun mapToUserLanguageSport(englishSport: String): String {
         return when (englishSport.toLowerCase()) {
-            "Running" -> stringResource(id = R.string.running)
-            "Walking" -> stringResource(id = R.string.walking)
-            "Cycling" -> stringResource(id = R.string.cycling)
+            "running" -> stringResource(id = R.string.running)
+            "walking" -> stringResource(id = R.string.walking)
+            "cycling" -> stringResource(id = R.string.cycling)
             else -> englishSport
         }
     }
