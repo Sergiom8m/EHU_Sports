@@ -2,7 +2,6 @@ package com.example.menditrack.preferences
 
 import androidx.core.os.LocaleListCompat
 import com.example.menditrack.data.Language
-import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 import androidx.appcompat.app.AppCompatDelegate

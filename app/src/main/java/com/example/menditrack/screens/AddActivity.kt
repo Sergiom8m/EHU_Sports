@@ -31,8 +31,8 @@ import androidx.navigation.NavController
 import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
 import androidx.compose.material.DropdownMenuItem
-import com.example.menditrack.model.SportActivity
 import com.example.menditrack.utils.isValidInput
+import com.example.menditrack.utils.sendNotification
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -245,11 +245,7 @@ fun AddActivity(
                     navController.navigateUp()
 
                     // Send a notification that indicates the activity has been added correctly
-                    appViewModel.sendAddNotification(
-                        context,
-                        title,
-                        content
-                    )
+                    sendNotification(context, title, content)
                 } else {
                     // If data isn't valid show a toast message
                     Toast.makeText(
@@ -306,7 +302,6 @@ fun AddHeading(navController: NavController){
             )
         }
     }
-
 }
 
 

@@ -41,5 +41,12 @@
     <string name="dist_activity">Egindako distantzia totala</string>
     <string name="noData">Ez dago informaziorik eskuragarri</string>
     <string name="themeAlert">Kolore hautaketa</string>
+    <string name="contact_us">Kontaktua</string>
+    <string name="subject">EHUSport aplikazioaren inguruko kontsulta</string>
+    <string name="body">Idatzi hemen zure kontsulta...</string>
+    <string name="confirm">Baieztatu</string>
+    <string name="cancel">Ezeztatu</string>
+    <string name="delete_warn">"Ziur jarduera hau ezabatu nahi duzula? "</string>
+    <string name="delete">Jarduera ezabatu</string>
 
 </resources>

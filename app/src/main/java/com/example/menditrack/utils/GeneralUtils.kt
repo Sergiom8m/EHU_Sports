@@ -1,6 +1,5 @@
 package com.example.menditrack.utils
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -8,27 +7,34 @@ import android.os.Environment
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import com.example.menditrack.R
 import com.example.menditrack.model.SportActivity
 import java.io.File
 import java.io.FileWriter
+import java.util.Locale
 import kotlin.random.Random
+
+// Function to convert SportActivity to string (data extraction)
+fun activityToString(activity: SportActivity): String{
+    return "NAME: ${activity.name}\n" +
+            "\n" +
+            "DISTANCE: ${activity.distance} km\n" +
+            "START POINT: ${activity.initPoint}\n" +
+            "GRADE: ${activity.grade} m\n" +
+            "DIFFICULTY: ${activity.difficulty}"
+}
 
 // Function to export an activity in txt
 fun exportActivityToTxt(activity: SportActivity) {
-    val ExternalStorageState = Environment.getExternalStorageState()
-    if (ExternalStorageState == Environment.MEDIA_MOUNTED) {
+    val externalStorageState = Environment.getExternalStorageState()
+    if (externalStorageState == Environment.MEDIA_MOUNTED) {
         val downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val file = File(downloadDir, "${activity.name}.txt")
 
-
         FileWriter(file).use { writer ->
             with(writer) {
-                append("NAME: ${activity.name}\n\n")
-                append("DISTANCE: ${activity.distance} km\n")
-                append("START POINT: ${activity.initPoint}\n")
-                append("GRADE: ${activity.grade} m\n")
-                append("DIFFICULTY: ${activity.difficulty}\n")
+                append(activityToString(activity))
             }
         }
     }
@@ -39,21 +45,40 @@ fun openGoogleMaps(startPoint: String, context: Context) {
     val gmmIntentUri = Uri.parse("geo:0,0?q=$startPoint")
     val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
     mapIntent.setPackage("com.google.android.apps.maps")
-    ContextCompat.startActivity(context, mapIntent, null)
+    startActivity(context, mapIntent, null)
+}
+
+// Function to open Gmail with a default subject, body and destination
+fun openEmail(context: Context) {
+    val emailAddress = "menditrackteam@gmail.com"
+
+    val intent = Intent(Intent.ACTION_SEND)
+    intent.type = "text/plain"
+    intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailAddress))
+    intent.setPackage("com.google.android.gm")
+    startActivity(context, intent, null)
+}
+
+// Function to open whatsapp in order to share a text with the activity's information
+fun openShare(activity: SportActivity, context: Context){
+
+    val intent = Intent(Intent.ACTION_SEND)
+    intent.type = "text/plain"
+    intent.putExtra(Intent.EXTRA_TEXT, activityToString(activity))
+    intent.setPackage("com.whatsapp")
+    startActivity(context, intent,null)
 }
 
 // Function to generate a random id long based on the activity name
 fun generateRandomId(name: String): Long {
     val hash = name.hashCode()
-
     val random = Random(hash.toLong())
-
     return random.nextLong()
 }
 
 // Function to map selected difficulty to english for storage in DB (From UI to DB)
 fun mapToEnglishDifficulty(selectedDifficulty: String): String {
-    return when (selectedDifficulty.toLowerCase()) {
+    return when (selectedDifficulty.lowercase(Locale.ROOT)) {
         "fácil", "erraza", "easy" -> "Easy"
         "moderado", "ertaina", "moderate" -> "Moderate"
         "difícil", "zaila", "hard" -> "Hard"
@@ -63,7 +88,7 @@ fun mapToEnglishDifficulty(selectedDifficulty: String): String {
 
 // Function to map selected sport to english for storage in DB (From UI to DB)
 fun mapToEnglishSport(selectedSport: String): String {
-    return when (selectedSport.toLowerCase()) {
+    return when (selectedSport.lowercase(Locale.ROOT)) {
         "ciclismo", "bizikleta", "cycling" -> "Cycling"
         "carrera", "korrika", "running" -> "Running"
         "caminata", "ibilaldia", "walking" -> "Walking"
@@ -74,7 +99,7 @@ fun mapToEnglishSport(selectedSport: String): String {
 // Function to map difficulty to user's selected language (From DB to UI)
 @Composable
 fun mapToUserLanguageDifficulty(englishDifficulty: String): String {
-    return when (englishDifficulty.toLowerCase()) {
+    return when (englishDifficulty.lowercase(Locale.ROOT)) {
         "easy" -> stringResource(id = R.string.easy)
         "moderate" -> stringResource(id = R.string.moderate)
         "hard" -> stringResource(id = R.string.hard)
@@ -85,7 +110,7 @@ fun mapToUserLanguageDifficulty(englishDifficulty: String): String {
 // Function to map sport to user's selected language (From DB to UI)
 @Composable
 fun mapToUserLanguageSport(englishSport: String): String {
-    return when (englishSport.toLowerCase()) {
+    return when (englishSport.lowercase(Locale.ROOT)) {
         "running" -> stringResource(id = R.string.running)
         "walking" -> stringResource(id = R.string.walking)
         "cycling" -> stringResource(id = R.string.cycling)
@@ -114,5 +139,5 @@ fun isValidInput(
 
 // Function to sum the distances of activity list
 fun sumActivityDistances(totalWalkingActivities: List<SportActivity>): Int {
-    return totalWalkingActivities.sumByDouble { it.distance }.toInt()
+    return totalWalkingActivities.sumOf { it.distance }.toInt()
 }

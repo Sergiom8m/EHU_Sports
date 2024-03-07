@@ -8,8 +8,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import com.example.menditrack.PreferencesViewModel
 
+// Definition of the different themes available in the application
 
-private val LightColorScheme = lightColorScheme(
+private val OrangeColorScheme = lightColorScheme(
     primary = Color(0xFFFF5722),
     secondary = Color(0xFFFFFFFF),
     tertiary = Color(0xFF000000),
@@ -18,7 +19,7 @@ private val LightColorScheme = lightColorScheme(
     tertiaryContainer = Color(0xFFFFC107)
 )
 
-private val AlternativeColorScheme = lightColorScheme(
+private val BlueColorScheme = lightColorScheme(
     primary = Color(0xFF2196F3),
     secondary = Color(0xFFFFFFFF),
     tertiary = Color(0xFF4CAF50),
@@ -27,7 +28,7 @@ private val AlternativeColorScheme = lightColorScheme(
     tertiaryContainer = Color(0xFFFFC107)
 )
 
-private val TertiaryColorScheme = lightColorScheme(
+private val GreenColorScheme = lightColorScheme(
     primary = Color(0xFF6C733D),
     secondary = Color(0xFFFFFFFF),
     tertiary = Color(0xFF4CAF50),
@@ -41,27 +42,28 @@ fun MendiTrackTheme(
     prefViewModel: PreferencesViewModel,
     content: @Composable () -> Unit
 ) {
-
+    // Get the variable that indicates the selected theme (Default orange)
     val theme by prefViewModel.theme.collectAsState(initial = 0)
 
+    // Set the theme depending on the variable's value
     when (theme) {
         0 -> {
             MaterialTheme(
-                colorScheme = LightColorScheme,
+                colorScheme = OrangeColorScheme,
                 typography = Typography,
                 content = content
             )
         }
         1 -> {
             MaterialTheme(
-                colorScheme = AlternativeColorScheme,
+                colorScheme = BlueColorScheme,
                 typography = Typography,
                 content = content
             )
         }
         else -> {
             MaterialTheme(
-                colorScheme = TertiaryColorScheme,
+                colorScheme = GreenColorScheme,
                 typography = Typography,
                 content = content
             )

@@ -1,6 +1,5 @@
 package com.example.menditrack
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.menditrack.data.Language
@@ -23,9 +22,9 @@ class PreferencesViewModel @Inject constructor(
     val theme = preferencesRepository.getThemePreferences()
 
     // Functions to save preferences when the user changes them (selected language + theme)
-    fun changeLang(idioma: Language, context: Context) {
-        languageManager.changeLang(idioma)
-        viewModelScope.launch(Dispatchers.IO) { preferencesRepository.setLanguage(idioma.code) }
+    fun changeLang(lang: Language) {
+        languageManager.changeLang(lang)
+        viewModelScope.launch(Dispatchers.IO) { preferencesRepository.setLanguage(lang.code) }
     }
     fun changeTheme(color: Int) {
         viewModelScope.launch(Dispatchers.IO) { preferencesRepository.setThemePreferences(color) }

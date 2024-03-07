@@ -40,7 +40,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -77,7 +76,7 @@ fun MainScreen(
     val context = LocalContext.current
 
     // Define language and theme change functions to use them inside composables
-    val onLanguageChange:(Language)-> Unit = { prefViewModel.changeLang(it, context) }
+    val onLanguageChange:(Language)-> Unit = { prefViewModel.changeLang(it) }
     val onThemeChange:(Int)-> Unit = { prefViewModel.changeTheme(it) }
 
     // Create a navController
@@ -284,7 +283,7 @@ fun TopBar(
         }
     )
     // Invoke dialog components with the "show" parameter and set it to false after the dialogs are dismissed.
-    InfoDialog(showInfo) { showInfo = false }
+    InfoDialog(showInfo, context) { showInfo = false }
     SettingsDialog(showSettings, onLanguageChange) { showSettings = false }
     ShowThemes(showThemes, onThemeChange) { showThemes = false }
 }
@@ -307,23 +306,23 @@ fun MainNavHost(
             AppScreens.Walking.route,
             enterTransition = { fadeIn(animationSpec = tween(1000)) },
             exitTransition = { fadeOut(animationSpec = tween(1000)) }
-        ) { AcitivtyList(appViewModel, navController, "Walking") }
+        ) { ActivityList(appViewModel, navController, "Walking") }
 
         composable(
             AppScreens.Running.route,
             enterTransition = { fadeIn(animationSpec = tween(1000)) },
             exitTransition = { fadeOut(animationSpec = tween(1000)) }
-        ) { AcitivtyList(appViewModel, navController, "Running") }
+        ) { ActivityList(appViewModel, navController, "Running") }
 
         composable(AppScreens.Cycling.route,
             enterTransition = { fadeIn(animationSpec = tween(1000)) },
             exitTransition = { fadeOut(animationSpec = tween(1000)) }
-        ) { AcitivtyList(appViewModel, navController, "Cycling") }
+        ) { ActivityList(appViewModel, navController, "Cycling") }
 
         composable(AppScreens.Stats.route,
             enterTransition = { fadeIn(animationSpec = tween(1000)) },
             exitTransition = { fadeOut(animationSpec = tween(1000)) }
-        ) { Stats(appViewModel, navController) }
+        ) { Stats(appViewModel) }
 
         composable(AppScreens.Add.route,
             enterTransition = { fadeIn(animationSpec = tween(1000)) },

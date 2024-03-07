@@ -18,6 +18,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -43,6 +44,7 @@ import com.example.menditrack.model.SportActivity
 import com.example.menditrack.utils.exportActivityToTxt
 import com.example.menditrack.utils.mapToUserLanguageDifficulty
 import com.example.menditrack.utils.openGoogleMaps
+import com.example.menditrack.utils.openShare
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -91,6 +93,7 @@ fun ViewActivity(
                             tint = MaterialTheme.colorScheme.secondary
                         )
                     }
+
                     Spacer(modifier = Modifier.width(8.dp))
 
                     Text(
@@ -100,7 +103,17 @@ fun ViewActivity(
                         modifier = Modifier.weight(1f)
                     )
 
+                    Spacer(modifier = Modifier.width(8.dp))
 
+                    IconButton(
+                        onClick = { openShare(activityToShow,context) },
+                    ) {
+                        Icon(
+                            Icons.Default.Share,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.secondary
+                        )
+                    }
                     IconButton(
                         onClick = { openGoogleMaps(activityToShow.initPoint, context) },
                     ) {

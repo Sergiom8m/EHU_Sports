@@ -41,6 +41,13 @@
     <string name="dist_activity">Distancia total recorrida</string>
     <string name="noData">No hay información disponible</string>
     <string name="themeAlert">Selección de tema</string>
+    <string name="contact_us">Contacto</string>
+    <string name="subject">Consulta sobre la aplicacion EHUSports</string>
+    <string name="body">Escribe aqui tu consulta</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="delete_warn">¿Estás seguro de que deseas eliminar esta actividad?</string>
+    <string name="delete">Eliminar actividad</string>
 
 
 </resources>

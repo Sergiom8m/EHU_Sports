@@ -1,6 +1,5 @@
 package com.example.menditrack.model
 
-import androidx.compose.runtime.MutableState
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 

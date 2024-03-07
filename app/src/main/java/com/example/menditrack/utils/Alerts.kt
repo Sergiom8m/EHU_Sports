@@ -1,5 +1,7 @@
 package com.example.menditrack.utils
 
+import android.app.NotificationManager
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,8 +23,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.app.NotificationCompat
+import com.example.menditrack.AppViewModel
+import com.example.menditrack.MainActivity
 import com.example.menditrack.R
 import com.example.menditrack.data.Language
+import com.example.menditrack.model.SportActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 // Dialog to select the language (user preference)
 @Composable
@@ -30,7 +39,7 @@ fun SettingsDialog(showSettings: Boolean, onLanguageChange: (Language)-> Unit, o
     if (showSettings) {
         AlertDialog(
             onDismissRequest = { onConfirm() },
-            confirmButton = { /*TODO*/ },
+            confirmButton = { },
             title = { Text(text = stringResource(id = R.string.settings)) },
             text = {
                 Column (
@@ -60,18 +69,23 @@ fun SettingsDialog(showSettings: Boolean, onLanguageChange: (Language)-> Unit, o
     }
 }
 
-// Dialog to show the information of the app
+// Dialog to show the information of the app (with a "contact us" button)
 @Composable
-fun InfoDialog(showInfo: Boolean, onConfirm: () -> Unit) {
+fun InfoDialog(showInfo: Boolean, context: Context, onConfirm: () -> Unit) {
     if (showInfo) {
         AlertDialog(
-            onDismissRequest = { /*TODO*/ },
-            confirmButton = { TextButton(onClick = { onConfirm() }) {
-                Text(text = stringResource(R.string.accept))
-            }},
+            onDismissRequest = { onConfirm() },
+            confirmButton = {
+                Row {
+                    TextButton(onClick = { openEmail(context) }) {
+                        Text(text = stringResource(R.string.contact_us))
+                    }
+                }
+            },
             title = { Text(text = stringResource(id = R.string.app_name)) },
-            text = { Text(text = stringResource(id = R.string.app_desc)) }
-
+            text = {
+                Text(text = stringResource(id = R.string.app_desc))
+            }
         )
     }
 }
@@ -82,7 +96,7 @@ fun ShowThemes(showThemes: Boolean, onThemeChange: (Int) -> Unit, onConfirm: () 
     if (showThemes) {
         AlertDialog(
             onDismissRequest = { onConfirm() },
-            confirmButton = { /* TODO */ },
+            confirmButton = { },
             title = { Text(text = stringResource(id = R.string.themeAlert)) },
             containerColor = Color.White,
             text = {
@@ -100,8 +114,8 @@ fun ShowThemes(showThemes: Boolean, onThemeChange: (Int) -> Unit, onConfirm: () 
                         Pair(R.drawable.tertiary_palette, "Theme 3")
                     )
 
-                    // Crear un botón para cada tema
-                    themes.forEachIndexed { index, (image, name) ->
+                    // Create a button fo each theme
+                    themes.forEachIndexed { index, (image, _) ->
 
                         Image(
                             painter = painterResource(id = image),
@@ -117,5 +131,62 @@ fun ShowThemes(showThemes: Boolean, onThemeChange: (Int) -> Unit, onConfirm: () 
             }
         )
     }
+}
+
+// Dialog to confirm activity deletion
+@Composable
+fun ShowDeleteMessage(
+    showDelete: Boolean,
+    appViewModel: AppViewModel,
+    activity: SportActivity,
+    onConfirm: () -> Unit
+) {
+    if (showDelete) {
+        AlertDialog(
+            onDismissRequest = { },
+            confirmButton = {
+                TextButton(onClick = {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        appViewModel.deleteActivity(activity)
+                    }
+                    onConfirm()
+                }) {
+                    Text(text = stringResource(id = R.string.confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    onConfirm()
+                }) {
+                    Text(text = stringResource(id = R.string.cancel))
+                }
+            },
+            title = {
+                Text(text = stringResource(id = R.string.delete))
+            },
+            text = {
+                Text(text = stringResource(id = R.string.delete_warn))
+            }
+        )
+    }
+}
+
+// Function to throw a notification given the title, the content of the notification and the context
+fun sendNotification(context: Context, title: String, content: String) {
+
+    val notificationManager = context.getSystemService(NotificationManager::class.java)
+
+    val notification = NotificationCompat.Builder(context, MainActivity.CHANNEL_ID)
+        .setContentTitle(title)
+        .setContentText(content)
+        .setAutoCancel(true)
+        .setSmallIcon(R.drawable.correct)
+        .setStyle(
+            NotificationCompat.BigTextStyle()
+            .bigText(content))
+        .setPriority(NotificationCompat.PRIORITY_HIGH)
+        .build()
+
+    notificationManager.notify(1, notification)
 }
 

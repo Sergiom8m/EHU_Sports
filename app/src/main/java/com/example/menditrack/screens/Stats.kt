@@ -26,7 +26,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
 import com.example.menditrack.charts.PieChart
@@ -36,7 +35,6 @@ import com.example.menditrack.utils.sumActivityDistances
 @Composable
 fun Stats(
     appViewModel: AppViewModel,
-    navController: NavController,
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ){
     // Get as states the lists of activities of each type

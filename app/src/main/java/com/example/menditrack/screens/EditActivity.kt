@@ -50,7 +50,6 @@ import androidx.navigation.NavController
 import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
 import androidx.compose.material3.Button
-import com.example.menditrack.model.SportActivity
 import com.example.menditrack.utils.isValidInput
 import com.example.menditrack.utils.mapToUserLanguageDifficulty
 import com.example.menditrack.utils.mapToUserLanguageSport

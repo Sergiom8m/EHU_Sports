@@ -32,18 +32,24 @@ import com.example.menditrack.navigation.AppScreens
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
+import com.example.menditrack.utils.ShowDeleteMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun AcitivtyList(
+fun ActivityList(
     appViewModel: AppViewModel,
     navController: NavController,
     type:String,
-    modifier: Modifier = Modifier
 ){
+
+    // Boolean variable to manage the visibility of the delete dialog
+    var showDelete by rememberSaveable { mutableStateOf(false) }
 
     // Get activity list (Flow) as state
     val activities = appViewModel.getActivitiesByType(type).collectAsState(initial = emptyList())
@@ -105,7 +111,9 @@ fun AcitivtyList(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column(
-                            modifier = Modifier.padding(16.dp).weight(1f),
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .weight(1f),
                             verticalArrangement = Arrangement.Center
                         ) {
                             Text(
@@ -145,9 +153,8 @@ fun AcitivtyList(
                             // Button to delete activity
                             IconButton(
                                 onClick = {
-                                    CoroutineScope(Dispatchers.Main).launch {
-                                        appViewModel.deleteActivity(activity)
-                                    }
+                                    // On click set visible the deletion confirm dialog
+                                    showDelete = true
                                 }
                             ) {
                                 Icon(
@@ -156,6 +163,9 @@ fun AcitivtyList(
                                     tint = MaterialTheme.colorScheme.primaryContainer
                                 )
                             }
+
+                            // Dialog to confirm activity deletion
+                            ShowDeleteMessage(showDelete, appViewModel, activity) {showDelete= false}
                         }
                     }
                 }
