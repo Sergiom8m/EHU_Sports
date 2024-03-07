@@ -7,12 +7,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import androidx.appcompat.app.AppCompatDelegate
 
+// Singleton class to manage the language preferences
 @Singleton
 class LanguageManager @Inject constructor() {
-
-    // Current application's lang
-    var currentLang: Language = Language.getFromCode(Locale.getDefault().language.lowercase())
-
     // Method to change the App's language setting a new locale
     fun changeLang(lang: Language) {
         val localeList = LocaleListCompat.forLanguageTags(lang.code)

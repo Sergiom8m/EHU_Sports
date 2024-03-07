@@ -1,11 +1,6 @@
 package com.example.menditrack.screens
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.os.Environment
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -37,35 +32,35 @@ import androidx.navigation.NavController
 import com.example.menditrack.AppViewModel
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.sp
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
-import androidx.core.content.ContextCompat.startActivity
 import com.example.menditrack.R
 import com.example.menditrack.model.SportActivity
-import java.io.File
-import java.io.FileWriter
+import com.example.menditrack.utils.exportActivityToTxt
+import com.example.menditrack.utils.mapToUserLanguageDifficulty
+import com.example.menditrack.utils.openGoogleMaps
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RouteView(
+fun ViewActivity(
     appViewModel: AppViewModel,
     navController: NavController,
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ){
+    // Get the variable that indicates which is the activity to show
     val activityToShow = appViewModel.activityToShow.value
     val context = LocalContext.current
 
+    // Create a scaffold to capsule activity's data and a download button
     Scaffold (
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
             if (activityToShow != null) {
-                DownloadButton(appViewModel, activityToShow)
+                DownloadButton(activityToShow)
             }
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -98,17 +93,16 @@ fun RouteView(
                     }
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    if (activityToShow != null) {
-                        Text(
-                            text = activityToShow.name ?: "",
-                            color = MaterialTheme.colorScheme.secondary,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
+                    Text(
+                        text = activityToShow!!.name,
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f)
+                    )
+
 
                     IconButton(
-                        onClick = { openGoogleMaps(activityToShow!!.initPoint, context) },
+                        onClick = { openGoogleMaps(activityToShow.initPoint, context) },
                     ) {
                         Icon(
                             Icons.Default.LocationOn,
@@ -125,16 +119,17 @@ fun RouteView(
             InfoRow("${stringResource(id = R.string.distance)}:", "${activityToShow?.distance ?: 0} km")
             InfoRow("${stringResource(id = R.string.start_point)}:",activityToShow?.initPoint ?: "")
             InfoRow("${stringResource(id = R.string.grade)}:", "${activityToShow?.grade ?: 0} m")
-            InfoRow("${stringResource(id = R.string.difficulty)}:", appViewModel.mapToUserLanguageDifficulty(activityToShow?.difficulty ?: ""))
+            InfoRow("${stringResource(id = R.string.difficulty)}:", mapToUserLanguageDifficulty(activityToShow?.difficulty ?: ""))
         }
     }
 
+    // On entering this screen nav bars and add floating button should be hidden
     DisposableEffect(Unit) {
-        appViewModel.enableNavigationButtons = false
         appViewModel.showNavBars = false
         appViewModel.showAddButton = false
+
+        // On exiting this screen make them visible again
         onDispose {
-            appViewModel.enableNavigationButtons = true
             appViewModel.showNavBars = true
             appViewModel.showAddButton = true
         }
@@ -167,11 +162,11 @@ fun InfoRow(boldText: String, normalText: String) {
     }
 }
 
-
+// Button to export activity to downloads file in txt
 @Composable
-fun DownloadButton(appViewModel: AppViewModel, activity: SportActivity) {
+fun DownloadButton(activity: SportActivity) {
     ExtendedFloatingActionButton(
-        onClick = { appViewModel.exportRouteToTXT(activity)},
+        onClick = { exportActivityToTxt(activity)},
         icon = {
             Icon(
                 painterResource(id = R.drawable.download),
@@ -189,11 +184,6 @@ fun DownloadButton(appViewModel: AppViewModel, activity: SportActivity) {
 }
 
 
-fun openGoogleMaps(startPoint: String, context: Context) {
-    val gmmIntentUri = Uri.parse("geo:0,0?q=$startPoint")
-    val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-    mapIntent.setPackage("com.google.android.apps.maps")
-    startActivity( context, mapIntent, null)
-}
+
 
 

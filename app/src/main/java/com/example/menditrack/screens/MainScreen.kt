@@ -4,19 +4,15 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,10 +36,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -58,16 +52,17 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.menditrack.AppViewModel
-import com.example.menditrack.InfoDialog
+import com.example.menditrack.utils.InfoDialog
 import com.example.menditrack.PreferencesViewModel
 import com.example.menditrack.R
-import com.example.menditrack.SettingsDialog
-import com.example.menditrack.ShowThemes
+import com.example.menditrack.utils.SettingsDialog
+import com.example.menditrack.utils.ShowThemes
 import com.example.menditrack.data.Design
 import com.example.menditrack.data.Language
 import com.example.menditrack.navigation.AppScreens
@@ -80,221 +75,91 @@ fun MainScreen(
     modifier: Modifier,
 ){
     val context = LocalContext.current
-    val onLanguageChange:(Language)-> Unit = {
-        prefViewModel.changeLang(it, context)
-    }
 
-    val onThemeChange:(Int)-> Unit = {
-        prefViewModel.changeTheme(it)
-    }
+    // Define language and theme change functions to use them inside composables
+    val onLanguageChange:(Language)-> Unit = { prefViewModel.changeLang(it, context) }
+    val onThemeChange:(Int)-> Unit = { prefViewModel.changeTheme(it) }
 
+    // Create a navController
     val navController = rememberNavController()
 
+    // Get variables to manage the visibility of the nav bars
     val showAddButton = appViewModel.showAddButton
     val showSettingButton = appViewModel.showNavBars
-    val enableButtons = appViewModel.enableNavigationButtons
 
-
+    // Get information about screen orientation
     val configuration = LocalConfiguration.current
     val isVertical = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
 
+    // If the orientation is vertical show portrait design
     if (isVertical) {
-
         Scaffold(
+            // TOP BAR
             topBar = {
+                // Manage the top bar's visibility with ViewModel's variables (ANIMATED ENTERING/EXITING)
                 AnimatedVisibility(
                     visible = showSettingButton,
                     enter = slideInVertically(initialOffsetY = { it }) + expandVertically(),
                     exit = slideOutVertically(targetOffsetY = { it }) + shrinkVertically()
                 ) { TopBar(context, onLanguageChange, onThemeChange, modifier) }
             },
+            // BOTTOM BAR
             bottomBar = {
+                // Manage the bottom bar's visibility with ViewModel's variables (ANIMATED ENTERING/EXITING)
                 AnimatedVisibility(
                     visible = showSettingButton,
                     enter = slideInVertically(initialOffsetY = { it }) + expandVertically(),
                     exit = slideOutVertically(targetOffsetY = { it }) + shrinkVertically()
-                ){ BottomBar(navController, appViewModel, modifier, enableButtons) }
-
-
+                ){ BottomBar(navController) }
             },
+            // FLOATING BUTTON
             floatingActionButton = {
-
+                // Retrieve the current back stack entry
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+                // Check if the current destination of the navigation back stack is not the Stats screen and
+                // if the showAddButton flag is true.
                 if (navBackStackEntry?.destination?.route != AppScreens.Stats.route && showAddButton) {
-                    Button(navController, appViewModel, modifier)
+                    AddButton(navController)
                 }
             }
         ) { innerPadding ->
-            NavHost(
-                modifier = Modifier.padding(innerPadding),
-                navController = navController,
-                startDestination = AppScreens.Stats.route
-            ) {
-                composable(
-                    AppScreens.Walking.route,
-                    enterTransition = { fadeIn(animationSpec = tween(1000)) },
-                    exitTransition = { fadeOut(animationSpec = tween(1000)) }
-                ) { AcitivtyList(appViewModel, navController, "Walking") }
-
-                composable(
-                    AppScreens.Running.route,
-                    enterTransition = { fadeIn(animationSpec = tween(1000)) },
-                    exitTransition = { fadeOut(animationSpec = tween(1000)) }
-                    ) { AcitivtyList(appViewModel, navController, "Running") }
-
-                composable(AppScreens.Cycling.route,
-                    enterTransition = { fadeIn(animationSpec = tween(1000)) },
-                    exitTransition = { fadeOut(animationSpec = tween(1000)) }
-                ) { AcitivtyList(appViewModel, navController, "Cycling") }
-
-                composable(AppScreens.Stats.route,
-                    enterTransition = { fadeIn(animationSpec = tween(1000)) },
-                    exitTransition = { fadeOut(animationSpec = tween(1000)) }
-                ) { Stats(appViewModel, navController) }
-
-                composable(AppScreens.Add.route,
-                    enterTransition = { fadeIn(animationSpec = tween(1000)) },
-                    exitTransition = { fadeOut(animationSpec = tween(1000)) }
-                ) { AddActivity(appViewModel, navController) }
-
-                composable(AppScreens.ActivityView.route,
-                    enterTransition = { fadeIn(animationSpec = tween(1000)) },
-                    exitTransition = { fadeOut(animationSpec = tween(1000)) }
-                ) { RouteView(appViewModel, navController) }
-
-                composable(AppScreens.Edit.route,
-                    enterTransition = { fadeIn(animationSpec = tween(1000)) },
-                    exitTransition = { fadeOut(animationSpec = tween(1000)) }
-                ) { EditActivity(appViewModel, navController) }
-            }
+            // Display the NavHost in the content of the scaffold (innerPadding to keep it inside the content site)
+            MainNavHost(navController, appViewModel, innerPadding)
         }
     }
+    // If the orientation is horizontal show landscape design
     else {
         Scaffold(
+            // FLOATING BUTTON
             floatingActionButton = {
+                // Retrieve the current back stack entry
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+                // Check if the current destination of the navigation back stack is not the Stats screen and
+                // if the showAddButton flag is true.
                 if (navBackStackEntry?.destination?.route != AppScreens.Stats.route && showAddButton) {
-                    Button(navController, appViewModel, modifier)
+                    AddButton(navController)
                 }
             }
-        ){
+        ){innerPadding ->
+
+            // Display the horizontal menu (NavRail) and include the NavHost in the content of the scaffold
             Row {
-                NavigationRail(
-                    backgroundColor = MaterialTheme.colorScheme.primary,
-                    elevation = 2.dp,
-                    modifier = modifier
-                        .fillMaxHeight()
-                        .align(Alignment.Top)
-                ) {
-                    NavigationRailItem(
-                        selected = false,
-                        onClick = { navController.navigate(AppScreens.Walking.route) },
-                        icon = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.walk),
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.secondary,
-                            )
-                        }
-                    )
-                    NavigationRailItem(
-                        selected = false,
-                        onClick = { navController.navigate(AppScreens.Running.route) },
-                        icon = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.run),
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.secondary
-                            )
-                        }
-                    )
-                    NavigationRailItem(
-                        selected = false,
-                        onClick = { navController.navigate(AppScreens.Cycling.route) },
-                        icon = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.bicycle),
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.secondary
-                            )
-                        }
-                    )
-                    NavigationRailItem(
-                        selected = false,
-                        onClick = { navController.navigate(AppScreens.Stats.route) },
-                        icon = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.stats),
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.secondary
-                            )
-                        }
-                    )
-                    NavigationRailItem(
-                        selected = false,
-                        onClick = { (context as? Activity)?.finish() },
-                        icon = {
-                            Icon(
-                                Icons.Filled.ExitToApp,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.secondary
-                            )
-                        },
-                    )
-
-                }
-                NavHost(
-                    navController = navController,
-                    startDestination = AppScreens.Stats.route
-                ) {
-                    composable(
-                        AppScreens.Walking.route,
-                        enterTransition = { fadeIn(animationSpec = tween(1000)) },
-                        exitTransition = { fadeOut(animationSpec = tween(1000)) }
-                    ) { AcitivtyList(appViewModel, navController, "Walking") }
-
-                    composable(
-                        AppScreens.Running.route,
-                        enterTransition = { fadeIn(animationSpec = tween(1000)) },
-                        exitTransition = { fadeOut(animationSpec = tween(1000)) }
-                    ) { AcitivtyList(appViewModel, navController, "Running") }
-
-                    composable(AppScreens.Cycling.route,
-                        enterTransition = { fadeIn(animationSpec = tween(1000)) },
-                        exitTransition = { fadeOut(animationSpec = tween(1000)) }
-                    ) { AcitivtyList(appViewModel, navController, "Cycling") }
-
-                    composable(AppScreens.Stats.route,
-                        enterTransition = { fadeIn(animationSpec = tween(1000)) },
-                        exitTransition = { fadeOut(animationSpec = tween(1000)) }
-                    ) { Stats(appViewModel, navController) }
-
-                    composable(AppScreens.Add.route,
-                        enterTransition = { fadeIn(animationSpec = tween(1000)) },
-                        exitTransition = { fadeOut(animationSpec = tween(1000)) }
-                    ) { AddActivity(appViewModel, navController) }
-
-                    composable(AppScreens.ActivityView.route,
-                        enterTransition = { fadeIn(animationSpec = tween(1000)) },
-                        exitTransition = { fadeOut(animationSpec = tween(1000)) }
-                    ) { RouteView(appViewModel, navController) }
-
-                    composable(AppScreens.Edit.route,
-                        enterTransition = { fadeIn(animationSpec = tween(1000)) },
-                        exitTransition = { fadeOut(animationSpec = tween(1000)) }
-                    ) { EditActivity(appViewModel, navController) }
-                }
+                NavRail(navController, context)
+                MainNavHost(navController, appViewModel, innerPadding)
             }
         }
     }
 }
 
 
-
+// Composable function to define the floating add button
 @Composable
-fun Button(navController: NavController, appViewModel: AppViewModel, modifier: Modifier) {
+fun AddButton(navController: NavController) {
     FloatingActionButton(
         onClick = {
+            // When add button is clicked led user to add screen
             navController.navigate(AppScreens.Add.route)
           },
         containerColor = MaterialTheme.colorScheme.primary,
@@ -306,22 +171,28 @@ fun Button(navController: NavController, appViewModel: AppViewModel, modifier: M
 }
 
 
+// Composable function to define the bottom navigation bar
 @Composable
-fun BottomBar(navController: NavController, appViewModel: AppViewModel, modifier: Modifier, enableButtons: Boolean) {
+fun BottomBar(navController: NavController) {
     BottomNavigation(
         backgroundColor = MaterialTheme.colorScheme.primary,
     ) {
-        val items = listOf(
+        // Define a list with design objects containing screen objects and their icons
+        val screens = listOf(
             Design(AppScreens.Walking, painterResource(id = R.drawable.walk)),
             Design(AppScreens.Running, painterResource(id = R.drawable.run)),
             Design(AppScreens.Cycling, painterResource(id = R.drawable.bicycle)),
             Design(AppScreens.Stats, painterResource(id = R.drawable.stats))
         )
 
+        // Retrieve the current back stack entry
         val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+        // Retrieve the current destination from the navigation back stack entry
         val currentDestination = navBackStackEntry?.destination
 
-        items.forEach { screen ->
+        // Iterate the existing screens to crate a icon in the bottom navigation bar
+        screens.forEach { screen ->
             BottomNavigationItem(
                 selectedContentColor = MaterialTheme.colorScheme.onPrimary,
                 icon = {
@@ -333,23 +204,24 @@ fun BottomBar(navController: NavController, appViewModel: AppViewModel, modifier
                 },
                 selected = currentDestination?.hierarchy?.any { it.route == screen.screen.route } == true,
                 onClick = {
-                    if (enableButtons) {
-                        navController.navigate(screen.screen.route) {
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
+                    // Navigate to the specified screen's route using the NavController.
+                    navController.navigate(screen.screen.route) {
+                        /// Clear the back stack up to the start destination of the navigation graph.
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
                         }
+                        // Specify that the destination should be launched as a single top-level destination.
+                        launchSingleTop = true
+                        // Specify whether to restore the state of the destination if it already exists in the back stack.
+                        restoreState = true
                     }
                 },
-                enabled = enableButtons,
-
             )
         }
     }
 }
 
+// Composable function to define top navigation bar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
@@ -358,7 +230,7 @@ fun TopBar(
     onThemeChange: (Int) -> Unit,
     modifier: Modifier
 ) {
-    
+    // Variables to manage the appearance of dialogs
     var showInfo by rememberSaveable { mutableStateOf(false) }
     var showSettings by rememberSaveable { mutableStateOf(false) }
     var showThemes by rememberSaveable { mutableStateOf(false) }
@@ -367,12 +239,12 @@ fun TopBar(
         modifier = modifier.fillMaxWidth(),
         title = {
             Text( text = stringResource(id = R.string.app_name))
-                },
+        },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary,
             titleContentColor = Color(0xFFFFFFFF),
         ),
-
+        // Button to exit the app
         navigationIcon = {
             IconButton(onClick = { (context as? Activity)?.finish() }) {
                 Icon(
@@ -382,16 +254,18 @@ fun TopBar(
                 )
             }
         },
-
+        // Action buttons
         actions = {
 
-        IconButton(onClick = { showThemes = true }) {
-            Icon(
-                painter = painterResource(id = R.drawable.palette),
-                contentDescription = stringResource(id = R.string.info),
-                tint = Color(0xFFFFFFFF)
-            )
-        }
+            // Button to show available themes dialog
+            IconButton(onClick = { showThemes = true }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.palette),
+                    contentDescription = stringResource(id = R.string.info),
+                    tint = Color(0xFFFFFFFF)
+                )
+            }
+            // Button to show application information dialog
             IconButton(onClick = { showInfo = true }) {
                 Icon(
                     imageVector = Icons.Filled.Info,
@@ -399,6 +273,7 @@ fun TopBar(
                     tint = Color(0xFFFFFFFF)
                 )
             }
+            // Button to show available languages dialog
             IconButton(onClick = { showSettings = true}) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.language),
@@ -408,8 +283,130 @@ fun TopBar(
             }
         }
     )
+    // Invoke dialog components with the "show" parameter and set it to false after the dialogs are dismissed.
     InfoDialog(showInfo) { showInfo = false }
     SettingsDialog(showSettings, onLanguageChange) { showSettings = false }
     ShowThemes(showThemes, onThemeChange) { showThemes = false }
 }
 
+// A composable function to define the navigation host (COMMON FOR LANDSCAPE AND PORTRAIT)
+@Composable
+fun MainNavHost(
+    navController: NavHostController,
+    appViewModel: AppViewModel,
+    innerPadding: PaddingValues
+){
+    NavHost(
+        navController = navController,
+        startDestination = AppScreens.Stats.route,
+        modifier = Modifier.padding(innerPadding)
+    ) {
+        // Define composable destinations for different screens with transitions
+
+        composable(
+            AppScreens.Walking.route,
+            enterTransition = { fadeIn(animationSpec = tween(1000)) },
+            exitTransition = { fadeOut(animationSpec = tween(1000)) }
+        ) { AcitivtyList(appViewModel, navController, "Walking") }
+
+        composable(
+            AppScreens.Running.route,
+            enterTransition = { fadeIn(animationSpec = tween(1000)) },
+            exitTransition = { fadeOut(animationSpec = tween(1000)) }
+        ) { AcitivtyList(appViewModel, navController, "Running") }
+
+        composable(AppScreens.Cycling.route,
+            enterTransition = { fadeIn(animationSpec = tween(1000)) },
+            exitTransition = { fadeOut(animationSpec = tween(1000)) }
+        ) { AcitivtyList(appViewModel, navController, "Cycling") }
+
+        composable(AppScreens.Stats.route,
+            enterTransition = { fadeIn(animationSpec = tween(1000)) },
+            exitTransition = { fadeOut(animationSpec = tween(1000)) }
+        ) { Stats(appViewModel, navController) }
+
+        composable(AppScreens.Add.route,
+            enterTransition = { fadeIn(animationSpec = tween(1000)) },
+            exitTransition = { fadeOut(animationSpec = tween(1000)) }
+        ) { AddActivity(appViewModel, navController) }
+
+        composable(AppScreens.ActivityView.route,
+            enterTransition = { fadeIn(animationSpec = tween(1000)) },
+            exitTransition = { fadeOut(animationSpec = tween(1000)) }
+        ) { ViewActivity(appViewModel, navController) }
+
+        composable(AppScreens.Edit.route,
+            enterTransition = { fadeIn(animationSpec = tween(1000)) },
+            exitTransition = { fadeOut(animationSpec = tween(1000)) }
+        ) { EditActivity(appViewModel, navController) }
+    }
+}
+
+// Composable function to define the Navigation Rain shown in the landscape design
+@Composable
+fun NavRail(navController: NavController, context: Context){
+    NavigationRail(
+        backgroundColor = MaterialTheme.colorScheme.primary,
+        elevation = 2.dp,
+        modifier = Modifier
+            .fillMaxHeight()
+    ) {
+        // Define each item in the navigation rail
+
+        NavigationRailItem(
+            selected = false,
+            onClick = { navController.navigate(AppScreens.Walking.route) },
+            icon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.walk),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary,
+                )
+            }
+        )
+        NavigationRailItem(
+            selected = false,
+            onClick = { navController.navigate(AppScreens.Running.route) },
+            icon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.run),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
+        )
+        NavigationRailItem(
+            selected = false,
+            onClick = { navController.navigate(AppScreens.Cycling.route) },
+            icon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.bicycle),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
+        )
+        NavigationRailItem(
+            selected = false,
+            onClick = { navController.navigate(AppScreens.Stats.route) },
+            icon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.stats),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
+        )
+        NavigationRailItem(
+            selected = false,
+            onClick = { (context as? Activity)?.finish() },
+            icon = {
+                Icon(
+                    Icons.Filled.ExitToApp,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            },
+        )
+    }
+}

@@ -45,21 +45,23 @@ fun AcitivtyList(
     modifier: Modifier = Modifier
 ){
 
+    // Get activity list (Flow) as state
     val activities = appViewModel.getActivitiesByType(type).collectAsState(initial = emptyList())
 
+    // Define the screens title depending on the selected option by the user
     var title = ""
-
     when (type){
         "Walking" -> title = stringResource(id = R.string.walk_routes)
         "Running" -> title = stringResource(id = R.string.run_routes)
         "Cycling" -> title = stringResource(id = R.string.cyc_routes)
     }
 
-
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ){
+
+        // Box with the screens heading
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -74,16 +76,24 @@ fun AcitivtyList(
                 lineHeight = 24.sp
             )
         }
+
         Divider()
+
+        // LazyColumn with the list of cards (ACTIVITY LIST)
+
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ){
+            // Iterate all the items in activities flow
             items(activities.value) { activity ->
+
+                // Create a card for each activity
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
+                        // When user clicks the card open ViewActivity screen with clicked activity data
                         .clickable {
                             navController.navigate(AppScreens.ActivityView.route)
                             appViewModel.activityToShow = mutableStateOf(activity)
@@ -110,10 +120,13 @@ fun AcitivtyList(
                                 color = Color.Gray
                             )
                         }
+
                         Spacer(modifier = Modifier.padding(5.dp))
+
                         Row(
                             horizontalArrangement = Arrangement.End
                         ) {
+                            // Button to edit the activity
                             IconButton(
                                 onClick = {
                                     navController.navigate(AppScreens.Edit.route)
@@ -126,7 +139,10 @@ fun AcitivtyList(
                                     tint = MaterialTheme.colorScheme.primaryContainer
                                 )
                             }
+
                             Spacer(modifier = Modifier.padding(5.dp))
+
+                            // Button to delete activity
                             IconButton(
                                 onClick = {
                                     CoroutineScope(Dispatchers.Main).launch {

@@ -32,6 +32,7 @@ import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
 import androidx.compose.material.DropdownMenuItem
 import com.example.menditrack.model.SportActivity
+import com.example.menditrack.utils.isValidInput
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,30 +45,37 @@ fun AddActivity(
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ){
 
+    // Variables to store the data inputs (EMPTY DEFAULT)
+    var selectedSport by rememberSaveable { mutableStateOf("") }
     var routeName by rememberSaveable { mutableStateOf("") }
     var routeDistance by rememberSaveable { mutableStateOf("") }
     var startingPoint by rememberSaveable { mutableStateOf("") }
     var grade by rememberSaveable { mutableStateOf("") }
+    var selectedDifficulty by rememberSaveable { mutableStateOf("") }
 
-    var selectedSport by rememberSaveable { mutableStateOf("") }
+    // Lists with available options on the combo boxes
     val sports = listOf(
         stringResource(id = R.string.walking),
         stringResource(id = R.string.running),
         stringResource(id = R.string.cycling)
     )
-
-    var selectedDifficulty by rememberSaveable { mutableStateOf("") }
     val difficulties = listOf(
         stringResource(id = R.string.easy),
         stringResource(id = R.string.moderate),
         stringResource(id = R.string.hard)
     )
 
+    val context = LocalContext.current
+
+    // Variables to manage visual efects on the input fields
     val focusManager = LocalFocusManager.current
     val expandedSport = rememberSaveable { mutableStateOf(false) }
     val expandedDiff= rememberSaveable { mutableStateOf(false) }
-    val context = LocalContext.current
+
+    // String to the toast message in case of data invalid format
     val errorMessage = stringResource(id = R.string.wrong_data)
+
+    // Strings to the notification
     var title = stringResource(id = R.string.notif_title)
     var content = stringResource(id = R.string.notif_body, selectedSport, routeName)
 
@@ -77,35 +85,11 @@ fun AddActivity(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
-        Box(
-            modifier = Modifier
-                .background(
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .padding(7.dp)
-                .fillMaxWidth()
-        ) {
-            Row (
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                IconButton(
-                    onClick = { navController.navigateUp()
-                    }
-                ) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = stringResource(id = R.string.add_route),
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
+        AddHeading(navController)
 
         Divider()
 
+        // Input field for sport type selection (COMBO BOX)
         Box(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -150,6 +134,7 @@ fun AddActivity(
             }
         }
 
+        // Regular text input fields
         OutlinedTextField(
             value = routeName,
             onValueChange = { routeName = it },
@@ -194,6 +179,7 @@ fun AddActivity(
             modifier = Modifier.fillMaxWidth()
         )
 
+        // Input field for difficulty selection (COMBO BOX)
         Box(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -238,9 +224,10 @@ fun AddActivity(
             }
         }
 
-
+        // Submit button (VALIDITY CHECK)
         Button(
             onClick = {
+                // Check the validity of the inputted data
                 if (isValidInput(
                         routeName,
                         routeDistance,
@@ -249,17 +236,22 @@ fun AddActivity(
                         selectedDifficulty,
                         selectedSport)
                     ) {
+                    // If the data is valid push it to the DB
                     CoroutineScope(Dispatchers.Main).launch {
                         appViewModel.addActivity(routeName, routeDistance.toDouble(), startingPoint, grade.toDouble(), selectedDifficulty, selectedSport)
                     }
+                    // Navigate back to the screen the user was before adding this activity
                     appViewModel.showAddButton = true
                     navController.navigateUp()
+
+                    // Send a notification that indicates the activity has been added correctly
                     appViewModel.sendAddNotification(
                         context,
                         title,
                         content
                     )
                 } else {
+                    // If data isn't valid show a toast message
                     Toast.makeText(
                         context,
                         errorMessage,
@@ -273,32 +265,49 @@ fun AddActivity(
         }
     }
 
+    // On entering this screen nav bars and add floating button should be hidden
     DisposableEffect(Unit) {
-        appViewModel.enableNavigationButtons = false
-        appViewModel.showAddButton = false
         appViewModel.showNavBars = false
+        appViewModel.showAddButton = false
+
+        // On exiting this screen make them visible again
         onDispose {
-            appViewModel.enableNavigationButtons = true
             appViewModel.showNavBars = true
             appViewModel.showAddButton = true
         }
     }
 }
 
+@Composable
+fun AddHeading(navController: NavController){
+    Box(
+        modifier = Modifier
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .padding(7.dp)
+            .fillMaxWidth()
+    ) {
+        Row (
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            IconButton(
+                onClick = { navController.navigateUp()
+                }
+            ) {
+                Icon(Icons.Default.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = stringResource(id = R.string.add_route),
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
 
-private fun isValidInput(
-    name: String,
-    distance: String,
-    point: String,
-    grade: String,
-    diff: String,
-    sport: String): Boolean
-{
-    val validName = name.isNotBlank()
-    val validDistance = distance.toDoubleOrNull() != null && distance.toDouble() > 0
-    val validPoint = point.isNotBlank()
-    val validGrade = grade.toDoubleOrNull() != null && grade.toDouble() > 0
-    val validDiff = diff.isNotBlank()
-    val validSport = sport.isNotBlank()
-    return validName && validDistance && validPoint && validGrade && validDiff && validSport
 }
+
+
+

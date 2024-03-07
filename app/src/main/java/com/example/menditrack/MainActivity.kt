@@ -24,28 +24,33 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    // Instanciar el ViewModel
+    // Instance ViewModels
     private val appViewModel by viewModels<AppViewModel> ()
     val preferencesViewModel by viewModels<PreferencesViewModel> ()
 
-    // Establecer un CHANNEL_ID para el canal de notificaciones
+    // Set a CHANNEL_ID
     companion object{
         const val CHANNEL_ID = "Menditrack_Channel"
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        // Create a notification channel
         createNotificationChannel()
+
         super.onCreate(savedInstanceState)
 
         setContent {
             MendiTrackTheme(preferencesViewModel) {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    // Ask for notification permission
                     NotificationPermission()
+
+                    // Redirect to MainScreen
                     MainScreen(
                         appViewModel = appViewModel,
                         prefViewModel = preferencesViewModel,

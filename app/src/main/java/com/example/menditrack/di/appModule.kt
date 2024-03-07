@@ -15,6 +15,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+// Object to define Singleton entities (PROVIDER METHOD)
 @Module
 @InstallIn(SingletonComponent::class)
 object appModule {
@@ -23,6 +24,7 @@ object appModule {
     @Provides
     fun provideDatabase(@ApplicationContext app: Context)=
         Room.databaseBuilder(app, Database::class.java,"ehuSportsDB")
+            // Instructions to populate the DB with external .db file
             .createFromAsset("database/ehuSports.db")
             .build()
 

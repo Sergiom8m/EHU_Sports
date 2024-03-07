@@ -31,6 +31,7 @@ import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
 import com.example.menditrack.charts.PieChart
 import com.example.menditrack.data.BarType
+import com.example.menditrack.utils.sumActivityDistances
 
 @Composable
 fun Stats(
@@ -38,32 +39,23 @@ fun Stats(
     navController: NavController,
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ){
-    val totalWalkingActivities by appViewModel.getActivitiesByType("Walking").collectAsState(initial = emptyList())
-    val totalRunningActivities by appViewModel.getActivitiesByType("Running").collectAsState(initial = emptyList())
-    val totalCyclingActivities by appViewModel.getActivitiesByType("Cycling").collectAsState(initial = emptyList())
+    // Get as states the lists of activities of each type
+    val walkingActivities by appViewModel.getActivitiesByType("Walking").collectAsState(initial = emptyList())
+    val runningActivities by appViewModel.getActivitiesByType("Running").collectAsState(initial = emptyList())
+    val cyclingActivities by appViewModel.getActivitiesByType("Cycling").collectAsState(initial = emptyList())
 
-    val totalDistanceWalking = totalWalkingActivities.sumByDouble { it.distance }.toInt()
-    val totalDistanceRunning = totalRunningActivities.sumByDouble { it.distance }.toInt()
-    val totalDistanceCycling = totalCyclingActivities.sumByDouble { it.distance }.toInt()
+    // Calculate the sum of distance of each activity type
+    val totalDistanceWalking = sumActivityDistances(walkingActivities)
+    val totalDistanceRunning = sumActivityDistances(runningActivities)
+    val totalDistanceCycling = sumActivityDistances(cyclingActivities)
 
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ){
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primaryContainer)
-        ) {
-            Text(
-                text = stringResource(id = R.string.your_stats),
-                Modifier.padding(16.dp),
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.secondary,
-                letterSpacing = 0.1.em,
-                lineHeight = 24.sp
-            )
-        }
+
+        StatsHeading()
+
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -71,36 +63,42 @@ fun Stats(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
 
-            // Total de actividades por tipo
+            // Section to visualize the total number of activities for each activity type
             Title(stringResource(id = R.string.num_activity))
 
+            // Create icons for each activity type
             val walkingIcon = painterResource(id = R.drawable.walk)
             val runningIcon = painterResource(id = R.drawable.run)
             val cyclingIcon = painterResource(id = R.drawable.bicycle)
 
-            if ( totalCyclingActivities.size > 0 || totalRunningActivities.size > 0 || totalWalkingActivities.size > 0) {
+            // Check if there is any activity
+            if ( cyclingActivities.isNotEmpty() || runningActivities.isNotEmpty() || walkingActivities.isNotEmpty()) {
 
+                // If activities exist on the DB create a pie chart showing the count of activities of each type
                 PieChart(
                     data = mapOf(
-                        Pair(cyclingIcon, totalCyclingActivities.size),
-                        Pair(runningIcon, totalRunningActivities.size),
-                        Pair(walkingIcon, totalWalkingActivities.size)
+                        Pair(cyclingIcon, cyclingActivities.size),
+                        Pair(runningIcon, runningActivities.size),
+                        Pair(walkingIcon, walkingActivities.size)
                     )
                 )
             }
             else{
+                // If no activities on the DB show a NO DATA message
                 NoData()
             }
 
-            // Distancia total por deporte
+            // Section to visualize the total accumulated distance for each activity type
             Title(stringResource(id = R.string.dist_activity))
 
-            // Gráfico de barras
+            // Modify the data to make it compatible with bar chart
             val dataList = listOf(totalDistanceCycling, totalDistanceRunning, totalDistanceWalking)
-            val maxValue = dataList.maxOrNull() ?: 1
-            val floatValue = dataList.map { it.toFloat() / maxValue }
+            val maxValue = dataList.maxOrNull() ?: 1 // Search for the max value
+            val floatValue = dataList.map { it.toFloat() / maxValue } // Rescale the values according to the mean
 
             if (maxValue != 0) {
+
+                // If activities exist on the DB create a bar chart showing the total distance of each activity type
                 BarGraph(
                     graphBarData = floatValue,
                     xAxisScaleData = listOf(
@@ -120,13 +118,29 @@ fun Stats(
                     barArrangement = Arrangement.SpaceEvenly
                 )
             }
-
             else{
+                // If no activities on the DB show a NO DATA message
                 NoData()
             }
-
         }
+    }
+}
 
+@Composable
+fun StatsHeading(){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.primaryContainer)
+    ) {
+        Text(
+            text = stringResource(id = R.string.your_stats),
+            Modifier.padding(16.dp),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.secondary,
+            letterSpacing = 0.1.em,
+            lineHeight = 24.sp
+        )
     }
 }
 

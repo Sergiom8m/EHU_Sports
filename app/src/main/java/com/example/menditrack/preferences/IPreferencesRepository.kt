@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.map
 import java.util.Locale
 import javax.inject.Inject
 
+// Interface-class file to create a intermedite repository between Datastore and ViewModel
+
 interface IPreferencesRepository {
 
     fun getLanguage(): Flow<String>

@@ -8,6 +8,8 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
+
+// Interface to manage DB data (DAO -> Data Access Object)
 @Dao
 interface ActivityDao {
 
@@ -20,6 +22,6 @@ interface ActivityDao {
     @Delete
     suspend fun deleteActivity(activity: SportActivity)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.ABORT)
     suspend fun updateActivity(activity: SportActivity)
 }

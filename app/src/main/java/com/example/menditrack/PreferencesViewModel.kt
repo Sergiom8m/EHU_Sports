@@ -18,14 +18,15 @@ class PreferencesViewModel @Inject constructor(
     private val languageManager: LanguageManager
 ): ViewModel(){
 
+    // Preference variables
     val lang = preferencesRepository.getLanguage().map { Language.getFromCode(it) }
     val theme = preferencesRepository.getThemePreferences()
 
+    // Functions to save preferences when the user changes them (selected language + theme)
     fun changeLang(idioma: Language, context: Context) {
         languageManager.changeLang(idioma)
         viewModelScope.launch(Dispatchers.IO) { preferencesRepository.setLanguage(idioma.code) }
     }
-
     fun changeTheme(color: Int) {
         viewModelScope.launch(Dispatchers.IO) { preferencesRepository.setThemePreferences(color) }
     }

@@ -51,6 +51,9 @@ import com.example.menditrack.AppViewModel
 import com.example.menditrack.R
 import androidx.compose.material3.Button
 import com.example.menditrack.model.SportActivity
+import com.example.menditrack.utils.isValidInput
+import com.example.menditrack.utils.mapToUserLanguageDifficulty
+import com.example.menditrack.utils.mapToUserLanguageSport
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -61,9 +64,11 @@ fun EditActivity(
     navController: NavController,
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ){
+    // Get the variable that indicates which is the activity to edit
     val activityToEdit = appViewModel.activityToEdit.value
-    val id = activityToEdit?.id
 
+    // Variables to store the data inputs (DEFAULT VALUES = SELECTED ACTIVITY VALUES)
+    val id = activityToEdit?.id
     var routeName by rememberSaveable { mutableStateOf(activityToEdit?.name ?: "") }
     var routeDistance by rememberSaveable { mutableStateOf(activityToEdit?.distance?.toString() ?: "") }
     var startingPoint by rememberSaveable { mutableStateOf(activityToEdit?.initPoint ?: "") }
@@ -71,22 +76,26 @@ fun EditActivity(
     var selectedSport by rememberSaveable { mutableStateOf(activityToEdit?.type ?: "") }
     var selectedDifficulty by rememberSaveable { mutableStateOf(activityToEdit?.difficulty ?: "") }
 
+    // Lists with available options on the combo boxes
     val sports = listOf(
         stringResource(id = R.string.walking),
         stringResource(id = R.string.running),
         stringResource(id = R.string.cycling)
     )
-
     val difficulties = listOf(
         stringResource(id = R.string.easy),
         stringResource(id = R.string.moderate),
         stringResource(id = R.string.hard)
     )
 
+    val context = LocalContext.current
+
+    // Variables to manage visual efects on the input fields
     val focusManager = LocalFocusManager.current
     val expandedSport = rememberSaveable { mutableStateOf(false) }
     val expandedDiff= rememberSaveable { mutableStateOf(false) }
-    val context = LocalContext.current
+
+    // String to the toast message in case of data invalid format
     val errorMessage = stringResource(id = R.string.wrong_data)
 
 
@@ -95,35 +104,11 @@ fun EditActivity(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
-        Box(
-            modifier = Modifier
-                .background(
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .padding(7.dp)
-                .fillMaxWidth()
-        ) {
-            Row (
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                IconButton(
-                    onClick = { navController.navigateUp()
-                    }
-                ) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = stringResource(id = R.string.modify),
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
+        EditHeading(navController)
 
         Divider()
 
+        // Input field for sport type selection (COMBO BOX)
         Box(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -139,7 +124,7 @@ fun EditActivity(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = appViewModel.mapToUserLanguageSport(selectedSport),
+                        text = mapToUserLanguageSport(selectedSport),
                         modifier = Modifier
                             .padding(vertical = 16.dp, horizontal = 12.dp)
                     )
@@ -168,6 +153,7 @@ fun EditActivity(
             }
         }
 
+        // Regular text input fields
         OutlinedTextField(
             value = routeName,
             onValueChange = { routeName = it },
@@ -212,6 +198,7 @@ fun EditActivity(
             modifier = Modifier.fillMaxWidth()
         )
 
+        // Input field for difficulty selection (COMBO BOX)
         Box(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -227,7 +214,7 @@ fun EditActivity(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = appViewModel.mapToUserLanguageDifficulty(selectedDifficulty),
+                        text = mapToUserLanguageDifficulty(selectedDifficulty),
                         modifier = Modifier
                             .padding(vertical = 16.dp, horizontal = 12.dp)
                     )
@@ -256,9 +243,10 @@ fun EditActivity(
             }
         }
 
-
+        // Submit button (VALIDITY CHECK)
         Button(
             onClick = {
+                // Check the validity of the inputted data
                 if (isValidInput(
                         routeName,
                         routeDistance,
@@ -267,23 +255,19 @@ fun EditActivity(
                         selectedDifficulty,
                         selectedSport)
                 ) {
-
+                    // Verify the edited route exists
                     if (id != null) {
+                        // If the data is valid push it to the DB
                         CoroutineScope(Dispatchers.Main).launch {
-                            appViewModel.updateActivity(
-                                id,
-                                routeName,
-                                routeDistance.toDouble(),
-                                startingPoint,
-                                grade.toDouble(),
-                                selectedDifficulty,
-                                selectedSport
+                            appViewModel.updateActivity(id, routeName, routeDistance.toDouble(), startingPoint, grade.toDouble(), selectedDifficulty, selectedSport
                             )
                         }
                     }
+                    // Navigate back to the screen the user was before adding this activity
                     appViewModel.showAddButton = true
                     navController.navigateUp()
                 } else {
+                    // If data isn't valid show a toast message
                     Toast.makeText(
                         context,
                         errorMessage,
@@ -297,32 +281,45 @@ fun EditActivity(
         }
     }
 
+    // On entering this screen nav bars and add floating button should be hidden
     DisposableEffect(Unit) {
-        appViewModel.enableNavigationButtons = false
-        appViewModel.showAddButton = false
         appViewModel.showNavBars = false
+        appViewModel.showAddButton = false
+
+        // On exiting this screen make them visible again
         onDispose {
-            appViewModel.enableNavigationButtons = true
             appViewModel.showNavBars = true
             appViewModel.showAddButton = true
         }
     }
 }
 
-
-private fun isValidInput(
-    name: String,
-    distance: String,
-    point: String,
-    grade: String,
-    diff: String,
-    sport: String): Boolean
-{
-    val validName = name.isNotBlank()
-    val validDistance = distance.toDoubleOrNull() != null && distance.toDouble() > 0
-    val validPoint = point.isNotBlank()
-    val validGrade = grade.toDoubleOrNull() != null && grade.toDouble() > 0
-    val validDiff = diff.isNotBlank()
-    val validSport = sport.isNotBlank()
-    return validName && validDistance && validPoint && validGrade && validDiff && validSport
+@Composable
+fun EditHeading(navController: NavController){
+    Box(
+        modifier = Modifier
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .padding(7.dp)
+            .fillMaxWidth()
+    ) {
+        Row (
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            IconButton(
+                onClick = { navController.navigateUp()
+                }
+            ) {
+                Icon(Icons.Default.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = stringResource(id = R.string.modify),
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
 }

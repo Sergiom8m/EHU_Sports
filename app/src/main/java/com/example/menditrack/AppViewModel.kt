@@ -2,41 +2,40 @@ package com.example.menditrack
 
 import android.app.NotificationManager
 import android.content.Context
-import android.os.Environment
 import android.util.Log
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.stringResource
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModel
-import com.example.menditrack.data.Language
 import com.example.menditrack.model.IActivityRepository
 import com.example.menditrack.model.SportActivity
+import com.example.menditrack.utils.generateRandomId
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import java.io.File
-import java.io.FileWriter
 import javax.inject.Inject
-import kotlin.random.Random
+import com.example.menditrack.utils.*
 
 @HiltViewModel
 class AppViewModel @Inject constructor(
     private val activityRepository: IActivityRepository
 ) : ViewModel() {
 
-
-    var actual_language by mutableStateOf(Language.ES)
+    // Variables to show nav bars and floating button
     var showAddButton by mutableStateOf(true)
     var showNavBars by  mutableStateOf(true)
-    var enableNavigationButtons by mutableStateOf(true)
 
-
+    // Variables to store activities to show and edit
     var activityToShow: MutableState<SportActivity?> = mutableStateOf(null)
     var activityToEdit: MutableState<SportActivity?> = mutableStateOf(null)
 
+
+
+
+    /* ############################################################################################# */
+    /* ######################### INTERACTION WITH THE ACTIVITY REPOSITORY ########################## */
+    /* ############################################################################################# */
     fun getActivitiesByType(type: String): Flow<List<SportActivity>> {
         return activityRepository.getActivitiesByType(type)
     }
@@ -111,73 +110,6 @@ class AppViewModel @Inject constructor(
 
         notificationManager.notify(1, notification)
     }
-
-
-    fun exportRouteToTXT(activity: SportActivity) {
-        val estadoAlmacenamientoExterno = Environment.getExternalStorageState()
-        if (estadoAlmacenamientoExterno == Environment.MEDIA_MOUNTED) {
-            val directorioDescargas = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            val archivo = File(directorioDescargas, "${activity.name}.txt")
-
-
-            FileWriter(archivo).use { writer ->
-                with(writer) {
-                    append("NAME: ${activity.name}\n\n")
-                    append("DISTANCE: ${activity.distance} km\n")
-                    append("START POINT: ${activity.initPoint}\n")
-                    append("GRADE: ${activity.grade} m\n")
-                    append("DIFFICULTY: ${activity.difficulty}\n")
-                }
-            }
-        }
-    }
-
-    fun generateRandomId(name: String): Long {
-        val hash = name.hashCode()
-
-        val random = Random(hash.toLong())
-
-        return random.nextLong()
-    }
-
-    private fun mapToEnglishDifficulty(selectedDifficulty: String): String {
-        return when (selectedDifficulty.toLowerCase()) {
-            "fácil", "erraza", "easy" -> "Easy"
-            "moderado", "ertaina", "moderate" -> "Moderate"
-            "difícil", "zaila", "hard" -> "Hard"
-            else -> selectedDifficulty
-        }
-    }
-
-    private fun mapToEnglishSport(selectedSport: String): String {
-        return when (selectedSport.toLowerCase()) {
-            "ciclismo", "bizikleta", "cycling" -> "Cycling"
-            "carrera", "korrika", "running" -> "Running"
-            "caminata", "ibilaldia", "walking" -> "Walking"
-            else -> selectedSport
-        }
-    }
-
-    @Composable
-    fun mapToUserLanguageDifficulty(englishDifficulty: String): String {
-        return when (englishDifficulty.toLowerCase()) {
-            "easy" -> stringResource(id = R.string.easy)
-            "moderate" -> stringResource(id = R.string.moderate)
-            "hard" -> stringResource(id = R.string.hard)
-            else -> englishDifficulty
-        }
-    }
-
-    @Composable
-    fun mapToUserLanguageSport(englishSport: String): String {
-        return when (englishSport.toLowerCase()) {
-            "running" -> stringResource(id = R.string.running)
-            "walking" -> stringResource(id = R.string.walking)
-            "cycling" -> stringResource(id = R.string.cycling)
-            else -> englishSport
-        }
-    }
-
 
 
 
