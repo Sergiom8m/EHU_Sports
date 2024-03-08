@@ -47,7 +47,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.menditrack.AppViewModel
+import com.example.menditrack.viewModel.AppViewModel
 import com.example.menditrack.R
 import androidx.compose.material3.Button
 import com.example.menditrack.utils.isValidInput

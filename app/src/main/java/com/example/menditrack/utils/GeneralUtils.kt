@@ -6,10 +6,9 @@ import android.net.Uri
 import android.os.Environment
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import com.example.menditrack.R
-import com.example.menditrack.model.SportActivity
+import com.example.menditrack.data.SportActivity
 import java.io.File
 import java.io.FileWriter
 import java.util.Locale

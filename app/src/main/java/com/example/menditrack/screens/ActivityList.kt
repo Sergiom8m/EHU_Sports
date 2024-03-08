@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.menditrack.AppViewModel
+import com.example.menditrack.viewModel.AppViewModel
 import com.example.menditrack.R
 import com.example.menditrack.navigation.AppScreens
 import androidx.compose.material3.Icon
@@ -37,9 +37,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
 import com.example.menditrack.utils.ShowDeleteMessage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Composable
 fun ActivityList(
@@ -154,6 +151,7 @@ fun ActivityList(
                             IconButton(
                                 onClick = {
                                     // On click set visible the deletion confirm dialog
+                                    appViewModel.activityToDelete = activity
                                     showDelete = true
                                 }
                             ) {
@@ -163,9 +161,8 @@ fun ActivityList(
                                     tint = MaterialTheme.colorScheme.primaryContainer
                                 )
                             }
-
                             // Dialog to confirm activity deletion
-                            ShowDeleteMessage(showDelete, appViewModel, activity) {showDelete= false}
+                            ShowDeleteMessage(showDelete, appViewModel) {showDelete= false}
                         }
                     }
                 }

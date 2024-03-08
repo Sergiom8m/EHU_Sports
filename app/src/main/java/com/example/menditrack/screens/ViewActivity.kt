@@ -30,7 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.menditrack.AppViewModel
+import com.example.menditrack.viewModel.AppViewModel
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.res.stringResource
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -40,7 +40,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import com.example.menditrack.R
-import com.example.menditrack.model.SportActivity
+import com.example.menditrack.data.SportActivity
 import com.example.menditrack.utils.exportActivityToTxt
 import com.example.menditrack.utils.mapToUserLanguageDifficulty
 import com.example.menditrack.utils.openGoogleMaps

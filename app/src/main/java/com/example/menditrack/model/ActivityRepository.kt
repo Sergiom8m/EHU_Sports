@@ -1,5 +1,6 @@
 package com.example.menditrack.model
 
+import com.example.menditrack.data.SportActivity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton

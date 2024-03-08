@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
-import com.example.menditrack.PreferencesViewModel
+import com.example.menditrack.viewModel.PreferencesViewModel
 
 // Definition of the different themes available in the application
 

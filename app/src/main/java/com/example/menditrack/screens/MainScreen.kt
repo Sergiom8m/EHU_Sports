@@ -56,9 +56,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.menditrack.AppViewModel
+import com.example.menditrack.viewModel.AppViewModel
 import com.example.menditrack.utils.InfoDialog
-import com.example.menditrack.PreferencesViewModel
+import com.example.menditrack.viewModel.PreferencesViewModel
 import com.example.menditrack.R
 import com.example.menditrack.utils.SettingsDialog
 import com.example.menditrack.utils.ShowThemes

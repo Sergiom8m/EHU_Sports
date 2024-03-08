@@ -1,4 +1,4 @@
-package com.example.menditrack
+package com.example.menditrack.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

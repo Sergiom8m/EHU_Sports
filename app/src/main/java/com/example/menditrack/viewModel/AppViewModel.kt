@@ -1,4 +1,4 @@
-package com.example.menditrack
+package com.example.menditrack.viewModel
 
 
 import androidx.compose.runtime.MutableState
@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.menditrack.model.IActivityRepository
-import com.example.menditrack.model.SportActivity
+import com.example.menditrack.data.SportActivity
 import com.example.menditrack.utils.generateRandomId
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -21,11 +21,12 @@ class AppViewModel @Inject constructor(
 
     // Variables to show nav bars and floating button
     var showAddButton by mutableStateOf(true)
-    var showNavBars by  mutableStateOf(true)
+    var showNavBars by mutableStateOf(true)
 
     // Variables to store activities to show and edit
     var activityToShow: MutableState<SportActivity?> = mutableStateOf(null)
     var activityToEdit: MutableState<SportActivity?> = mutableStateOf(null)
+    var activityToDelete by mutableStateOf<SportActivity?>(null)
 
 
     /* ############################################################################################# */

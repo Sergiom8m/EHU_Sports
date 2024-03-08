@@ -17,6 +17,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import com.example.menditrack.screens.MainScreen
 import com.example.menditrack.ui.theme.MendiTrackTheme
+import com.example.menditrack.viewModel.AppViewModel
+import com.example.menditrack.viewModel.PreferencesViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import dagger.hilt.android.AndroidEntryPoint

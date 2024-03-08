@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -24,11 +23,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
-import com.example.menditrack.AppViewModel
+import com.example.menditrack.viewModel.AppViewModel
 import com.example.menditrack.MainActivity
 import com.example.menditrack.R
 import com.example.menditrack.data.Language
-import com.example.menditrack.model.SportActivity
+import com.example.menditrack.data.SportActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -138,7 +137,6 @@ fun ShowThemes(showThemes: Boolean, onThemeChange: (Int) -> Unit, onConfirm: () 
 fun ShowDeleteMessage(
     showDelete: Boolean,
     appViewModel: AppViewModel,
-    activity: SportActivity,
     onConfirm: () -> Unit
 ) {
     if (showDelete) {
@@ -147,7 +145,7 @@ fun ShowDeleteMessage(
             confirmButton = {
                 TextButton(onClick = {
                     CoroutineScope(Dispatchers.Main).launch {
-                        appViewModel.deleteActivity(activity)
+                        appViewModel.deleteActivity(appViewModel.activityToDelete!!)
                     }
                     onConfirm()
                 }) {

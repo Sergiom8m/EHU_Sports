@@ -26,7 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import com.example.menditrack.AppViewModel
+import com.example.menditrack.viewModel.AppViewModel
 import com.example.menditrack.R
 import com.example.menditrack.charts.PieChart
 import com.example.menditrack.data.BarType
