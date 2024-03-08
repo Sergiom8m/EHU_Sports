@@ -27,7 +27,6 @@ import com.example.menditrack.viewModel.AppViewModel
 import com.example.menditrack.MainActivity
 import com.example.menditrack.R
 import com.example.menditrack.data.Language
-import com.example.menditrack.data.SportActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -170,7 +169,7 @@ fun ShowDeleteMessage(
 }
 
 // Function to throw a notification given the title, the content of the notification and the context
-fun sendNotification(context: Context, title: String, content: String) {
+fun sendNotification(context: Context, title: String, content: String, icon: Int) {
 
     val notificationManager = context.getSystemService(NotificationManager::class.java)
 
@@ -178,7 +177,7 @@ fun sendNotification(context: Context, title: String, content: String) {
         .setContentTitle(title)
         .setContentText(content)
         .setAutoCancel(true)
-        .setSmallIcon(R.drawable.correct)
+        .setSmallIcon(icon)
         .setStyle(
             NotificationCompat.BigTextStyle()
             .bigText(content))

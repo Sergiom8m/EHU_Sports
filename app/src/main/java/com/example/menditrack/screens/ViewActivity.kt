@@ -1,6 +1,7 @@
 package com.example.menditrack.screens
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -45,6 +46,7 @@ import com.example.menditrack.utils.exportActivityToTxt
 import com.example.menditrack.utils.mapToUserLanguageDifficulty
 import com.example.menditrack.utils.openGoogleMaps
 import com.example.menditrack.utils.openShare
+import com.example.menditrack.utils.sendNotification
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -62,7 +64,7 @@ fun ViewActivity(
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
             if (activityToShow != null) {
-                DownloadButton(activityToShow)
+                DownloadButton(activityToShow, context)
             }
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -177,9 +179,11 @@ fun InfoRow(boldText: String, normalText: String) {
 
 // Button to export activity to downloads file in txt
 @Composable
-fun DownloadButton(activity: SportActivity) {
+fun DownloadButton(activity: SportActivity, context: Context) {
     ExtendedFloatingActionButton(
-        onClick = { exportActivityToTxt(activity)},
+        onClick = {
+            exportActivityToTxt(activity)
+            sendNotification(context, activity.name, "", R.drawable.download)},
         icon = {
             Icon(
                 painterResource(id = R.drawable.download),

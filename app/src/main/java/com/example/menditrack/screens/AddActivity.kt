@@ -245,7 +245,7 @@ fun AddActivity(
                     navController.navigateUp()
 
                     // Send a notification that indicates the activity has been added correctly
-                    sendNotification(context, title, content)
+                    sendNotification(context, title, content, R.drawable.correct)
                 } else {
                     // If data isn't valid show a toast message
                     Toast.makeText(
