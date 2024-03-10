@@ -65,6 +65,7 @@ import com.example.menditrack.utils.ShowThemes
 import com.example.menditrack.data.Design
 import com.example.menditrack.data.Language
 import com.example.menditrack.navigation.AppScreens
+import com.example.menditrack.utils.ShowDeleteMessage
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -91,66 +92,57 @@ fun MainScreen(
     val isVertical = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
 
     // If the orientation is vertical show portrait design
-    if (isVertical) {
-        Scaffold(
-            // TOP BAR
-            topBar = {
+    Scaffold(
+        // TOP BAR
+        topBar = {
+            if (isVertical) {
                 // Manage the top bar's visibility with ViewModel's variables (ANIMATED ENTERING/EXITING)
                 AnimatedVisibility(
                     visible = showSettingButton,
                     enter = slideInVertically(initialOffsetY = { it }) + expandVertically(),
                     exit = slideOutVertically(targetOffsetY = { it }) + shrinkVertically()
-                ) { TopBar(context, onLanguageChange, onThemeChange, modifier) }
-            },
-            // BOTTOM BAR
-            bottomBar = {
+                ) { TopBar(appViewModel, context, modifier) }
+            }
+        },
+        // BOTTOM BAR
+        bottomBar = {
+            if (isVertical) {
                 // Manage the bottom bar's visibility with ViewModel's variables (ANIMATED ENTERING/EXITING)
                 AnimatedVisibility(
                     visible = showSettingButton,
                     enter = slideInVertically(initialOffsetY = { it }) + expandVertically(),
                     exit = slideOutVertically(targetOffsetY = { it }) + shrinkVertically()
-                ){ BottomBar(navController) }
-            },
-            // FLOATING BUTTON
-            floatingActionButton = {
-                // Retrieve the current back stack entry
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-
-                // Check if the current destination of the navigation back stack is not the Stats screen and
-                // if the showAddButton flag is true.
-                if (navBackStackEntry?.destination?.route != AppScreens.Stats.route && showAddButton) {
-                    AddButton(navController)
-                }
+                ) { BottomBar(navController) }
             }
-        ) { innerPadding ->
+        },
+        // FLOATING BUTTON
+        floatingActionButton = {
+            // Retrieve the current back stack entry
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+            // Check if the current destination of the navigation back stack is not the Stats screen and
+            // if the showAddButton flag is true.
+            if (navBackStackEntry?.destination?.route != AppScreens.Stats.route && showAddButton) {
+                AddButton(navController)
+            }
+        }
+    ) { innerPadding ->
+
+        Row {
+            if (!isVertical){
+                NavRail(navController, context)
+            }
             // Display the NavHost in the content of the scaffold (innerPadding to keep it inside the content site)
             MainNavHost(navController, appViewModel, innerPadding)
         }
-    }
-    // If the orientation is horizontal show landscape design
-    else {
-        Scaffold(
-            // FLOATING BUTTON
-            floatingActionButton = {
-                // Retrieve the current back stack entry
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-
-                // Check if the current destination of the navigation back stack is not the Stats screen and
-                // if the showAddButton flag is true.
-                if (navBackStackEntry?.destination?.route != AppScreens.Stats.route && showAddButton) {
-                    AddButton(navController)
-                }
-            }
-        ){innerPadding ->
-
-            // Display the horizontal menu (NavRail) and include the NavHost in the content of the scaffold
-            Row {
-                NavRail(navController, context)
-                MainNavHost(navController, appViewModel, innerPadding)
-            }
-        }
+        // Invoke dialog components with the "show" parameter and set it to false after the dialogs are dismissed.
+        InfoDialog(appViewModel.showInfo, context) { appViewModel.showInfo = false }
+        SettingsDialog(appViewModel.showSettings, onLanguageChange) { appViewModel.showSettings = false }
+        ShowThemes(appViewModel.showThemes, onThemeChange) { appViewModel.showThemes = false }
+        ShowDeleteMessage(appViewModel.showDelete, appViewModel) { appViewModel.showDelete = false }
     }
 }
+
 
 
 // Composable function to define the floating add button
@@ -180,7 +172,7 @@ fun BottomBar(navController: NavController) {
         val screens = listOf(
             Design(AppScreens.Walking, painterResource(id = R.drawable.walk)),
             Design(AppScreens.Running, painterResource(id = R.drawable.run)),
-            Design(AppScreens.Cycling, painterResource(id = R.drawable.bicycle)),
+            Design(AppScreens. Cycling, painterResource(id = R.drawable.bicycle)),
             Design(AppScreens.Stats, painterResource(id = R.drawable.stats))
         )
 
@@ -224,15 +216,11 @@ fun BottomBar(navController: NavController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
+    appViewModel: AppViewModel,
     context: Context,
-    onLanguageChange: (Language) -> Unit,
-    onThemeChange: (Int) -> Unit,
     modifier: Modifier
 ) {
     // Variables to manage the appearance of dialogs
-    var showInfo by rememberSaveable { mutableStateOf(false) }
-    var showSettings by rememberSaveable { mutableStateOf(false) }
-    var showThemes by rememberSaveable { mutableStateOf(false) }
     
     TopAppBar(
         modifier = modifier.fillMaxWidth(),
@@ -257,7 +245,7 @@ fun TopBar(
         actions = {
 
             // Button to show available themes dialog
-            IconButton(onClick = { showThemes = true }) {
+            IconButton(onClick = { appViewModel.showThemes = true }) {
                 Icon(
                     painter = painterResource(id = R.drawable.palette),
                     contentDescription = stringResource(id = R.string.info),
@@ -265,7 +253,7 @@ fun TopBar(
                 )
             }
             // Button to show application information dialog
-            IconButton(onClick = { showInfo = true }) {
+            IconButton(onClick = { appViewModel.showInfo = true }) {
                 Icon(
                     imageVector = Icons.Filled.Info,
                     contentDescription = stringResource(id = R.string.info),
@@ -273,7 +261,7 @@ fun TopBar(
                 )
             }
             // Button to show available languages dialog
-            IconButton(onClick = { showSettings = true}) {
+            IconButton(onClick = { appViewModel.showSettings = true}) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.language),
                     contentDescription = stringResource(id = R.string.settings),
@@ -282,10 +270,6 @@ fun TopBar(
             }
         }
     )
-    // Invoke dialog components with the "show" parameter and set it to false after the dialogs are dismissed.
-    InfoDialog(showInfo, context) { showInfo = false }
-    SettingsDialog(showSettings, onLanguageChange) { showSettings = false }
-    ShowThemes(showThemes, onThemeChange) { showThemes = false }
 }
 
 // A composable function to define the navigation host (COMMON FOR LANDSCAPE AND PORTRAIT)
@@ -351,7 +335,6 @@ fun NavRail(navController: NavController, context: Context){
             .fillMaxHeight()
     ) {
         // Define each item in the navigation rail
-
         NavigationRailItem(
             selected = false,
             onClick = { navController.navigate(AppScreens.Walking.route) },

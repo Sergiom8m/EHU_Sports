@@ -4,6 +4,7 @@ package com.example.menditrack.viewModel
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.menditrack.model.IActivityRepository
@@ -19,9 +20,17 @@ class AppViewModel @Inject constructor(
     private val activityRepository: IActivityRepository
 ) : ViewModel() {
 
+
     // Variables to show nav bars and floating button
     var showAddButton by mutableStateOf(true)
     var showNavBars by mutableStateOf(true)
+
+    // Variables to manage dialog visibility
+    var showInfo by mutableStateOf(false)
+    var showSettings by mutableStateOf(false)
+    var showThemes by mutableStateOf(false)
+    var showDelete by mutableStateOf(false)
+
 
     // Variables to store activities to show and edit
     var activityToShow: MutableState<SportActivity?> = mutableStateOf(null)

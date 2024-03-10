@@ -51,9 +51,6 @@ fun ActivityList(
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ){
 
-    // Boolean variable to manage the visibility of the delete dialog
-    var showDelete by rememberSaveable { mutableStateOf(false) }
-
     // Get activity list (Flow) as state
     val activities = appViewModel.getActivitiesByType(type).collectAsState(initial = emptyList())
 
@@ -158,7 +155,7 @@ fun ActivityList(
                                 onClick = {
                                     // On click set visible the deletion confirm dialog
                                     appViewModel.activityToDelete = activity
-                                    showDelete = true
+                                    appViewModel.showDelete = true
                                 }
                             ) {
                                 Icon(
@@ -167,8 +164,6 @@ fun ActivityList(
                                     tint = MaterialTheme.colorScheme.primaryContainer
                                 )
                             }
-                            // Dialog to confirm activity deletion
-                            ShowDeleteMessage(showDelete, appViewModel) {showDelete= false}
                         }
                     }
                 }
