@@ -41,31 +41,42 @@ fun exportActivityToTxt(activity: SportActivity) {
 
 // Function to open Google Maps in an exact location using intents
 fun openGoogleMaps(startPoint: String, context: Context) {
-    val gmmIntentUri = Uri.parse("geo:0,0?q=$startPoint")
-    val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-    mapIntent.setPackage("com.google.android.apps.maps")
-    startActivity(context, mapIntent, null)
+
+    try {
+        val gmmIntentUri = Uri.parse("geo:0,0?q=$startPoint")
+        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+        mapIntent.setPackage("com.google.android.apps.maps")
+        startActivity(context, mapIntent, null)
+    } catch (_: Exception) {
+
+    }
 }
 
 // Function to open Gmail with a default subject, body and destination
 fun openEmail(context: Context) {
     val emailAddress = "menditrackteam@gmail.com"
 
-    val intent = Intent(Intent.ACTION_SEND)
-    intent.type = "text/plain"
-    intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailAddress))
-    intent.setPackage("com.google.android.gm")
-    startActivity(context, intent, null)
+    try {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailAddress))
+        intent.setPackage("com.google.android.gm")
+        startActivity(context, intent, null)
+    } catch (_: Exception) {
+
+    }
 }
 
 // Function to open whatsapp in order to share a text with the activity's information
 fun openShare(activity: SportActivity, context: Context){
+    try {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT, activityToString(activity))
+        startActivity(context, intent, null)
+    } catch (_: Exception) {
 
-    val intent = Intent(Intent.ACTION_SEND)
-    intent.type = "text/plain"
-    intent.putExtra(Intent.EXTRA_TEXT, activityToString(activity))
-    intent.setPackage("com.whatsapp")
-    startActivity(context, intent,null)
+    }
 }
 
 // Function to generate a random id long based on the activity name
