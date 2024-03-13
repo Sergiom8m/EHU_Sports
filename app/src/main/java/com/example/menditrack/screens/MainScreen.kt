@@ -12,9 +12,11 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -37,9 +39,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -328,67 +328,73 @@ fun MainNavHost(
 // Composable function to define the Navigation Rain shown in the landscape design
 @Composable
 fun NavRail(navController: NavController, context: Context){
-    NavigationRail(
-        backgroundColor = MaterialTheme.colorScheme.primary,
-        elevation = 2.dp,
-        modifier = Modifier
-            .fillMaxHeight()
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        // Define each item in the navigation rail
-        NavigationRailItem(
-            selected = false,
-            onClick = { navController.navigate(AppScreens.Walking.route) },
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.walk),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.secondary,
-                )
-            }
-        )
-        NavigationRailItem(
-            selected = false,
-            onClick = { navController.navigate(AppScreens.Running.route) },
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.run),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.secondary
-                )
-            }
-        )
-        NavigationRailItem(
-            selected = false,
-            onClick = { navController.navigate(AppScreens.Cycling.route) },
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.bicycle),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.secondary
-                )
-            }
-        )
-        NavigationRailItem(
-            selected = false,
-            onClick = { navController.navigate(AppScreens.Stats.route) },
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.stats),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.secondary
-                )
-            }
-        )
-        NavigationRailItem(
-            selected = false,
-            onClick = { (context as? Activity)?.finish() },
-            icon = {
-                Icon(
-                    Icons.Filled.ExitToApp,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.secondary
-                )
-            },
-        )
+        NavigationRail(
+            backgroundColor = MaterialTheme.colorScheme.primary,
+            elevation = 2.dp
+        ) {
+            // Define each item in the navigation rail
+            NavigationRailItem(
+                selected = false,
+                onClick = { navController.navigate(AppScreens.Walking.route) },
+                icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.walk),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary,
+                    )
+                }
+            )
+            NavigationRailItem(
+                selected = false,
+                onClick = { navController.navigate(AppScreens.Running.route) },
+                icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.run),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
+            )
+            NavigationRailItem(
+                selected = false,
+                onClick = { navController.navigate(AppScreens.Cycling.route) },
+                icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.bicycle),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
+            )
+            NavigationRailItem(
+                selected = false,
+                onClick = { navController.navigate(AppScreens.Stats.route) },
+                icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.stats),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            NavigationRailItem(
+                selected = false,
+                onClick = { (context as? Activity)?.finish() },
+                icon = {
+                    Icon(
+                        Icons.Filled.ExitToApp,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                },
+                modifier = Modifier.align(Alignment.End)
+            )
+        }
     }
 }
