@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.example.menditrack.screens.MainScreen
 import com.example.menditrack.ui.theme.MendiTrackTheme
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     // Set a CHANNEL_ID
     companion object{
-        const val CHANNEL_ID = "Menditrack_Channel"
+        const val CHANNEL_ID = "EHUSport_Channel"
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -45,12 +46,16 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             MendiTrackTheme(preferencesViewModel) {
+                preferencesViewModel.restartLang(preferencesViewModel.lang.collectAsState(initial = preferencesViewModel.currentSetLang).value)
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     // Ask for notification permission
                     NotificationPermission()
+
+                    // Ask for storage permission
+                    StoragePermission()
 
                     // Redirect to MainScreen
                     MainScreen(
@@ -60,6 +65,17 @@ class MainActivity : AppCompatActivity() {
                     )
                 }
             }
+        }
+    }
+
+    @OptIn(ExperimentalPermissionsApi::class)
+    @Composable
+    fun StoragePermission(){
+        val permissionState2 = rememberPermissionState(
+            permission = android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+        LaunchedEffect(true){
+            permissionState2.launchPermissionRequest()
         }
     }
 

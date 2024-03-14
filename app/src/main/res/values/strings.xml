@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">EHU-Sports</string>
 
-    <string name="channel_name">Canal de notificaciones de Menditrack</string>
+    <string name="channel_name">Canal de notificaciones de EHUSports</string>
     <string name="channel_desc">Este canal lanzará las notificaciones de la aplicación</string>
 
     <string name="go_back">Atrás</string>

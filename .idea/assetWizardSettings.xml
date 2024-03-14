@@ -322,9 +322,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="fd5722" />
-                            <entry key="outputName" value="correct" />
-                            <entry key="sourceFile" value="C:\Users\Sergio\AndroidStudioProjects\MendiTrack" />
+                            <entry key="outputName" value="applogo" />
+                            <entry key="sourceFile" value="C:\Users\Sergio\Downloads\appLogo.svg" />
                           </map>
                         </option>
                       </PersistentState>

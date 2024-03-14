@@ -18,6 +18,8 @@ class PreferencesViewModel @Inject constructor(
 ): ViewModel(){
 
     // Preference variables
+
+    val currentSetLang by languageManager::currentLang
     val lang = preferencesRepository.getLanguage().map { Language.getFromCode(it) }
     val theme = preferencesRepository.getThemePreferences()
 
@@ -25,6 +27,10 @@ class PreferencesViewModel @Inject constructor(
     fun changeLang(lang: Language) {
         languageManager.changeLang(lang)
         viewModelScope.launch(Dispatchers.IO) { preferencesRepository.setLanguage(lang.code) }
+    }
+
+    fun restartLang(lang: Language){
+        languageManager.changeLang(lang)
     }
     fun changeTheme(color: Int) {
         viewModelScope.launch(Dispatchers.IO) { preferencesRepository.setThemePreferences(color) }

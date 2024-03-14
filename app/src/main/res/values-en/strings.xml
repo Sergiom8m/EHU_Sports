@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">EHU-Sports</string>
 
-    <string name="channel_name">Menditrack\'s notification channel</string>
+    <string name="channel_name">EHUSports notification channel</string>
     <string name="channel_desc">This channel will throw the app\'s notifications</string>
 
     <string name="go_back">Back</string>
