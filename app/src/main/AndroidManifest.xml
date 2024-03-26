@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
@@ -23,6 +26,11 @@
         android:theme="@style/Theme.MendiTrack"
         tools:targetApi="31"
         android:requestLegacyExternalStorage="true">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAA3QTCa-z2RgOsc01ty5K2slHeTb_LLyQ" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -1,7 +1,9 @@
 package com.example.menditrack.screens
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.location.Geocoder
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -38,6 +41,7 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import com.example.menditrack.R
@@ -47,7 +51,18 @@ import com.example.menditrack.utils.mapToUserLanguageDifficulty
 import com.example.menditrack.utils.openGoogleMaps
 import com.example.menditrack.utils.openShare
 import com.example.menditrack.utils.sendNotification
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
 
+@OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ViewActivity(
@@ -58,6 +73,16 @@ fun ViewActivity(
     // Get the variable that indicates which is the activity to show
     val activityToShow = appViewModel.activityToShow.value
     val context = LocalContext.current
+
+    val locationPermissionState = rememberPermissionState(
+        permission = android.Manifest.permission.ACCESS_FINE_LOCATION
+    )
+
+    LaunchedEffect(true){
+        if (!locationPermissionState.status.isGranted) {
+            locationPermissionState.launchPermissionRequest()
+        }
+    }
 
     // Create a scaffold to capsule activity's data and a download button
     Scaffold (
@@ -135,6 +160,30 @@ fun ViewActivity(
             InfoRow("${stringResource(id = R.string.start_point)}:",activityToShow?.initPoint ?: "")
             InfoRow("${stringResource(id = R.string.grade)}:", "${activityToShow?.grade ?: 0} m")
             InfoRow("${stringResource(id = R.string.difficulty)}:", mapToUserLanguageDifficulty(activityToShow?.difficulty ?: ""))
+
+            if (locationPermissionState.status.isGranted) {
+                activityToShow?.initPoint?.let { initPoint ->
+                    getLatLngFromAddress(context, initPoint)?.let { (latitude, longitude) ->
+                        val cameraPositionState = rememberCameraPositionState {
+                            position =
+                                CameraPosition.fromLatLngZoom(LatLng(latitude, longitude), 10f)
+                        }
+                        GoogleMap(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(350.dp),
+                            cameraPositionState = cameraPositionState,
+                            properties = MapProperties(isMyLocationEnabled = true)
+                        ) {
+                            Marker(
+                                state = MarkerState(position = LatLng(latitude, longitude)),
+                                title = "Location",
+                                snippet = "Marker at provided address"
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -200,7 +249,18 @@ fun DownloadButton(activity: SportActivity, context: Context) {
     )
 }
 
-
-
-
+fun getLatLngFromAddress(context: Context, mAddress: String): Pair<Double, Double>? {
+    val coder = Geocoder(context)
+    try {
+        val addressList = coder.getFromLocationName(mAddress, 1)
+        if (addressList.isNullOrEmpty()) {
+            return null
+        }
+        val location = addressList[0]
+        return Pair(location.latitude, location.longitude)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return null
+    }
+}
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
+import android.location.Location
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
@@ -66,6 +67,7 @@ import com.example.menditrack.data.Design
 import com.example.menditrack.data.Language
 import com.example.menditrack.navigation.AppScreens
 import com.example.menditrack.utils.ShowDeleteMessage
+import com.google.android.gms.location.FusedLocationProviderClient
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

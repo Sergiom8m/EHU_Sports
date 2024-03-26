@@ -4,6 +4,7 @@ plugins {
 
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+
 }
 
 android {
@@ -59,6 +60,11 @@ android {
 }
 
 dependencies {
+
+    // Google Maps
+    implementation("com.google.maps.android:maps-compose:2.11.4")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.gms:play-services-location:21.2.0")
 
     // Hilt dependencies
     implementation("com.google.dagger:hilt-android:2.51")
