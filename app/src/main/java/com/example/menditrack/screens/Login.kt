@@ -8,15 +8,20 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.menditrack.R
 import com.example.menditrack.data.User
 import com.example.menditrack.navigation.AppScreens
 import com.example.menditrack.viewModel.AppViewModel
@@ -45,22 +50,25 @@ fun Login(
             style = MaterialTheme.typography.h4
         )
         Spacer(modifier = Modifier.height(16.dp))
-        TextField(
+        OutlinedTextField(
             value = username,
             onValueChange = { username = it },
-            placeholder = { Text(text = "Nombre de usuario") },
-            modifier = Modifier.fillMaxWidth(),
+            label = { Text("Nombre de usuario") },
+            singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-            keyboardActions = KeyboardActions(onNext = { FocusDirection.Down })
+            keyboardActions = KeyboardActions(onNext = { FocusDirection.Down }),
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
-        TextField(
+        OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            placeholder = { Text(text = "Contraseña") },
-            modifier = Modifier.fillMaxWidth(),
+            label = { Text("Contraseña") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+            keyboardActions = KeyboardActions(onNext = { FocusDirection.Down }),
             visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
@@ -72,9 +80,12 @@ fun Login(
                             navController.navigate(AppScreens.UserScreen.route)
                             appViewModel.actualUser = mutableStateOf(user)
                         }
+                        else{
+                            Log.d("PROBLEMAS", "password erronea")
+                        }
                     }
                     else{
-                        Log.d("PROBLEMAS", "PROBLEMAS")
+                        Log.d("PROBLEMAS", "no user")
                     }
                 }
             },
@@ -82,7 +93,11 @@ fun Login(
         ) {
             Text(text = "Iniciar sesión")
         }
-        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "¿No tienes cuenta?",
+            style = MaterialTheme.typography.body1,
+            modifier = Modifier.padding(bottom = 8.dp) 
+        )
         Button(
             onClick = { navController.navigate(AppScreens.Register.route) },
             modifier = Modifier.fillMaxWidth()

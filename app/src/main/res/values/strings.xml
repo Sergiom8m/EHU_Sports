@@ -48,4 +48,7 @@
     <string name="cancel">Cancelar</string>
     <string name="delete_warn">¿Estás seguro de que deseas eliminar esta actividad?</string>
     <string name="delete">Eliminar actividad</string>
+    <string name="empty_fields">Todos los campos deben estar completos</string>
+    <string name="wrong_psw">La contraseña tiene menos de 6 caracteres</string>
+    <string name="diff_psw">Las contraseñas no coinciden</string>
 </resources>

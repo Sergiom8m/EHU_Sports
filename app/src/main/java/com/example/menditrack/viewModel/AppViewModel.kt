@@ -1,6 +1,7 @@
 package com.example.menditrack.viewModel
 
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -103,9 +104,16 @@ class AppViewModel @Inject constructor(
     suspend fun addUser(
         username: String,
         password: String
-    ){
-        val user = User(username, password)
-        userRepository.addUser(user)
+    ):Boolean {
+        val newUser = User(username, password)
+        val existingUser = userRepository.getUser(username)
+        if (existingUser == null) {
+            userRepository.addUser(newUser)
+            return true
+        }
+        else{
+            return false
+        }
     }
 
     suspend fun getUser(username: String): User? {

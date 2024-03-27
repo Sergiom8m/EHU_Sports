@@ -48,6 +48,9 @@
     <string name="cancel">Cancel</string>
     <string name="delete_warn">" Are you sure you want to delete this activity?"</string>
     <string name="delete">Delete activity</string>
+    <string name="empty_fields">All the fields must be completed</string>
+    <string name="wrong_psw">The password has less than 6 characters</string>
+    <string name="diff_psw">Password mismatching</string>
 
 
 </resources>

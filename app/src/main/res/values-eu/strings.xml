@@ -48,5 +48,8 @@
     <string name="cancel">Ezeztatu</string>
     <string name="delete_warn">"Ziur jarduera hau ezabatu nahi duzula? "</string>
     <string name="delete">Jarduera ezabatu</string>
+    <string name="empty_fields">Datu guztiak beteta egon behar dira</string>
+    <string name="wrong_psw">Pasahitzak 6 karaktere baino gutxiago ditu</string>
+    <string name="diff_psw">Pasahitzak ez datoz bat</string>
 
 </resources>

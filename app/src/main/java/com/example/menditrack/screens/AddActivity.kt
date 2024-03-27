@@ -154,6 +154,7 @@ fun AddActivity(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Number
             ),
+
             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             modifier = Modifier.fillMaxWidth()
         )
