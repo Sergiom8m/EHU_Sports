@@ -37,10 +37,12 @@ fun Stats(
     appViewModel: AppViewModel,
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ){
+    val user = appViewModel.actualUser.value.username
+
     // Get as states the lists of activities of each type
-    val walkingActivities by appViewModel.getActivitiesByType("Walking").collectAsState(initial = emptyList())
-    val runningActivities by appViewModel.getActivitiesByType("Running").collectAsState(initial = emptyList())
-    val cyclingActivities by appViewModel.getActivitiesByType("Cycling").collectAsState(initial = emptyList())
+    val walkingActivities by appViewModel.getActivitiesByType("Walking", user).collectAsState(initial = emptyList())
+    val runningActivities by appViewModel.getActivitiesByType("Running", user).collectAsState(initial = emptyList())
+    val cyclingActivities by appViewModel.getActivitiesByType("Cycling", user).collectAsState(initial = emptyList())
 
     // Calculate the sum of distance of each activity type
     val totalDistanceWalking = sumActivityDistances(walkingActivities)

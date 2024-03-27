@@ -45,9 +45,10 @@ fun ActivityList(
     type:String,
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ){
+    val user = appViewModel.actualUser.value.username
 
     // Get activity list (Flow) as state
-    val activities = appViewModel.getActivitiesByType(type).collectAsState(initial = emptyList())
+    val activities = appViewModel.getActivitiesByType(type, user).collectAsState(initial = emptyList())
 
     // Define the screens title depending on the selected option by the user
     var title = ""

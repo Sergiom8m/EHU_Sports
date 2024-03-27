@@ -8,6 +8,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.menditrack.model.IActivityRepository
 import com.example.menditrack.data.SportActivity
+import com.example.menditrack.data.User
+import com.example.menditrack.model.IUserRepository
 import com.example.menditrack.utils.generateRandomId
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -16,9 +18,9 @@ import com.example.menditrack.utils.*
 
 @HiltViewModel
 class AppViewModel @Inject constructor(
-    private val activityRepository: IActivityRepository
+    private val activityRepository: IActivityRepository,
+    private val userRepository: IUserRepository
 ) : ViewModel() {
-
 
     // Variables to show nav bars and floating button
     var showAddButton by mutableStateOf(true)
@@ -30,11 +32,12 @@ class AppViewModel @Inject constructor(
     var showThemes by mutableStateOf(false)
     var showDelete by mutableStateOf(false)
 
-
     // Variables to store activities to show and edit
     var activityToShow: MutableState<SportActivity?> = mutableStateOf(null)
     var activityToEdit: MutableState<SportActivity?> = mutableStateOf(null)
     var activityToDelete by mutableStateOf<SportActivity?>(null)
+
+    var actualUser: MutableState<User> = mutableStateOf(User("",""))
 
 
     /* ############################################################################################# */
@@ -42,8 +45,8 @@ class AppViewModel @Inject constructor(
     /* ############################################################################################# */
 
     // Function to get the activity list of a specific type of sport
-    fun getActivitiesByType(type: String): Flow<List<SportActivity>> {
-        return activityRepository.getActivitiesByType(type)
+    fun getActivitiesByType(type: String, username:String): Flow<List<SportActivity>> {
+        return activityRepository.getActivitiesByType(type, username)
     }
 
     // Function to push activities in the DB (MAP DIFF AND SPORT TO ENGLISH BEFORE SAVE)
@@ -65,7 +68,8 @@ class AppViewModel @Inject constructor(
             startingPoint,
             grade,
             englishDifficulty,
-            englishSport
+            englishSport,
+            actualUser.value.username
         )
         activityRepository.addActivity(activity)
     }
@@ -88,9 +92,24 @@ class AppViewModel @Inject constructor(
         val englishDifficulty = mapToEnglishDifficulty(selectedDifficulty)
         val englishSport = mapToEnglishSport(selectedSport)
 
-        val updatedActivity = SportActivity(id, routeName, routeDistance, startingPoint, grade, englishDifficulty, englishSport)
+        val updatedActivity = SportActivity(id, routeName, routeDistance, startingPoint, grade, englishDifficulty, englishSport, actualUser.value.username)
         activityRepository.updateActivity(updatedActivity)
     }
 
+    /* ############################################################################################# */
+    /* ########################## INTERACTION WITH THE USERS REPOSITORY ############################ */
+    /* ############################################################################################# */
+
+    suspend fun addUser(
+        username: String,
+        password: String
+    ){
+        val user = User(username, password)
+        userRepository.addUser(user)
+    }
+
+    suspend fun getUser(username: String): User? {
+        return userRepository.getUser(username)
+    }
 
 }

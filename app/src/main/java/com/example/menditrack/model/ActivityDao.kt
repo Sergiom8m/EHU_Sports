@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.Flow
 interface ActivityDao {
 
     @Transaction
-    @Query("SELECT * FROM activities WHERE type = :type ")
-    fun getActivitiesByType(type: String): Flow<List<SportActivity>>
+    @Query("SELECT * FROM activities WHERE type = :type AND userId = :username")
+    fun getActivitiesByType(type: String, username: String): Flow<List<SportActivity>>
 
     @Transaction
     @Insert(onConflict = OnConflictStrategy.ABORT)

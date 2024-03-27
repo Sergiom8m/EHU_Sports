@@ -75,7 +75,7 @@ fun ViewActivity(
     val context = LocalContext.current
 
     val locationPermissionState = rememberPermissionState(
-        permission = android.Manifest.permission.ACCESS_FINE_LOCATION
+        permission = Manifest.permission.ACCESS_FINE_LOCATION
     )
 
     LaunchedEffect(true){

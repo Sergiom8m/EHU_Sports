@@ -1,15 +1,11 @@
 package com.example.menditrack
 
-import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -19,23 +15,22 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.menditrack.navigation.AppScreens
+import com.example.menditrack.screens.Login
 import com.example.menditrack.screens.MainScreen
+import com.example.menditrack.screens.Register
 import com.example.menditrack.ui.theme.MendiTrackTheme
 import com.example.menditrack.viewModel.AppViewModel
 import com.example.menditrack.viewModel.PreferencesViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
+
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -70,12 +65,26 @@ class MainActivity : AppCompatActivity() {
                     // Ask for storage permission
                     StoragePermission()
 
-                    // Redirect to MainScreen
-                    MainScreen(
-                        appViewModel = appViewModel,
-                        prefViewModel = preferencesViewModel,
-                        modifier = Modifier
-                    )
+                    val navController = rememberNavController()
+
+                    NavHost(
+                        navController = navController,
+                        startDestination = AppScreens.Login.route) {
+
+                        composable(AppScreens.Login.route) {
+                            Login(appViewModel, navController)
+                        }
+                        composable(AppScreens.Register.route) {
+                            Register(appViewModel, navController)
+                        }
+                        composable(AppScreens.UserScreen.route) {
+                            MainScreen(
+                                appViewModel = appViewModel,
+                                prefViewModel = preferencesViewModel,
+                                modifier = Modifier
+                            )
+                        }
+                    }
                 }
             }
         }

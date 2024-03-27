@@ -6,6 +6,9 @@ import com.example.menditrack.model.ActivityDao
 import com.example.menditrack.model.ActivityRepository
 import com.example.menditrack.model.Database
 import com.example.menditrack.model.IActivityRepository
+import com.example.menditrack.model.IUserRepository
+import com.example.menditrack.model.UserDao
+import com.example.menditrack.model.UserRepository
 import com.example.menditrack.preferences.IPreferencesRepository
 import com.example.menditrack.preferences.PreferencesRepository
 import dagger.Module
@@ -19,7 +22,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object appModule {
-
     @Singleton
     @Provides
     fun provideDatabase(@ApplicationContext app: Context)=
@@ -34,9 +36,17 @@ object appModule {
 
     @Singleton
     @Provides
+    fun provideUserDao(db: Database) = db.userDao()
+
+    @Singleton
+    @Provides
     fun provideActivityRepository(activityDao: ActivityDao): IActivityRepository = ActivityRepository(activityDao)
 
     @Singleton
     @Provides
     fun provideUserPreferences(@ApplicationContext app: Context): IPreferencesRepository = PreferencesRepository(app)
+
+    @Singleton
+    @Provides
+    fun provideUserRepository(userDao: UserDao): IUserRepository = UserRepository(userDao)
 }
