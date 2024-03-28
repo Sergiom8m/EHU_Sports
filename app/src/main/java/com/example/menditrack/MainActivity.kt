@@ -15,7 +15,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -38,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     // Instance ViewModels
     private val appViewModel by viewModels<AppViewModel> ()
-    val preferencesViewModel by viewModels<PreferencesViewModel> ()
+    private val preferencesViewModel by viewModels<PreferencesViewModel> ()
 
     // Set a CHANNEL_ID
     companion object{

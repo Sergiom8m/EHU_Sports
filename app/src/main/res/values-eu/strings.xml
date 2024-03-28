@@ -51,5 +51,15 @@
     <string name="empty_fields">Datu guztiak beteta egon behar dira</string>
     <string name="wrong_psw">Pasahitzak 6 karaktere baino gutxiago ditu</string>
     <string name="diff_psw">Pasahitzak ez datoz bat</string>
+    <string name="user_exist">Sartutako erabiltzaile izena jada existitzen da</string>
+    <string name="wrong_username">Sartutako erabiltzailea ez da existitzen</string>
+    <string name="wrong_password">Pasahitza ez da zuzena</string>
+    <string name="login">Saioa hasi</string>
+    <string name="register">Erregistratu</string>
+    <string name="username">Erabiltzaile izena</string>
+    <string name="password">Pasahitza</string>
+    <string name="rep_psw">Pasahitza errepikatu</string>
+    <string name="no_account">Ez daukazu konturik?</string>
+    <string name="account">Jada kontua duzu?</string>
 
 </resources>

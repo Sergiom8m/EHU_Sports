@@ -11,6 +11,7 @@ import com.example.menditrack.R
 import com.example.menditrack.data.SportActivity
 import java.io.File
 import java.io.FileWriter
+import java.security.MessageDigest
 import java.util.Locale
 import kotlin.random.Random
 
@@ -150,4 +151,11 @@ fun isValidInput(
 // Function to sum the distances of activity list
 fun sumActivityDistances(totalWalkingActivities: List<SportActivity>): Int {
     return totalWalkingActivities.sumOf { it.distance }.toInt()
+}
+
+// Function to hash passwords using SHA-256
+fun hashPassword(password: String): String {
+    val digest = MessageDigest.getInstance("SHA-256")
+    val hashedBytes = digest.digest(password.toByteArray())
+    return hashedBytes.joinToString("") { "%02x".format(it) }
 }

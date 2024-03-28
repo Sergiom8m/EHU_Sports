@@ -51,6 +51,16 @@
     <string name="empty_fields">All the fields must be completed</string>
     <string name="wrong_psw">The password has less than 6 characters</string>
     <string name="diff_psw">Password mismatching</string>
+    <string name="user_exist">The username already exists</string>
+    <string name="wrong_username">The introduced user does not exist</string>
+    <string name="wrong_password">Incorrect password</string>
+    <string name="login">Log in</string>
+    <string name="register">Sign up</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="rep_psw">Repeat password</string>
+    <string name="no_account">¿Don\'t have an account?</string>
+    <string name="account">¿Already have an account?</string>
 
 
 </resources>

@@ -16,6 +16,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import com.example.menditrack.utils.*
+import java.security.MessageDigest
 
 @HiltViewModel
 class AppViewModel @Inject constructor(
@@ -105,7 +106,7 @@ class AppViewModel @Inject constructor(
         username: String,
         password: String
     ):Boolean {
-        val newUser = User(username, password)
+        val newUser = User(username, hashPassword(password))
         val existingUser = userRepository.getUser(username)
         if (existingUser == null) {
             userRepository.addUser(newUser)
@@ -121,3 +122,4 @@ class AppViewModel @Inject constructor(
     }
 
 }
+

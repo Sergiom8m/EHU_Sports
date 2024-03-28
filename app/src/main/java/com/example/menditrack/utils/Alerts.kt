@@ -111,10 +111,8 @@ fun ShowThemes(showThemes: Boolean, onThemeChange: (Int) -> Unit, onConfirm: () 
                         Pair(R.drawable.secondary_palette, "Theme 2"),
                         Pair(R.drawable.tertiary_palette, "Theme 3")
                     )
-
                     // Create a button fo each theme
                     themes.forEachIndexed { index, (image, _) ->
-
                         Image(
                             painter = painterResource(id = image),
                             contentDescription = null,

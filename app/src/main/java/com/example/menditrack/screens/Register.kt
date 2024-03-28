@@ -3,10 +3,16 @@ package com.example.menditrack.screens
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonColors
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -16,7 +22,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -34,34 +43,43 @@ import kotlinx.coroutines.launch
 fun Register(
     appViewModel: AppViewModel,
     navController: NavHostController,
+    modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ) {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var password2 by remember { mutableStateOf("") }
+    var username by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var password2 by rememberSaveable { mutableStateOf("") }
 
-    var context = LocalContext.current
+    val context = LocalContext.current
 
-    var emptyFields = stringResource(R.string.empty_fields)
-    var diffPsw = stringResource(R.string.diff_psw)
-    var wrongPsw = stringResource(R.string.wrong_psw)
+    val emptyFields = stringResource(R.string.empty_fields)
+    val diffPsw = stringResource(R.string.diff_psw)
+    val wrongPsw = stringResource(R.string.wrong_psw)
+    val userExist = stringResource(R.string.user_exist)
 
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(30.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.spacedBy(1.dp)
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.applogo),
+            contentDescription = "",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.size(100.dp)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Registro",
+            text = stringResource(R.string.register),
             style = MaterialTheme.typography.h4
         )
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
             value = username,
             onValueChange = { username = it },
-            label = { Text("Nombre de usuario") },
+            label = { Text(text = stringResource(R.string.username)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
             keyboardActions = KeyboardActions(onNext = { FocusDirection.Down }),
@@ -71,7 +89,7 @@ fun Register(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Contraseña") },
+            label = { Text(text = stringResource(R.string.password)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
             keyboardActions = KeyboardActions(onNext = { FocusDirection.Down }),
@@ -82,7 +100,7 @@ fun Register(
         OutlinedTextField(
             value = password2,
             onValueChange = { password2 = it },
-            label = { Text("Repetir contraseña") },
+            label = { Text(text = stringResource(R.string.rep_psw)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
             keyboardActions = KeyboardActions(onNext = { FocusDirection.Down }),
@@ -96,16 +114,31 @@ fun Register(
                     if (checkRegistrationFields(username, password, password2, context, emptyFields, diffPsw, wrongPsw)) {
                         if (appViewModel.addUser(username, password2)) {
                             appViewModel.actualUser = mutableStateOf(User(username, password))
+                            username = ""
+                            password = ""
+                            password2 = ""
                             navController.navigate(AppScreens.UserScreen.route)
                         } else {
-                            Log.d("REG", "El usuario existe")
+                            Toast.makeText(context, userExist,Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = "Registrarse")
+            Text(text = stringResource(R.string.register))
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        Text(
+            text = stringResource(R.string.account),
+            style = MaterialTheme.typography.body1,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        Button(
+            onClick = { navController.navigate(AppScreens.Login.route) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = stringResource(R.string.login))
         }
     }
 }
