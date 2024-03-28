@@ -9,9 +9,8 @@ sealed class AppScreens(val route: String) {
     data object Add: AppScreens("add")
     data object Edit: AppScreens("edit")
     data object ActivityView: AppScreens("activity_view")
-
-
     data object Login: AppScreens("login")
     data object Register: AppScreens("register")
     data object UserScreen: AppScreens("user_screen")
+    data object Map: AppScreens("map")
 }

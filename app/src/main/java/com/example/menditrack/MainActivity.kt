@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -52,31 +53,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            MendiTrackTheme(preferencesViewModel) {
-                preferencesViewModel.restartLang(preferencesViewModel.lang.collectAsState(initial = preferencesViewModel.currentSetLang).value)
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    // Ask for notification permission
-                    NotificationPermission()
+            preferencesViewModel.restartLang(preferencesViewModel.lang.collectAsState(initial = preferencesViewModel.currentSetLang).value)
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
+            ) {
+                // Ask for notification permission
+                NotificationPermission()
 
-                    // Ask for storage permission
-                    StoragePermission()
+                // Ask for storage permission
+                StoragePermission()
 
-                    val navController = rememberNavController()
+                val navController = rememberNavController()
 
-                    NavHost(
-                        navController = navController,
-                        startDestination = AppScreens.Login.route) {
+                NavHost(
+                    navController = navController,
+                    startDestination = AppScreens.Login.route) {
 
-                        composable(AppScreens.Login.route) {
-                            Login(appViewModel, navController)
-                        }
-                        composable(AppScreens.Register.route) {
-                            Register(appViewModel, navController)
-                        }
-                        composable(AppScreens.UserScreen.route) {
+                    composable(AppScreens.Login.route) {
+                        Login(appViewModel, navController)
+                    }
+                    composable(AppScreens.Register.route) {
+                        Register(appViewModel, navController)
+                    }
+                    composable(AppScreens.UserScreen.route) {
+                        MendiTrackTheme(preferencesViewModel) {
                             MainScreen(
                                 appViewModel = appViewModel,
                                 prefViewModel = preferencesViewModel,

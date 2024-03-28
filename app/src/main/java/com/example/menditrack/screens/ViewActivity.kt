@@ -46,6 +46,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import com.example.menditrack.R
 import com.example.menditrack.data.SportActivity
+import com.example.menditrack.navigation.AppScreens
 import com.example.menditrack.utils.exportActivityToTxt
 import com.example.menditrack.utils.mapToUserLanguageDifficulty
 import com.example.menditrack.utils.openGoogleMaps
@@ -72,17 +73,12 @@ fun ViewActivity(
 ){
     // Get the variable that indicates which is the activity to show
     val activityToShow = appViewModel.activityToShow.value
+
     val context = LocalContext.current
 
     val locationPermissionState = rememberPermissionState(
         permission = Manifest.permission.ACCESS_FINE_LOCATION
     )
-
-    LaunchedEffect(true){
-        if (!locationPermissionState.status.isGranted) {
-            locationPermissionState.launchPermissionRequest()
-        }
-    }
 
     // Create a scaffold to capsule activity's data and a download button
     Scaffold (
@@ -142,7 +138,7 @@ fun ViewActivity(
                         )
                     }
                     IconButton(
-                        onClick = { openGoogleMaps(activityToShow.initPoint, context) },
+                        onClick = { navController.navigate(AppScreens.Map.route) },
                     ) {
                         Icon(
                             Icons.Default.LocationOn,
@@ -161,29 +157,7 @@ fun ViewActivity(
             InfoRow("${stringResource(id = R.string.grade)}:", "${activityToShow?.grade ?: 0} m")
             InfoRow("${stringResource(id = R.string.difficulty)}:", mapToUserLanguageDifficulty(activityToShow?.difficulty ?: ""))
 
-            if (locationPermissionState.status.isGranted) {
-                activityToShow?.initPoint?.let { initPoint ->
-                    getLatLngFromAddress(context, initPoint)?.let { (latitude, longitude) ->
-                        val cameraPositionState = rememberCameraPositionState {
-                            position =
-                                CameraPosition.fromLatLngZoom(LatLng(latitude, longitude), 10f)
-                        }
-                        GoogleMap(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(350.dp),
-                            cameraPositionState = cameraPositionState,
-                            properties = MapProperties(isMyLocationEnabled = true)
-                        ) {
-                            Marker(
-                                state = MarkerState(position = LatLng(latitude, longitude)),
-                                title = "Location",
-                                snippet = "Marker at provided address"
-                            )
-                        }
-                    }
-                }
-            }
+
         }
     }
 
@@ -194,8 +168,11 @@ fun ViewActivity(
 
         // On exiting this screen make them visible again
         onDispose {
-            appViewModel.showNavBars = true
-            appViewModel.showAddButton = true
+            val currentRoute = navController.currentBackStackEntry?.destination?.route
+            if (currentRoute != AppScreens.Map.route) {
+                appViewModel.showNavBars = true
+                appViewModel.showAddButton = true
+            }
         }
     }
 

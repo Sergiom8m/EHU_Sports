@@ -324,6 +324,11 @@ fun MainNavHost(
             enterTransition = { fadeIn(animationSpec = tween(1000)) },
             exitTransition = { fadeOut(animationSpec = tween(1000)) }
         ) { EditActivity(appViewModel, navController) }
+
+        composable(AppScreens.Map.route,
+            enterTransition = { fadeIn(animationSpec = tween(1000)) },
+            exitTransition = { fadeOut(animationSpec = tween(1000)) }
+        ) { MapScreen(appViewModel, navController) }
     }
 }
 
