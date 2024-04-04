@@ -9,6 +9,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat.startActivity
 import com.example.menditrack.R
 import com.example.menditrack.data.SportActivity
+import com.example.menditrack.data.User
+import com.example.menditrack.remote.PostUser
 import java.io.File
 import java.io.FileWriter
 import java.security.MessageDigest
@@ -158,4 +160,18 @@ fun hashPassword(password: String): String {
     val digest = MessageDigest.getInstance("SHA-256")
     val hashedBytes = digest.digest(password.toByteArray())
     return hashedBytes.joinToString("") { "%02x".format(it) }
+}
+
+fun userToPostUser(user: User): PostUser {
+    return PostUser(
+        user.username,
+        user.password
+    )
+}
+
+fun postUserToUser(postUser: PostUser): User {
+    return User(
+        postUser.username,
+        postUser.password
+    )
 }

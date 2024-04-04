@@ -32,6 +32,9 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -49,6 +52,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // Create a notification channel
         createNotificationChannel()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            appViewModel.addUsersFromRemote()
+        }
 
         super.onCreate(savedInstanceState)
 

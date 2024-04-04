@@ -121,5 +121,9 @@ class AppViewModel @Inject constructor(
         return userRepository.getUser(username)
     }
 
+    suspend fun addUsersFromRemote(){
+        userRepository.addUsersFromRemote()
+    }
+
 }
 

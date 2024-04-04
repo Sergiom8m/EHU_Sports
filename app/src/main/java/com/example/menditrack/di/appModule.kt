@@ -11,6 +11,7 @@ import com.example.menditrack.model.UserDao
 import com.example.menditrack.model.UserRepository
 import com.example.menditrack.preferences.IPreferencesRepository
 import com.example.menditrack.preferences.PreferencesRepository
+import com.example.menditrack.remote.ApiClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -48,5 +49,5 @@ object appModule {
 
     @Singleton
     @Provides
-    fun provideUserRepository(userDao: UserDao): IUserRepository = UserRepository(userDao)
+    fun provideUserRepository(userDao: UserDao, apiClient: ApiClient): IUserRepository = UserRepository(userDao, apiClient)
 }
