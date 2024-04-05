@@ -41,7 +41,7 @@ object appModule {
 
     @Singleton
     @Provides
-    fun provideActivityRepository(activityDao: ActivityDao): IActivityRepository = ActivityRepository(activityDao)
+    fun provideActivityRepository(activityDao: ActivityDao, apiClient: ApiClient): IActivityRepository = ActivityRepository(activityDao, apiClient)
 
     @Singleton
     @Provides

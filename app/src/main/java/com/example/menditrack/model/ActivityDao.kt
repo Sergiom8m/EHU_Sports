@@ -19,7 +19,7 @@ interface ActivityDao {
     fun getActivitiesByType(type: String, username: String): Flow<List<SportActivity>>
 
     @Transaction
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addActivity(activity: SportActivity)
 
     @Transaction
@@ -27,6 +27,6 @@ interface ActivityDao {
     suspend fun deleteActivity(activity: SportActivity)
 
     @Transaction
-    @Update(onConflict = OnConflictStrategy.ABORT)
+    @Update(onConflict = OnConflictStrategy.IGNORE)
     suspend fun updateActivity(activity: SportActivity)
 }

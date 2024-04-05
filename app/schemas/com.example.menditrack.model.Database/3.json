@@ -2,16 +2,16 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "121d11f07a48bbd599c87802b355c10b",
+    "identityHash": "8990e62ee2df45fbc4da8fb4ab920371",
     "entities": [
       {
         "tableName": "activities",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `distance` REAL NOT NULL, `initPoint` TEXT NOT NULL, `grade` REAL NOT NULL, `difficulty` TEXT NOT NULL, `type` TEXT NOT NULL, `userId` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`userId`) REFERENCES `users`(`username`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `distance` REAL NOT NULL, `initPoint` TEXT NOT NULL, `grade` REAL NOT NULL, `difficulty` TEXT NOT NULL, `type` TEXT NOT NULL, `userId` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`userId`) REFERENCES `users`(`username`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -108,7 +108,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '121d11f07a48bbd599c87802b355c10b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8990e62ee2df45fbc4da8fb4ab920371')"
     ]
   }
 }

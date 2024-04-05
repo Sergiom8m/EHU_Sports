@@ -53,10 +53,6 @@ class MainActivity : AppCompatActivity() {
         // Create a notification channel
         createNotificationChannel()
 
-        CoroutineScope(Dispatchers.Main).launch {
-            appViewModel.addUsersFromRemote()
-        }
-
         super.onCreate(savedInstanceState)
 
         setContent {

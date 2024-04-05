@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat.startActivity
 import com.example.menditrack.R
 import com.example.menditrack.data.SportActivity
 import com.example.menditrack.data.User
+import com.example.menditrack.remote.PostActivity
 import com.example.menditrack.remote.PostUser
 import java.io.File
 import java.io.FileWriter
@@ -83,10 +84,10 @@ fun openShare(activity: SportActivity, context: Context){
 }
 
 // Function to generate a random id long based on the activity name
-fun generateRandomId(name: String): Long {
+fun generateRandomId(name: String): String {
     val hash = name.hashCode()
     val random = Random(hash.toLong())
-    return random.nextLong()
+    return random.nextLong().toString()
 }
 
 // Function to map selected difficulty to english for storage in DB (From UI to DB)
@@ -173,5 +174,31 @@ fun postUserToUser(postUser: PostUser): User {
     return User(
         postUser.username,
         postUser.password
+    )
+}
+
+fun activityToPostActivity(activity: SportActivity): PostActivity {
+    return PostActivity(
+        activity.id,
+        activity.name,
+        activity.distance,
+        activity.initPoint,
+        activity.grade,
+        activity.difficulty,
+        activity.type,
+        activity.userId
+    )
+}
+
+fun postActivityToActivity(postActivity: PostActivity): SportActivity {
+    return SportActivity(
+        postActivity.id,
+        postActivity.name,
+        postActivity.distance,
+        postActivity.initPoint,
+        postActivity.grade,
+        postActivity.difficulty,
+        postActivity.type,
+        postActivity.user_id
     )
 }

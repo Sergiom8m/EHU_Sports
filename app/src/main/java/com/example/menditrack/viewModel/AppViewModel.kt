@@ -16,6 +16,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import com.example.menditrack.utils.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.security.MessageDigest
 
 @HiltViewModel
@@ -23,6 +26,13 @@ class AppViewModel @Inject constructor(
     private val activityRepository: IActivityRepository,
     private val userRepository: IUserRepository
 ) : ViewModel() {
+
+    init {
+        CoroutineScope(Dispatchers.Main).launch {
+            addUsersFromRemote()
+            addActivitiesFromRemote()
+        }
+    }
 
     // Variables to show nav bars and floating button
     var showAddButton by mutableStateOf(true)
@@ -83,7 +93,7 @@ class AppViewModel @Inject constructor(
 
     // Function to update an activity and save it on the DB (MAP DIFF AND SPORT TO ENGLISH BEFORE SAVE)
     suspend fun updateActivity(
-        id: Long,
+        id: String,
         routeName: String,
         routeDistance: Double,
         startingPoint: String,
@@ -96,6 +106,10 @@ class AppViewModel @Inject constructor(
 
         val updatedActivity = SportActivity(id, routeName, routeDistance, startingPoint, grade, englishDifficulty, englishSport, actualUser.value.username)
         activityRepository.updateActivity(updatedActivity)
+    }
+
+    suspend fun addActivitiesFromRemote() {
+        activityRepository.addActivitiesFromRemote()
     }
 
     /* ############################################################################################# */
@@ -124,6 +138,8 @@ class AppViewModel @Inject constructor(
     suspend fun addUsersFromRemote(){
         userRepository.addUsersFromRemote()
     }
+
+
 
 }
 

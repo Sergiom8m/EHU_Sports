@@ -1,6 +1,8 @@
 package com.example.menditrack.model
 
 import com.example.menditrack.data.SportActivity
+import com.example.menditrack.remote.ApiClient
+import com.example.menditrack.utils.postActivityToActivity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,12 +14,14 @@ interface IActivityRepository{
     suspend fun addActivity(activity: SportActivity)
     suspend fun deleteActivity(activity: SportActivity)
     suspend fun updateActivity(activity: SportActivity)
+    suspend fun addActivitiesFromRemote()
 }
 
 // The repository is unique and injects the DAO's constructor
 @Singleton
 class ActivityRepository @Inject constructor(
-    private val activityDao: ActivityDao
+    private val activityDao: ActivityDao,
+    private val apiClient: ApiClient
 ): IActivityRepository {
 
     override fun getActivitiesByType(type: String, username: String): Flow<List<SportActivity>> {
@@ -26,14 +30,21 @@ class ActivityRepository @Inject constructor(
 
     override suspend fun addActivity(activity: SportActivity){
         activityDao. addActivity(activity)
+        apiClient.createActivity(activity)
     }
 
     override suspend fun deleteActivity(activity: SportActivity) {
         activityDao.deleteActivity(activity)
+        apiClient.deleteActivity(activity)
     }
 
     override suspend fun updateActivity(activity: SportActivity) {
         activityDao.updateActivity(activity)
+    }
+
+    override suspend fun addActivitiesFromRemote() {
+        val activityList = apiClient.getActivities()
+        activityList.map { activityDao.addActivity(postActivityToActivity(it)) }
     }
 
 

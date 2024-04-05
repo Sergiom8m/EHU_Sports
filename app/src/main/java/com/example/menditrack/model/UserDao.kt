@@ -12,7 +12,7 @@ import com.example.menditrack.data.User
 interface UserDao {
 
     @Transaction
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addUser(user: User)
 
     @Transaction

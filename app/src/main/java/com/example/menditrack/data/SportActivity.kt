@@ -13,7 +13,7 @@ import kotlinx.serialization.Serializable
     ]
 )
 data class SportActivity (
-    @PrimaryKey val id: Long,
+    @PrimaryKey val id: String,
     val name: String,
     val distance: Double,
     val initPoint: String,

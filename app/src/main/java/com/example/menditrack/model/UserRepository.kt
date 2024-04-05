@@ -20,25 +20,13 @@ class UserRepository @Inject constructor(
     private val apiClient: ApiClient
 ): IUserRepository {
     override suspend fun addUser(user: User) {
-        try {
-            apiClient.createUser(user)
-        }
-        catch (e: Exception){
-            Log.d("RemoteDB","User insert failed")
-        }
+        apiClient.createUser(user)
         userDao.addUser(user)
     }
 
     override suspend fun addUsersFromRemote() {
         val userList = apiClient.getUsers()
-        userList.map {
-            try {
-                userDao.addUser(postUserToUser(it))
-            }
-            catch (e: Exception){
-                Log.d("RemoteDB","User insert failed")
-            }
-        }
+        userList.map { userDao.addUser(postUserToUser(it)) }
     }
 
     override fun deleteUser(user: User) {
