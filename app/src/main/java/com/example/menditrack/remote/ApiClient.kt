@@ -14,6 +14,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
@@ -106,6 +107,14 @@ class ApiClient @Inject constructor() {
     @Throws(Exception::class)
     suspend fun deleteActivity(activity: SportActivity) {
         httpClient.delete("http://34.71.128.243:8000/activities/${activity.id}/")
+    }
+
+    @Throws(Exception::class)
+    suspend fun updateActivity(activity: SportActivity) {
+        httpClient.put("http://34.71.128.243:8000/activities/${activity.id}"){
+            contentType(ContentType.Application.Json)
+            setBody(Json.encodeToJsonElement(activityToPostActivity(activity)))
+        }
     }
 
     @Throws(Exception::class)

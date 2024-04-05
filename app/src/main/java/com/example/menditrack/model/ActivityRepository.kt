@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
-// Interface-class file to create a intermedite repository between DAO and ViewModel
+// Interface-class file to create a intermediate repository between DAO and ViewModel
 
 interface IActivityRepository{
     fun getActivitiesByType(type: String, username: String): Flow<List<SportActivity>>
@@ -40,6 +40,7 @@ class ActivityRepository @Inject constructor(
 
     override suspend fun updateActivity(activity: SportActivity) {
         activityDao.updateActivity(activity)
+        apiClient.updateActivity(activity)
     }
 
     override suspend fun addActivitiesFromRemote() {
