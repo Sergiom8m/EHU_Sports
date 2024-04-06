@@ -57,7 +57,6 @@ class AppViewModel @Inject constructor(
     var actualUser: MutableState<User> = mutableStateOf(User("",""))
 
     var profilePicture: Bitmap? by mutableStateOf(null)
-        private set
 
     var profilePicturePath: String? = null
 

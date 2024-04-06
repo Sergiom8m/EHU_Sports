@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -50,6 +51,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -60,6 +62,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -166,6 +169,7 @@ fun MainScreen(
         ShowThemes(appViewModel.showThemes, onThemeChange) { appViewModel.showThemes = false }
         ShowDeleteMessage(appViewModel.showDelete, appViewModel) { appViewModel.showDelete = false }
     }
+
 }
 
 
@@ -300,7 +304,8 @@ fun TopBar(
                     Icon(
                         imageVector = Icons.Filled.AccountCircle,
                         contentDescription = stringResource(id = R.string.settings),
-                        tint = Color(0xFFFFFFFF)
+                        tint = Color(0xFFFFFFFF),
+                        modifier = modifier.size(55.dp)
                     )
                 }
                 else{

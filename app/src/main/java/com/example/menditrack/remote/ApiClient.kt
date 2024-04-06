@@ -121,14 +121,23 @@ class ApiClient @Inject constructor() {
 
     @Throws(Exception::class)
     suspend fun getActivities(): List<PostActivity> = runBlocking {
-        val response = httpClient.get("http://34.71.128.243:8000/activities")
+        val response = httpClient.get("http://34.71.128.243:8000/activities/")
         response.body()
     }
 
-    suspend fun getUserImage(username: String): Bitmap {
-        val response = httpClient.get("http://34.71.128.243:8000/users/${username}/image")
-        val image: ByteArray = response.body()
-        return BitmapFactory.decodeByteArray(image, 0, image.size)
+    suspend fun getUserImage(username: String): Bitmap? {
+        val response = try {
+            httpClient.get("http://34.71.128.243:8000/users/${username}/image")
+        } catch (e: Exception) {
+            null
+        }
+        if (response != null) {
+            val image: ByteArray = response.body()
+            return BitmapFactory.decodeByteArray(image, 0, image.size)
+        }
+        else{
+            return response
+        }
     }
 
     suspend fun setUserImage(username: String, image: Bitmap) {

@@ -38,6 +38,8 @@ fun Login(
     navController: NavHostController,
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ) {
+    appViewModel.profilePicture = null
+
     var username by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
 
