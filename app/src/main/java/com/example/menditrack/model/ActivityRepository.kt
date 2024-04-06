@@ -30,17 +30,32 @@ class ActivityRepository @Inject constructor(
 
     override suspend fun addActivity(activity: SportActivity){
         activityDao. addActivity(activity)
-        apiClient.createActivity(activity)
+        try {
+            apiClient.createActivity(activity)
+        }
+        catch (_:Exception){
+
+        }
     }
 
     override suspend fun deleteActivity(activity: SportActivity) {
         activityDao.deleteActivity(activity)
-        apiClient.deleteActivity(activity)
+        try {
+            apiClient.deleteActivity(activity)
+        }
+        catch (_:Exception){
+
+        }
     }
 
     override suspend fun updateActivity(activity: SportActivity) {
         activityDao.updateActivity(activity)
-        apiClient.updateActivity(activity)
+        try {
+            apiClient.updateActivity(activity)
+        }
+        catch (_:Exception){
+
+        }
     }
 
     override suspend fun addActivitiesFromRemote() {

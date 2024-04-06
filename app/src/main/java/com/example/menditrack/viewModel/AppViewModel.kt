@@ -1,11 +1,12 @@
 package com.example.menditrack.viewModel
 
 
-import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import com.example.menditrack.model.IActivityRepository
 import com.example.menditrack.data.SportActivity
@@ -19,7 +20,6 @@ import com.example.menditrack.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.security.MessageDigest
 
 @HiltViewModel
 class AppViewModel @Inject constructor(
@@ -29,8 +29,12 @@ class AppViewModel @Inject constructor(
 
     init {
         CoroutineScope(Dispatchers.Main).launch {
-            addUsersFromRemote()
-            addActivitiesFromRemote()
+            try {
+                addUsersFromRemote()
+                addActivitiesFromRemote()
+            } catch (_: Exception) {
+
+            }
         }
     }
 

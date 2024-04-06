@@ -20,8 +20,13 @@ class UserRepository @Inject constructor(
     private val apiClient: ApiClient
 ): IUserRepository {
     override suspend fun addUser(user: User) {
-        apiClient.createUser(user)
         userDao.addUser(user)
+        try {
+            apiClient.createUser(user)
+        }
+        catch (_: Exception){
+
+        }
     }
 
     override suspend fun addUsersFromRemote() {
