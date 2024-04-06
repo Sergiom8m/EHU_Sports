@@ -96,7 +96,6 @@ fun MainScreen(
     val context = LocalContext.current
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
-
     // Define language and theme change functions to use them inside composables
     val onLanguageChange:(Language)-> Unit = { prefViewModel.changeLang(it) }
     val onThemeChange:(Int)-> Unit = { prefViewModel.changeTheme(it) }
@@ -247,7 +246,8 @@ fun TopBar(
     onEditProfile: () -> Unit,
     modifier: Modifier
 ) {
-    val profilePicture: Bitmap? = appViewModel.profilePicture
+
+    val profilePicture = appViewModel.profilePicture
 
     TopAppBar(
         modifier = modifier.fillMaxWidth(),

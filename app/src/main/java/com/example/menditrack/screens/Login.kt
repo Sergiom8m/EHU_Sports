@@ -97,6 +97,7 @@ fun Login(
                             password = ""
                             navController.navigate(AppScreens.UserScreen.route)
                             appViewModel.actualUser = mutableStateOf(user)
+                            appViewModel.getProfileImage(appViewModel.actualUser.value.username)
                         }
                         else{
                             Toast.makeText(context, wrongPassword, Toast.LENGTH_SHORT).show()

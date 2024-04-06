@@ -14,8 +14,8 @@ interface IUserRepository{
     suspend fun addUsersFromRemote()
     fun deleteUser(user: User)
     suspend fun getUser(username: String): User?
-    suspend fun setUserProfile(username: String, image: Bitmap): Bitmap
-    suspend fun getUserProfile(username: String): Bitmap
+    suspend fun setUserProfile(username: String, image: Bitmap)
+    suspend fun getUserProfile(username: String): Bitmap?
 }
 
 @Singleton
@@ -23,8 +23,6 @@ class UserRepository @Inject constructor(
     private val userDao: UserDao,
     private val apiClient: ApiClient
 ): IUserRepository {
-
-    lateinit var profileImage: Bitmap
 
     override suspend fun addUser(user: User) {
         userDao.addUser(user)
@@ -49,23 +47,23 @@ class UserRepository @Inject constructor(
         return userDao.getUser(username)
     }
 
-    override suspend fun setUserProfile(username: String, image: Bitmap): Bitmap {
+    override suspend fun setUserProfile(username: String, image: Bitmap) {
         try {
-            //apiClient.setUserProfile(username, image)
-            profileImage = image
+          apiClient.setUserImage(username, image)
         } catch (_: ResponseException) {
 
         }
-        return profileImage
     }
 
-    override suspend fun getUserProfile(username: String): Bitmap {
+    override suspend fun getUserProfile(username: String): Bitmap? {
+        var image: Bitmap? = null
         try {
-            //profileImage = apiClient.getUserProfile(username)
+            image = apiClient.getUserImage(username)
         } catch (_: ResponseException) {
 
         }
-        return profileImage
+        return image
+
     }
 
 

@@ -125,13 +125,13 @@ class ApiClient @Inject constructor() {
         response.body()
     }
 
-    suspend fun getUserProfile(username: String): Bitmap {
+    suspend fun getUserImage(username: String): Bitmap {
         val response = httpClient.get("http://34.71.128.243:8000/users/${username}/image")
         val image: ByteArray = response.body()
         return BitmapFactory.decodeByteArray(image, 0, image.size)
     }
 
-    suspend fun setUserProfile(username: String, image: Bitmap) {
+    suspend fun setUserImage(username: String, image: Bitmap) {
         val stream = ByteArrayOutputStream()
         image.compress(Bitmap.CompressFormat.PNG, 100, stream)
         val byteArray = stream.toByteArray()

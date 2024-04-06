@@ -151,8 +151,8 @@ class AppViewModel @Inject constructor(
 
     fun setProfileImage(username: String, image: Bitmap) {
         viewModelScope.launch(Dispatchers.IO) {
-            profilePicture = null
-            profilePicture = userRepository.setUserProfile(username, image)
+            userRepository.setUserProfile(username, image)
+            profilePicture = image
         }
 
     }

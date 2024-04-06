@@ -108,6 +108,7 @@ fun Register(
                     if (checkRegistrationFields(username, password, password2, context, emptyFields, diffPsw, wrongPsw)) {
                         if (appViewModel.addUser(username, password2)) {
                             appViewModel.actualUser = mutableStateOf(User(username, password))
+                            appViewModel.getProfileImage(appViewModel.actualUser.value.username)
                             username = ""
                             password = ""
                             password2 = ""
