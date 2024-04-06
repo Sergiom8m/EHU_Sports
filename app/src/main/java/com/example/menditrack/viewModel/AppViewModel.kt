@@ -1,13 +1,13 @@
 package com.example.menditrack.viewModel
 
 
-import android.widget.Toast
+import android.graphics.Bitmap
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.menditrack.model.IActivityRepository
 import com.example.menditrack.data.SportActivity
 import com.example.menditrack.data.User
@@ -19,6 +19,7 @@ import javax.inject.Inject
 import com.example.menditrack.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -54,6 +55,11 @@ class AppViewModel @Inject constructor(
     var activityToDelete by mutableStateOf<SportActivity?>(null)
 
     var actualUser: MutableState<User> = mutableStateOf(User("",""))
+
+    var profilePicture: Bitmap? by mutableStateOf(null)
+        private set
+
+    var profilePicturePath: String? = null
 
 
     /* ############################################################################################# */
@@ -143,6 +149,20 @@ class AppViewModel @Inject constructor(
         userRepository.addUsersFromRemote()
     }
 
+    fun setProfileImage(username: String, image: Bitmap) {
+        viewModelScope.launch(Dispatchers.IO) {
+            profilePicture = null
+            profilePicture = userRepository.setUserProfile(username, image)
+        }
+
+    }
+
+    fun getProfileImage(username: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            delay(100)
+            profilePicture = userRepository.getUserProfile(username)
+        }
+    }
 
 
 }

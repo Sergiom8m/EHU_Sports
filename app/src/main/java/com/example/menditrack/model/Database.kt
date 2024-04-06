@@ -2,6 +2,7 @@ package com.example.menditrack.model
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.menditrack.data.SportActivity
 import com.example.menditrack.data.User
 

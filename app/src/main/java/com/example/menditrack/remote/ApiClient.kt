@@ -1,5 +1,7 @@
 package com.example.menditrack.remote
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
 import com.example.menditrack.data.SportActivity
 import com.example.menditrack.data.User
@@ -12,11 +14,16 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpResponseValidator
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.delete
+import io.ktor.client.request.forms.formData
+import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
@@ -26,14 +33,12 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
+import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
-private val BASE_URL = "http://34.71.128.243:8000/"
-
 class UserExistsException : Exception()
-
 
 @Serializable
 data class PostActivity(
@@ -46,14 +51,11 @@ data class PostActivity(
     @SerialName("type") val type: String,
     @SerialName("user_id") val user_id: String
 )
-
-
 @Serializable
 data class PostUser(
     val username: String,
     val password: String,
 )
-
 
 @Singleton
 class ApiClient @Inject constructor() {
@@ -121,6 +123,27 @@ class ApiClient @Inject constructor() {
     suspend fun getActivities(): List<PostActivity> = runBlocking {
         val response = httpClient.get("http://34.71.128.243:8000/activities")
         response.body()
+    }
+
+    suspend fun getUserProfile(username: String): Bitmap {
+        val response = httpClient.get("http://34.71.128.243:8000/users/${username}/image")
+        val image: ByteArray = response.body()
+        return BitmapFactory.decodeByteArray(image, 0, image.size)
+    }
+
+    suspend fun setUserProfile(username: String, image: Bitmap) {
+        val stream = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        val byteArray = stream.toByteArray()
+        httpClient.submitFormWithBinaryData(
+            url = "http://34.71.128.243:8000/users/${username}/image",
+            formData = formData {
+                append("file", byteArray, Headers.build {
+                    append(HttpHeaders.ContentType, "image/png")
+                    append(HttpHeaders.ContentDisposition, "filename=profile_image.png")
+                })
+            }
+        ) { method = HttpMethod.Put }
     }
 
 

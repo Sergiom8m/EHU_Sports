@@ -3,9 +3,16 @@ package com.example.menditrack
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -42,6 +49,33 @@ class MainActivity : AppCompatActivity() {
     // Instance ViewModels
     private val appViewModel by viewModels<AppViewModel> ()
     private val preferencesViewModel by viewModels<PreferencesViewModel> ()
+
+    private fun getPathFromUri(uri: Uri): String {
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = contentResolver.query(uri, projection, null, null, null)
+        cursor?.use {
+            val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            it.moveToFirst()
+            return it.getString(columnIndex)
+        }
+        return ""
+    }
+
+    val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()){
+        if (it!=null){
+            var ivImage = ImageView(this)
+            ivImage.setImageURI(it)
+            val drawable: Drawable = ivImage.drawable
+
+            // Si el drawable es una instancia de BitmapDrawable, obtener el Bitmap directamente
+            if (drawable is BitmapDrawable) {
+                appViewModel.profilePicturePath = getPathFromUri(it)
+                appViewModel.setProfileImage(appViewModel.actualUser.value.username, drawable.bitmap)
+            }
+        }else{
+            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show()
+        }
+    }
 
     // Set a CHANNEL_ID
     companion object{
@@ -84,6 +118,7 @@ class MainActivity : AppCompatActivity() {
                             MainScreen(
                                 appViewModel = appViewModel,
                                 prefViewModel = preferencesViewModel,
+                                pickMedia = pickMedia,
                                 modifier = Modifier
                             )
                         }
@@ -137,18 +172,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @OptIn(ExperimentalPermissionsApi::class)
-    @Composable
-    fun LocationPermission(){
-        val locationPermissionState = rememberPermissionState(
-            permission = android.Manifest.permission.ACCESS_FINE_LOCATION
-        )
-        LaunchedEffect(true){
-            if (!locationPermissionState.status.isGranted) {
-                locationPermissionState.launchPermissionRequest()
-            }
-        }
-    }
 
 
 

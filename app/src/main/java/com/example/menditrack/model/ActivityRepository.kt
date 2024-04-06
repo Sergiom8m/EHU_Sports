@@ -1,5 +1,7 @@
 package com.example.menditrack.model
 
+import android.graphics.Bitmap
+import androidx.compose.runtime.MutableState
 import com.example.menditrack.data.SportActivity
 import com.example.menditrack.remote.ApiClient
 import com.example.menditrack.utils.postActivityToActivity

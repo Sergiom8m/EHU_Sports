@@ -103,8 +103,11 @@ dependencies {
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
 
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
 
+    
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.7")
     implementation("com.google.accompanist:accompanist-permissions:0.35.0-alpha")
     implementation("androidx.compose.material:material:1.6.2")

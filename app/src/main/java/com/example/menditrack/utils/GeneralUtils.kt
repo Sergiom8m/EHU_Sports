@@ -2,12 +2,10 @@ package com.example.menditrack.utils
 
 import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Environment
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.ContextCompat.startActivity
 import com.example.menditrack.R
 import com.example.menditrack.data.SportActivity

@@ -4,7 +4,10 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
-import android.location.Location
+import android.graphics.Bitmap
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
@@ -13,21 +16,28 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.DrawerValue
 import androidx.compose.material.NavigationRail
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.rememberDrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -42,8 +52,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -67,20 +81,30 @@ import com.example.menditrack.data.Design
 import com.example.menditrack.data.Language
 import com.example.menditrack.navigation.AppScreens
 import com.example.menditrack.utils.ShowDeleteMessage
-import com.google.android.gms.location.FusedLocationProviderClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
     appViewModel: AppViewModel,
     prefViewModel: PreferencesViewModel,
+    pickMedia: ActivityResultLauncher<PickVisualMediaRequest>,
     modifier: Modifier,
 ){
     val context = LocalContext.current
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+
 
     // Define language and theme change functions to use them inside composables
     val onLanguageChange:(Language)-> Unit = { prefViewModel.changeLang(it) }
     val onThemeChange:(Int)-> Unit = { prefViewModel.changeTheme(it) }
+
+    val onEditProfile: () -> Unit = {
+        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        CoroutineScope(Dispatchers.Main).launch { drawerState.close() }
+    }
 
     // Create a navController
     val navController = rememberNavController()
@@ -103,7 +127,7 @@ fun MainScreen(
                     visible = showSettingButton,
                     enter = slideInVertically(initialOffsetY = { it }) + expandVertically(),
                     exit = slideOutVertically(targetOffsetY = { it }) + shrinkVertically()
-                ) { TopBar(appViewModel, context, modifier) }
+                ) { TopBar(appViewModel, context, onEditProfile, modifier) }
             }
         },
         // BOTTOM BAR
@@ -220,10 +244,11 @@ fun BottomBar(navController: NavController) {
 fun TopBar(
     appViewModel: AppViewModel,
     context: Context,
+    onEditProfile: () -> Unit,
     modifier: Modifier
 ) {
-    // Variables to manage the appearance of dialogs
-    
+    val profilePicture: Bitmap? = appViewModel.profilePicture
+
     TopAppBar(
         modifier = modifier.fillMaxWidth(),
         title = {
@@ -269,6 +294,25 @@ fun TopBar(
                     contentDescription = stringResource(id = R.string.settings),
                     tint = Color(0xFFFFFFFF)
                 )
+            }
+            IconButton(onClick = { onEditProfile() }) {
+                if(profilePicture == null) {
+                    Icon(
+                        imageVector = Icons.Filled.AccountCircle,
+                        contentDescription = stringResource(id = R.string.settings),
+                        tint = Color(0xFFFFFFFF)
+                    )
+                }
+                else{
+                    Image(
+                        bitmap = profilePicture.asImageBitmap(),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(45.dp)
+                            .clip(CircleShape),
+                    )
+                }
             }
         }
     )
