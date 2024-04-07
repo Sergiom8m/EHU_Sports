@@ -28,16 +28,8 @@ class AppViewModel @Inject constructor(
     private val userRepository: IUserRepository
 ) : ViewModel() {
 
-    init {
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                addUsersFromRemote()
-                addActivitiesFromRemote()
-            } catch (_: Exception) {
 
-            }
-        }
-    }
+    var correctInit by mutableStateOf(false)
 
     // Variables to show nav bars and floating button
     var showAddButton by mutableStateOf(true)
@@ -59,6 +51,18 @@ class AppViewModel @Inject constructor(
     var profilePicture: Bitmap? by mutableStateOf(null)
 
     var profilePicturePath: String? = null
+
+    fun loadData(){
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                addUsersFromRemote()
+                addActivitiesFromRemote()
+                correctInit = true
+            } catch (_: Exception) {
+
+            }
+        }
+    }
 
 
     /* ############################################################################################# */

@@ -23,11 +23,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.menditrack.navigation.AppScreens
+import com.example.menditrack.screens.LoadingScreen
 import com.example.menditrack.screens.Login
 import com.example.menditrack.screens.MainScreen
 import com.example.menditrack.screens.Register
@@ -35,13 +35,9 @@ import com.example.menditrack.ui.theme.MendiTrackTheme
 import com.example.menditrack.viewModel.AppViewModel
 import com.example.menditrack.viewModel.PreferencesViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -105,8 +101,11 @@ class MainActivity : AppCompatActivity() {
 
                 NavHost(
                     navController = navController,
-                    startDestination = AppScreens.Login.route) {
+                    startDestination = AppScreens.Loading.route) {
 
+                    composable(AppScreens.Loading.route){
+                        LoadingScreen(appViewModel, navController)
+                    }
                     composable(AppScreens.Login.route) {
                         Login(appViewModel, navController)
                     }

@@ -61,5 +61,9 @@
     <string name="rep_psw">Pasahitza errepikatu</string>
     <string name="no_account">Ez daukazu konturik?</string>
     <string name="account">Jada kontua duzu?</string>
+    <string name="loading">Datuak kargatzen...</string>
+    <string name="no_internet">Ez duzu interneterako konexiorik</string>
+    <string name="reload">Berriro kargatu</string>
+    <string name="timeout">Berandutuz gero, baliteke zerbitzariak erabilgarri ez egotea</string>
 
 </resources>

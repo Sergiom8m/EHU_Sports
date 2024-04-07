@@ -29,9 +29,7 @@ class UserRepository @Inject constructor(
         try {
             apiClient.createUser(user)
         }
-        catch (_: Exception){
-
-        }
+        catch (_: Exception){}
     }
 
     override suspend fun addUsersFromRemote() {

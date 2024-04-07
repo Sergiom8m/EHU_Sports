@@ -13,4 +13,5 @@ sealed class AppScreens(val route: String) {
     data object Register: AppScreens("register")
     data object UserScreen: AppScreens("user_screen")
     data object Map: AppScreens("map")
+    data object  Loading: AppScreens("loading")
 }

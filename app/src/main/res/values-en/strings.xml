@@ -61,6 +61,10 @@
     <string name="rep_psw">Repeat password</string>
     <string name="no_account">¿Don\'t have an account?</string>
     <string name="account">¿Already have an account?</string>
+    <string name="loading">Downloading data...</string>
+    <string name="no_internet">You don\'t have internet connection</string>
+    <string name="reload">Refresh</string>
+    <string name="timeout">In case of delay, the servers may not be available</string>
 
 
 </resources>
