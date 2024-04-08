@@ -64,5 +64,6 @@
     <string name="reload">Berriro kargatu</string>
     <string name="timeout">Berandutuz gero, baliteke zerbitzariak erabilgarri ez egotea</string>
     <string name="add_event">JARDUERA BAT PROGRAMATU</string>
+    <string name="no_location">Jardueraren kokalekua ez dago eskuragarri</string>
 
 </resources>

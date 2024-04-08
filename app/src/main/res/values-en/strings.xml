@@ -64,6 +64,7 @@
     <string name="reload">Refresh</string>
     <string name="timeout">In case of delay, the servers may not be available</string>
     <string name="add_event">SCHEDULE A NEW ACTIVITY</string>
+    <string name="no_location">The activity\'s location isn\'t available</string>
 
 
 </resources>

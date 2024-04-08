@@ -2,9 +2,11 @@ package com.example.menditrack.utils
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
+import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -69,33 +71,6 @@ fun exportActivityToTxt(activity: SportActivity) {
     }
 }
 
-// Function to open Google Maps in an exact location using intents
-fun openGoogleMaps(startPoint: String, context: Context) {
-
-    try {
-        val gmmIntentUri = Uri.parse("geo:0,0?q=$startPoint")
-        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-        mapIntent.setPackage("com.google.android.apps.maps")
-        startActivity(context, mapIntent, null)
-    } catch (_: Exception) {
-
-    }
-}
-
-// Function to open Gmail with a default subject, body and destination
-fun openEmail(context: Context) {
-    val emailAddress = "menditrackteam@gmail.com"
-
-    try {
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailAddress))
-        intent.setPackage("com.google.android.gm")
-        startActivity(context, intent, null)
-    } catch (_: Exception) {
-
-    }
-}
 
 // Function to open whatsapp in order to share a text with the activity's information
 fun openShare(activity: SportActivity, context: Context){
@@ -189,6 +164,21 @@ fun hashPassword(password: String): String {
     return hashedBytes.joinToString("") { "%02x".format(it) }
 }
 
+fun getLatLngFromAddress(context: Context, mAddress: String): Pair<Double, Double>? {
+    val coder = Geocoder(context)
+    try {
+        val addressList = coder.getFromLocationName(mAddress, 1)
+        if (addressList.isNullOrEmpty()) {
+            return null
+        }
+        val location = addressList[0]
+        return Pair(location.latitude, location.longitude)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return null
+    }
+}
+
 fun userToPostUser(user: User): PostUser {
     return PostUser(
         user.username,
@@ -270,7 +260,6 @@ fun getCalendarIds(context: Context): List<Long> {
     val selection = "${CalendarContract.Calendars.ACCOUNT_TYPE} NOT IN (?)"
     val selectionArgs = arrayOf("com.google")
 
-    // Consultar los calendarios
     context.contentResolver.query(
         CalendarContract.Calendars.CONTENT_URI,
         projection,
@@ -302,17 +291,32 @@ fun addEventOnCalendar(context: Context, title: String, dateP: Long){
             put(Events.CALENDAR_ID, calendarID)
             put(Events.TITLE, title)
             put(Events.DTSTART, dateP)
-            put(Events.DTEND, dateP + (60 * 60 * 1000))
+            put(Events.DTEND, dateP +  (24 * 60 * 60 * 1000))
+            put(Events.ALL_DAY, 1)
             put(Events.EVENT_TIMEZONE, timeZone)
         }
 
         val uri = contentResolver.insert(Events.CONTENT_URI, contentValues)
 
         if (uri != null) {
-            Log.d("CALENDAR", "CORRECTO")
+            val eventId = ContentUris.parseId(uri)
+            addEventReminder(context, eventId, 720)
         } else {
             Log.d("CALENDAR", "INCORRECTO")
         }
     }
+
+}
+
+fun addEventReminder(context: Context, eventId: Long, timePrev: Int) {
+    val contentResolver: ContentResolver = context.contentResolver
+
+    val reminderValues = ContentValues().apply {
+        put(CalendarContract.Reminders.EVENT_ID, eventId)
+        put(CalendarContract.Reminders.MINUTES, timePrev)
+        put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT)
+    }
+
+    contentResolver.insert(CalendarContract.Reminders.CONTENT_URI, reminderValues)
 
 }

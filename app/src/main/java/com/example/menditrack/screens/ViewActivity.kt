@@ -49,7 +49,6 @@ import com.example.menditrack.data.SportActivity
 import com.example.menditrack.navigation.AppScreens
 import com.example.menditrack.utils.exportActivityToTxt
 import com.example.menditrack.utils.mapToUserLanguageDifficulty
-import com.example.menditrack.utils.openGoogleMaps
 import com.example.menditrack.utils.openShare
 import com.example.menditrack.utils.sendNotification
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -226,18 +225,4 @@ fun DownloadButton(activity: SportActivity, context: Context) {
     )
 }
 
-fun getLatLngFromAddress(context: Context, mAddress: String): Pair<Double, Double>? {
-    val coder = Geocoder(context)
-    try {
-        val addressList = coder.getFromLocationName(mAddress, 1)
-        if (addressList.isNullOrEmpty()) {
-            return null
-        }
-        val location = addressList[0]
-        return Pair(location.latitude, location.longitude)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        return null
-    }
-}
 

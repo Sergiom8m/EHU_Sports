@@ -4,6 +4,12 @@
     <string name="channel_name">Canal de notificaciones de EHUSports</string>
     <string name="channel_desc">Este canal lanzará las notificaciones de la aplicación</string>
 
+
+    <string name="app_widget_name" translatable="false">EHUSportsWidget</string>
+    <string name="widget_text" translatable="false">Prueba</string>
+    <string name="widget_button_text" translatable="false">SINCRONIZAR</string>
+
+
     <string name="go_back">Atrás</string>
     <string name="settings">Selección de idioma</string>
     <string name="stats">Estadísticas</string>
@@ -64,4 +70,5 @@
     <string name="reload">Recargar</string>
     <string name="timeout">En caso de demora puede que los servidores no estén disponibles</string>
     <string name="add_event">PROGRAMAR UNA ACTIVIDAD</string>
+    <string name="no_location">La ubicación de la actividad no esta disponible</string>
 </resources>

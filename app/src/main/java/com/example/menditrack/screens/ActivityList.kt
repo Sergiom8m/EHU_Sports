@@ -17,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +38,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.res.painterResource
+import com.example.menditrack.utils.LoadingImagePlaceholder
 
 @Composable
 fun ActivityList(
@@ -78,15 +80,14 @@ fun ActivityList(
             )
         }
 
-        Divider()
+        HorizontalDivider()
 
         // LazyColumn with the list of cards (ACTIVITY LIST)
-
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             contentPadding = PaddingValues(bottom = 70.dp)
-        ){
+        ) {
             // Iterate all the items in activities flow
             items(activities.value) { activity ->
 
