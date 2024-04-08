@@ -1,5 +1,6 @@
 package com.example.menditrack.screens
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
@@ -20,6 +21,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +38,9 @@ import com.example.menditrack.R
 import com.example.menditrack.navigation.AppScreens
 import com.example.menditrack.utils.LoadingImagePlaceholder
 import com.example.menditrack.viewModel.AppViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import java.net.HttpURLConnection
 import java.net.InetAddress
 import java.net.InetSocketAddress

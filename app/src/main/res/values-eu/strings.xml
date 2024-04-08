@@ -6,25 +6,23 @@
     <string name="channel_desc">Kanal honek aplikazioaren notifikazioak bota ditu</string>
 
     <string name="go_back">Atzera</string>
-    <string name="info">Informazioa</string>
     <string name="settings">Hizkuntza hautaketa</string>
     <string name="stats">Estatistikak</string>
     <string name="accept">Ados</string>
-    <string name="app_desc">Aplikazio hau mendiko ibilbideen atari bat da, eta bertan zure ibilbideak gorde eta Menditrack komunitateko beste erabiltzaile batzuen ibilbideak kontsulta ditzakezu.</string>
     <string name="cycling">Bizikleta</string>
     <string name="running">Korrika</string>
     <string name="walking">Ibilaldia</string>
     <string name="add">Gehitu</string>
-    <string name="route_name">Ibilbidearen izena</string>
-    <string name="route_dist">Ibilbidearen luzera</string>
+    <string name="route_name">Jardueraren izena</string>
+    <string name="route_dist">Jardueraren luzera</string>
     <string name="select_sport">Kirol bat aukeratu</string>
-    <string name="walk_routes">ZURE OINEZKO IBILBIDEAK</string>
-    <string name="run_routes">ZURE KORRIKA IBILBIDEAK</string>
-    <string name="cyc_routes">ZURE BIZIKLETA IBILBIDEAK</string>
+    <string name="walk_routes">ZURE OINEZKO JARDUERAK</string>
+    <string name="run_routes">ZURE KORRIKA JARDUERAK</string>
+    <string name="cyc_routes">ZURE BIZIKLETA JARDUERAK</string>
     <string name="your_stats">ZURE ESTATISTIKAK</string>
     <string name="wrong_data">Datuek ez dituzte baldintzak betetzen</string>
-    <string name="add_route">IBILBIDEA GEHITU</string>
-    <string name="notif_title">Ibildidea gordeta!</string>
+    <string name="add_route">JARDUERA GEHITU</string>
+    <string name="notif_title">Jarduera gordeta!</string>
     <string name="notif_body">Ibilbidea gordeta %1$s-rentzat izenarekin: %2$s</string>
     <string name="hard">Zaila</string>
     <string name="moderate">Ertaina</string>
@@ -35,7 +33,7 @@
     <string name="difficulty">Zailtasuna</string>
     <string name="distance">Distantzia</string>
     <string name="download">Deskargatu</string>
-    <string name="modify">IBILIDIDEA EDITATU</string>
+    <string name="modify">JARDUERA EDITATU</string>
     <string name="savechange">Aldaketak gorde</string>
     <string name="num_activity">Kirol jarduera kopuru totala</string>
     <string name="dist_activity">Egindako distantzia totala</string>
@@ -65,5 +63,6 @@
     <string name="no_internet">Ez duzu interneterako konexiorik</string>
     <string name="reload">Berriro kargatu</string>
     <string name="timeout">Berandutuz gero, baliteke zerbitzariak erabilgarri ez egotea</string>
+    <string name="add_event">JARDUERA BAT PROGRAMATU</string>
 
 </resources>

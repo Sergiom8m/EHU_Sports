@@ -32,9 +32,11 @@ import com.example.menditrack.screens.Login
 import com.example.menditrack.screens.MainScreen
 import com.example.menditrack.screens.Register
 import com.example.menditrack.ui.theme.MendiTrackTheme
+import com.example.menditrack.utils.addEventOnCalendar
 import com.example.menditrack.viewModel.AppViewModel
 import com.example.menditrack.viewModel.PreferencesViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.permissions.rememberPermissionState
 
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,30 +48,16 @@ class MainActivity : AppCompatActivity() {
     private val appViewModel by viewModels<AppViewModel> ()
     private val preferencesViewModel by viewModels<PreferencesViewModel> ()
 
-    private fun getPathFromUri(uri: Uri): String {
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = contentResolver.query(uri, projection, null, null, null)
-        cursor?.use {
-            val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            it.moveToFirst()
-            return it.getString(columnIndex)
-        }
-        return ""
-    }
-
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()){
         if (it!=null){
-            var ivImage = ImageView(this)
+            val ivImage = ImageView(this)
             ivImage.setImageURI(it)
             val drawable: Drawable = ivImage.drawable
 
             // Si el drawable es una instancia de BitmapDrawable, obtener el Bitmap directamente
             if (drawable is BitmapDrawable) {
-                appViewModel.profilePicturePath = getPathFromUri(it)
                 appViewModel.setProfileImage(appViewModel.actualUser.value.username, drawable.bitmap)
             }
-        }else{
-            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -91,11 +79,8 @@ class MainActivity : AppCompatActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-                // Ask for notification permission
-                NotificationPermission()
-
-                // Ask for storage permission
-                StoragePermission()
+                // Ask for permissions
+                AskPermissions()
 
                 val navController = rememberNavController()
 
@@ -128,16 +113,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    @OptIn(ExperimentalPermissionsApi::class)
-    @Composable
-    fun StoragePermission(){
-        val permissionState2 = rememberPermissionState(
-            permission = android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
-        LaunchedEffect(true){
-            permissionState2.launchPermissionRequest()
-        }
-    }
 
     private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
@@ -162,12 +137,19 @@ class MainActivity : AppCompatActivity() {
     @OptIn(ExperimentalPermissionsApi::class)
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @Composable
-    fun NotificationPermission(){
-        val permissionState = rememberPermissionState(
-            permission = android.Manifest.permission.POST_NOTIFICATIONS
+    fun AskPermissions(){
+        val permissions = arrayOf(
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            android.Manifest.permission.POST_NOTIFICATIONS,
+            android.Manifest.permission.READ_CALENDAR,
+            android.Manifest.permission.WRITE_CALENDAR,
+        )
+        val permissionState = rememberMultiplePermissionsState(
+            permissions = permissions.toList()
+
         )
         LaunchedEffect(true){
-            permissionState.launchPermissionRequest()
+            permissionState.launchMultiplePermissionRequest()
         }
     }
 

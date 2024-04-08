@@ -1,9 +1,15 @@
 package com.example.menditrack.utils
 
+import android.annotation.SuppressLint
+import android.content.ContentResolver
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
+import android.provider.CalendarContract
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -30,8 +36,13 @@ import com.example.menditrack.remote.PostUser
 import java.io.File
 import java.io.FileWriter
 import java.security.MessageDigest
+import java.time.LocalDate
+import java.time.ZoneOffset
 import java.util.Locale
 import kotlin.random.Random
+import android.provider.CalendarContract.Events
+import android.util.Log
+import java.util.TimeZone
 
 // Function to convert SportActivity to string (data extraction)
 fun activityToString(activity: SportActivity): String{
@@ -221,7 +232,7 @@ fun postActivityToActivity(postActivity: PostActivity): SportActivity {
 @Composable
 fun LoadingImagePlaceholder(image: Int, size: Dp) {
     // Creates an `InfiniteTransition` that runs infinite child animation values.
-    val infiniteTransition = rememberInfiniteTransition()
+    val infiniteTransition = rememberInfiniteTransition(label = "")
     val alpha by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
@@ -249,4 +260,59 @@ fun LoadingImagePlaceholder(image: Int, size: Dp) {
         contentDescription = null,
         contentScale = ContentScale.Crop
     )
+}
+
+@SuppressLint("Range")
+fun getCalendarIds(context: Context): List<Long> {
+    val calendarIds = mutableListOf<Long>()
+    val projection = arrayOf(CalendarContract.Calendars._ID)
+
+    val selection = "${CalendarContract.Calendars.ACCOUNT_TYPE} NOT IN (?)"
+    val selectionArgs = arrayOf("com.google")
+
+    // Consultar los calendarios
+    context.contentResolver.query(
+        CalendarContract.Calendars.CONTENT_URI,
+        projection,
+        selection,
+        selectionArgs,
+        null
+    )?.use { cursor ->
+        while (cursor.moveToNext()) {
+            val id = cursor.getLong(cursor.getColumnIndex(CalendarContract.Calendars._ID))
+            calendarIds.add(id)
+        }
+    }
+
+    return calendarIds
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun addEventOnCalendar(context: Context, title: String, dateP: Long){
+
+    val contentResolver: ContentResolver = context.contentResolver
+
+    val timeZone = TimeZone.getDefault().id
+
+    val calendarIDs = getCalendarIds(context)
+
+    for (calendarID in calendarIDs) {
+
+        val contentValues = ContentValues().apply {
+            put(Events.CALENDAR_ID, calendarID)
+            put(Events.TITLE, title)
+            put(Events.DTSTART, dateP)
+            put(Events.DTEND, dateP + (60 * 60 * 1000))
+            put(Events.EVENT_TIMEZONE, timeZone)
+        }
+
+        val uri = contentResolver.insert(Events.CONTENT_URI, contentValues)
+
+        if (uri != null) {
+            Log.d("CALENDAR", "CORRECTO")
+        } else {
+            Log.d("CALENDAR", "INCORRECTO")
+        }
+    }
+
 }

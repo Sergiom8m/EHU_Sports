@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
-import android.graphics.Bitmap
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,9 +16,7 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -36,8 +32,8 @@ import androidx.compose.material.NavigationRail
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -51,19 +47,15 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -76,7 +68,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.menditrack.viewModel.AppViewModel
-import com.example.menditrack.utils.InfoDialog
 import com.example.menditrack.viewModel.PreferencesViewModel
 import com.example.menditrack.R
 import com.example.menditrack.utils.SettingsDialog
@@ -130,7 +121,7 @@ fun MainScreen(
                     visible = showSettingButton,
                     enter = slideInVertically(initialOffsetY = { it }) + expandVertically(),
                     exit = slideOutVertically(targetOffsetY = { it }) + shrinkVertically()
-                ) { TopBar(appViewModel, context, onEditProfile, modifier) }
+                ) { TopBar(appViewModel, navController, context, onEditProfile, modifier) }
             }
         },
         // BOTTOM BAR
@@ -165,7 +156,6 @@ fun MainScreen(
             MainNavHost(navController, appViewModel, innerPadding)
         }
         // Invoke dialog components with the "show" parameter and set it to false after the dialogs are dismissed.
-        InfoDialog(appViewModel.showInfo, context) { appViewModel.showInfo = false }
         SettingsDialog(appViewModel.showSettings, onLanguageChange) { appViewModel.showSettings = false }
         ShowThemes(appViewModel.showThemes, onThemeChange) { appViewModel.showThemes = false }
         ShowDeleteMessage(appViewModel.showDelete, appViewModel) { appViewModel.showDelete = false }
@@ -247,6 +237,7 @@ fun BottomBar(navController: NavController) {
 @Composable
 fun TopBar(
     appViewModel: AppViewModel,
+    navController: NavController,
     context: Context,
     onEditProfile: () -> Unit,
     modifier: Modifier
@@ -275,20 +266,18 @@ fun TopBar(
         },
         // Action buttons
         actions = {
-
+            IconButton(onClick = { navController.navigate(AppScreens.ProgramAct.route) }) {
+                Icon(
+                    imageVector = Icons.Filled.DateRange,
+                    contentDescription = null,
+                    tint = Color(0xFFFFFFFF)
+                )
+            }
             // Button to show available themes dialog
             IconButton(onClick = { appViewModel.showThemes = true }) {
                 Icon(
                     painter = painterResource(id = R.drawable.palette),
-                    contentDescription = stringResource(id = R.string.info),
-                    tint = Color(0xFFFFFFFF)
-                )
-            }
-            // Button to show application information dialog
-            IconButton(onClick = { appViewModel.showInfo = true }) {
-                Icon(
-                    imageVector = Icons.Filled.Info,
-                    contentDescription = stringResource(id = R.string.info),
+                    contentDescription = null,
                     tint = Color(0xFFFFFFFF)
                 )
             }
@@ -296,7 +285,7 @@ fun TopBar(
             IconButton(onClick = { appViewModel.showSettings = true}) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.language),
-                    contentDescription = stringResource(id = R.string.settings),
+                    contentDescription = null,
                     tint = Color(0xFFFFFFFF)
                 )
             }
@@ -304,7 +293,7 @@ fun TopBar(
                 if(profilePicture == null) {
                     Icon(
                         imageVector = Icons.Filled.AccountCircle,
-                        contentDescription = stringResource(id = R.string.settings),
+                        contentDescription = null,
                         tint = Color(0xFFFFFFFF),
                         modifier = modifier.size(55.dp)
                     )
@@ -330,7 +319,7 @@ fun MainNavHost(
     navController: NavHostController,
     appViewModel: AppViewModel,
     innerPadding: PaddingValues
-){
+) {
     NavHost(
         navController = navController,
         startDestination = AppScreens.Stats.route,
@@ -379,6 +368,11 @@ fun MainNavHost(
             enterTransition = { fadeIn(animationSpec = tween(1000)) },
             exitTransition = { fadeOut(animationSpec = tween(1000)) }
         ) { MapScreen(appViewModel, navController) }
+
+        composable(AppScreens.ProgramAct.route,
+            enterTransition = { fadeIn(animationSpec = tween(1000)) },
+            exitTransition = { fadeOut(animationSpec = tween(1000)) }
+        ) { ProgramActivity(appViewModel, navController) }
     }
 }
 

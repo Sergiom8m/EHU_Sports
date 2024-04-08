@@ -1,6 +1,9 @@
 package com.example.menditrack.screens
 
+import android.Manifest
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -26,12 +29,18 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.menditrack.R
 import com.example.menditrack.navigation.AppScreens
+import com.example.menditrack.utils.addEventOnCalendar
 import com.example.menditrack.utils.hashPassword
 import com.example.menditrack.viewModel.AppViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Login(
     appViewModel: AppViewModel,

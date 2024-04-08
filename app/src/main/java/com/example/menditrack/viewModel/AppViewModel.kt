@@ -29,6 +29,7 @@ class AppViewModel @Inject constructor(
 ) : ViewModel() {
 
 
+
     var correctInit by mutableStateOf(false)
 
     // Variables to show nav bars and floating button
@@ -36,7 +37,6 @@ class AppViewModel @Inject constructor(
     var showNavBars by mutableStateOf(true)
 
     // Variables to manage dialog visibility
-    var showInfo by mutableStateOf(false)
     var showSettings by mutableStateOf(false)
     var showThemes by mutableStateOf(false)
     var showDelete by mutableStateOf(false)
@@ -50,7 +50,6 @@ class AppViewModel @Inject constructor(
 
     var profilePicture: Bitmap? by mutableStateOf(null)
 
-    var profilePicturePath: String? = null
 
     fun loadData(){
         CoroutineScope(Dispatchers.IO).launch {

@@ -87,7 +87,7 @@ fun AddActivity(
 
         AddHeading(navController)
 
-        Divider()
+        HorizontalDivider()
 
         // Input field for sport type selection (COMBO BOX)
         Box(

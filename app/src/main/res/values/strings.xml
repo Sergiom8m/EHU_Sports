@@ -5,26 +5,24 @@
     <string name="channel_desc">Este canal lanzará las notificaciones de la aplicación</string>
 
     <string name="go_back">Atrás</string>
-    <string name="info">Información</string>
     <string name="settings">Selección de idioma</string>
     <string name="stats">Estadísticas</string>
 
     <string name="accept">Aceptar</string>
-    <string name="app_desc">Esta aplicacion es un portal de rutas de montaña donde se pueden guardar rutas propias y consultar las rutas de otros usuarios de la comunidad Menditrack</string>
     <string name="cycling">Ciclismo</string>
     <string name="running">Carrera</string>
     <string name="walking">Caminata</string>
     <string name="add">Añadir</string>
-    <string name="route_name">Nombre de la ruta</string>
-    <string name="route_dist">Distancia de la ruta</string>
+    <string name="route_name">Nombre de la actividad</string>
+    <string name="route_dist">Distancia de la actividad</string>
     <string name="select_sport">Seleccione un deporte</string>
-    <string name="walk_routes">TUS RUTAS DE CAMINATA</string>
-    <string name="run_routes">TUS RUTAS DE CARRERA</string>
-    <string name="cyc_routes">TUS RUTAS DE CICLISMO</string>
+    <string name="walk_routes">TUS ACTIVIDADES DE CAMINATA</string>
+    <string name="run_routes">TUS ACTIVIDADES DE CARRERA</string>
+    <string name="cyc_routes">TUS ACTIVIDADES DE CICLISMO</string>
     <string name="your_stats">TUS ESTADÍSTICAS</string>
     <string name="wrong_data">Los datos no cumplen con los requisitos</string>
-    <string name="add_route">AÑADIR RUTA</string>
-    <string name="notif_title">Ruta guardada!</string>
+    <string name="add_route">AÑADIR ACTIVIDAD</string>
+    <string name="notif_title">Actividad guardada!</string>
     <string name="notif_body">Se ha guardado la ruta para %1$s con el nombre: %2$s</string>
     <string name="hard">Difícil</string>
     <string name="moderate">Moderado</string>
@@ -35,7 +33,7 @@
     <string name="difficulty">Dificultad</string>
     <string name="distance">Distancia</string>
     <string name="download">Descargar</string>
-    <string name="modify">MODIFICAR RUTA</string>
+    <string name="modify">MODIFICAR ACTIVIDAD</string>
     <string name="savechange">Guardar cambios</string>
     <string name="num_activity">"Número total de actividades "</string>
     <string name="dist_activity">Distancia total recorrida</string>
@@ -65,4 +63,5 @@
     <string name="no_internet">No tienes conexión a internet</string>
     <string name="reload">Recargar</string>
     <string name="timeout">En caso de demora puede que los servidores no estén disponibles</string>
+    <string name="add_event">PROGRAMAR UNA ACTIVIDAD</string>
 </resources>
