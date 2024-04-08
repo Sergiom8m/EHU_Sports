@@ -100,7 +100,7 @@ fun MapScreen(
     }
 
     FloatingActionButton(
-        onClick = { navController.navigateUp() },
+        onClick = { navController.popBackStack() },
         containerColor = MaterialTheme.colorScheme.primary,
         shape = RoundedCornerShape(20),
         modifier = Modifier.padding(10.dp)

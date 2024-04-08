@@ -243,7 +243,7 @@ fun AddActivity(
                     }
                     // Navigate back to the screen the user was before adding this activity
                     appViewModel.showAddButton = true
-                    navController.navigateUp()
+                    navController.popBackStack()
 
                     // Send a notification that indicates the activity has been added correctly
                     sendNotification(context, title, content, R.drawable.correct)
@@ -290,7 +290,7 @@ fun AddHeading(navController: NavController){
             verticalAlignment = Alignment.CenterVertically
         ){
             IconButton(
-                onClick = { navController.navigateUp()
+                onClick = { navController.popBackStack()
                 }
             ) {
                 Icon(Icons.Default.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)

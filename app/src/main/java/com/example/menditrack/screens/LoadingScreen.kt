@@ -115,7 +115,7 @@ fun NoInternetView(navController: NavHostController) {
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
-                    navController.navigateUp()
+                    navController.popBackStack()
                     navController.navigate(AppScreens.Loading.route)
                 },
                 modifier = Modifier.padding(horizontal = 16.dp)

@@ -107,7 +107,7 @@ fun ViewActivity(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     IconButton(
-                        onClick = { navController.navigateUp() }
+                        onClick = { navController.popBackStack() }
                     ) {
                         Icon(
                             Icons.Default.ArrowBack,

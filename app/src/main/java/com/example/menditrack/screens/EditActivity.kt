@@ -264,7 +264,7 @@ fun EditActivity(
                     }
                     // Navigate back to the screen the user was before adding this activity
                     appViewModel.showAddButton = true
-                    navController.navigateUp()
+                    navController.popBackStack()
                 } else {
                     // If data isn't valid show a toast message
                     Toast.makeText(
@@ -308,7 +308,7 @@ fun EditHeading(navController: NavController){
             verticalAlignment = Alignment.CenterVertically
         ){
             IconButton(
-                onClick = { navController.navigateUp()
+                onClick = { navController.popBackStack()
                 }
             ) {
                 Icon(Icons.Default.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
