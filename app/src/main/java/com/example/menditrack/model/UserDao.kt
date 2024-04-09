@@ -22,7 +22,17 @@ interface UserDao {
     fun deleteUser(user: User)
 
     @Transaction
+    @Query("DELETE FROM users")
+    suspend fun clearUsers()
+
+    @Transaction
     @Query("SELECT * FROM users WHERE username = :username")
     suspend fun getUser(username: String): User?
+
+    @Transaction
+    @Query("SELECT * FROM users ")
+    suspend fun getUsers(): List<User>
+
+
 
 }

@@ -48,12 +48,25 @@ class AppViewModel @Inject constructor(
 
     var profilePicture: Bitmap? by mutableStateOf(null)
 
-    fun loadData(){
+    fun downloadData(){
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 addUsersFromRemote()
                 addActivitiesFromRemote()
                 correctInit = true
+            } catch (_: Exception) {
+
+            }
+        }
+    }
+
+    fun uploadData(){
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                activityRepository.clearActivitiesOnRemote()
+                userRepository.clearUsersOnRemote()
+                userRepository.uploadUsers()
+                activityRepository.uploadActivities()
             } catch (_: Exception) {
 
             }
@@ -120,6 +133,7 @@ class AppViewModel @Inject constructor(
         activityRepository.addActivitiesFromRemote()
     }
 
+
     /* ############################################################################################# */
     /* ########################## INTERACTION WITH THE USERS REPOSITORY ############################ */
     /* ############################################################################################# */
@@ -161,7 +175,6 @@ class AppViewModel @Inject constructor(
             profilePicture = userRepository.getUserProfile(username)
         }
     }
-
 
 }
 

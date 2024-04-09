@@ -5,6 +5,7 @@ import android.util.Log
 import com.example.menditrack.data.User
 import com.example.menditrack.remote.ApiClient
 import com.example.menditrack.utils.postUserToUser
+import com.example.menditrack.utils.userToPostUser
 import io.ktor.client.plugins.ResponseException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,6 +17,8 @@ interface IUserRepository{
     suspend fun getUser(username: String): User?
     suspend fun setUserProfile(username: String, image: Bitmap)
     suspend fun getUserProfile(username: String): Bitmap?
+    suspend fun uploadUsers()
+    suspend fun clearUsersOnRemote()
 }
 
 @Singleton
@@ -33,6 +36,7 @@ class UserRepository @Inject constructor(
     }
 
     override suspend fun addUsersFromRemote() {
+        userDao.clearUsers()
         val userList = apiClient.getUsers()
         userList.map { userDao.addUser(postUserToUser(it)) }
     }
@@ -61,7 +65,15 @@ class UserRepository @Inject constructor(
 
         }
         return image
+    }
 
+    override suspend fun uploadUsers(){
+        val userList = userDao.getUsers()
+        userList.map { apiClient.createUser(it) }
+    }
+
+    override suspend fun clearUsersOnRemote(){
+        apiClient.clearUsers()
     }
 
 

@@ -101,11 +101,21 @@ class ApiClient @Inject constructor() {
     }
 
     @Throws(Exception::class)
+    suspend fun clearUsers() {
+        httpClient.delete("http://34.71.128.243:8000/users/")
+    }
+
+    @Throws(Exception::class)
     suspend fun createActivity(activity: SportActivity) {
         httpClient.post("http://34.71.128.243:8000/activities/"){
             contentType(ContentType.Application.Json)
             setBody(Json.encodeToJsonElement(activityToPostActivity(activity)))
         }
+    }
+    @Throws(Exception::class)
+    suspend fun getActivities(): List<PostActivity> = runBlocking {
+        val response = httpClient.get("http://34.71.128.243:8000/activities/")
+        response.body()
     }
 
     @Throws(Exception::class)
@@ -122,9 +132,8 @@ class ApiClient @Inject constructor() {
     }
 
     @Throws(Exception::class)
-    suspend fun getActivities(): List<PostActivity> = runBlocking {
-        val response = httpClient.get("http://34.71.128.243:8000/activities/")
-        response.body()
+    suspend fun clearActivities() {
+        httpClient.delete("http://34.71.128.243:8000/activities/")
     }
 
     suspend fun getUserImage(username: String): Bitmap? {

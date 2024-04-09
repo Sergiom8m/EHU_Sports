@@ -64,6 +64,10 @@ fun Login(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(1.dp)
     ) {
+
+        Button(onClick = { appViewModel.uploadData() }) {
+            Text(text = "SUBIR")
+        }
         Image(
             painter = painterResource(id = R.drawable.applogo),
             contentDescription = "",

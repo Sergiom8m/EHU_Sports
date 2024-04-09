@@ -118,6 +118,9 @@ dependencies {
 
     // For interop APIs with Material 3
     implementation ("androidx.glance:glance-material3:1.0.0")
+
+    //WorkManager
+    implementation ("androidx.work:work-runtime-ktx:2.9.0")
     
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.7")
