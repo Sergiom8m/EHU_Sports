@@ -15,6 +15,10 @@ import kotlinx.coroutines.flow.Flow
 interface ActivityDao {
 
     @Transaction
+    @Query("SELECT * FROM activities")
+    fun getActivities(): Flow<List<SportActivity>>
+
+    @Transaction
     @Query("SELECT * FROM activities WHERE type = :type AND userId = :username")
     fun getActivitiesByType(type: String, username: String): Flow<List<SportActivity>>
 

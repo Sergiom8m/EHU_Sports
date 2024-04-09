@@ -22,3 +22,27 @@ data class SportActivity (
     val type: String,
     val userId: String
 )
+
+@Serializable
+data class CompactActivity(
+    val id: String,
+    val name: String,
+    val distance: Double,
+    val initPoint: String,
+    val grade: Double,
+    val difficulty: String,
+    val type: String,
+    val userId: String
+) {
+    constructor(activity: SportActivity): this(
+        id = activity.id,
+        name = activity.name,
+        distance = activity.distance,
+        initPoint = activity.initPoint,
+        grade = activity.grade,
+        difficulty = activity.difficulty,
+        type = activity.type,
+        userId = activity.userId
+    )
+
+}

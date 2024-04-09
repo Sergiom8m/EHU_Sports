@@ -28,8 +28,6 @@ class AppViewModel @Inject constructor(
     private val userRepository: IUserRepository
 ) : ViewModel() {
 
-
-
     var correctInit by mutableStateOf(false)
 
     // Variables to show nav bars and floating button
@@ -50,7 +48,6 @@ class AppViewModel @Inject constructor(
 
     var profilePicture: Bitmap? by mutableStateOf(null)
 
-
     fun loadData(){
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -62,7 +59,6 @@ class AppViewModel @Inject constructor(
             }
         }
     }
-
 
     /* ############################################################################################# */
     /* ######################### INTERACTION WITH THE ACTIVITY REPOSITORY ########################## */

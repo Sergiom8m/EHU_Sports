@@ -12,6 +12,7 @@ import javax.inject.Singleton
 // Interface-class file to create a intermediate repository between DAO and ViewModel
 
 interface IActivityRepository{
+    fun getActivities(): Flow<List<SportActivity>>
     fun getActivitiesByType(type: String, username: String): Flow<List<SportActivity>>
     suspend fun addActivity(activity: SportActivity)
     suspend fun deleteActivity(activity: SportActivity)
@@ -25,6 +26,10 @@ class ActivityRepository @Inject constructor(
     private val activityDao: ActivityDao,
     private val apiClient: ApiClient
 ): IActivityRepository {
+
+    override fun getActivities():  Flow<List<SportActivity>> {
+        return activityDao.getActivities()
+    }
 
     override fun getActivitiesByType(type: String, username: String): Flow<List<SportActivity>> {
         return activityDao.getActivitiesByType(type, username)
@@ -64,6 +69,7 @@ class ActivityRepository @Inject constructor(
         val activityList = apiClient.getActivities()
         activityList.map { activityDao.addActivity(postActivityToActivity(it)) }
     }
+
 
 
 }
