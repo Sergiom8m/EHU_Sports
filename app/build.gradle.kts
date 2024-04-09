@@ -7,6 +7,8 @@ plugins {
 
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
 
+    id("com.google.gms.google-services")
+
 }
 
 android {
@@ -70,6 +72,10 @@ dependencies {
     implementation("io.ktor:ktor-client-auth:2.0.0")
     implementation("io.ktor:ktor-client-content-negotiation:2.0.0")
 
+    //Firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-messaging:23.4.1")
 
     // Kotlin Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
