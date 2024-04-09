@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.Flow
 // Interface to manage DB data (DAO -> Data Access Object)
 @Dao
 interface ActivityDao {
-
     @Transaction
     @Query("SELECT * FROM activities")
     fun getActivities(): Flow<List<SportActivity>>
@@ -33,4 +32,11 @@ interface ActivityDao {
     @Transaction
     @Update(onConflict = OnConflictStrategy.IGNORE)
     suspend fun updateActivity(activity: SportActivity)
+
+    @Transaction
+    @Query("DELETE FROM activities")
+    suspend fun clearActivities()
+
+
+
 }

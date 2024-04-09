@@ -52,6 +52,8 @@ class EHUSportsWidgetReceiver() : GlanceAppWidgetReceiver(){
         coroutineScope.launch {
             Log.d("Widget", "Coroutine Called")
 
+            activityRepository.addActivitiesFromRemote()
+
             val activities = activityRepository.getActivities().first().map(::CompactActivity)
 
             Log.d("Widget", "Coroutine - Data-Length: ${activities.size}")

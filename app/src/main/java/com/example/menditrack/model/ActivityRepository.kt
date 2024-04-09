@@ -66,6 +66,7 @@ class ActivityRepository @Inject constructor(
     }
 
     override suspend fun addActivitiesFromRemote() {
+        activityDao.clearActivities()
         val activityList = apiClient.getActivities()
         activityList.map { activityDao.addActivity(postActivityToActivity(it)) }
     }
