@@ -2,15 +2,14 @@ package com.example.menditrack
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
+import android.util.Log
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -32,14 +31,21 @@ import com.example.menditrack.screens.Login
 import com.example.menditrack.screens.MainScreen
 import com.example.menditrack.screens.Register
 import com.example.menditrack.ui.theme.MendiTrackTheme
-import com.example.menditrack.utils.addEventOnCalendar
 import com.example.menditrack.viewModel.AppViewModel
 import com.example.menditrack.viewModel.PreferencesViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.google.accompanist.permissions.rememberPermissionState
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.messaging
 
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.tasks.await
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -82,6 +88,8 @@ class MainActivity : AppCompatActivity() {
                 // Ask for permissions
                 AskPermissions()
 
+                deviceToken(appViewModel)
+
                 val navController = rememberNavController()
 
                 NavHost(
@@ -112,6 +120,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun deviceToken(appViewModel: AppViewModel) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val token = Firebase.messaging.token.await()
+            Log.d("TOKEN", token)
+            appViewModel.subscribeDevice(token)
+        }
+    }
 
 
     private fun createNotificationChannel() {

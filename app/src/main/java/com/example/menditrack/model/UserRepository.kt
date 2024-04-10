@@ -1,11 +1,9 @@
 package com.example.menditrack.model
 
 import android.graphics.Bitmap
-import android.util.Log
 import com.example.menditrack.data.User
 import com.example.menditrack.remote.ApiClient
 import com.example.menditrack.utils.postUserToUser
-import com.example.menditrack.utils.userToPostUser
 import io.ktor.client.plugins.ResponseException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,6 +17,7 @@ interface IUserRepository{
     suspend fun getUserProfile(username: String): Bitmap?
     suspend fun uploadUsers()
     suspend fun clearUsersOnRemote()
+    suspend fun subscribe(token: String)
 }
 
 @Singleton
@@ -74,6 +73,10 @@ class UserRepository @Inject constructor(
 
     override suspend fun clearUsersOnRemote(){
         apiClient.clearUsers()
+    }
+
+    override suspend fun subscribe(token: String) {
+        apiClient.subscribe(token)
     }
 
 

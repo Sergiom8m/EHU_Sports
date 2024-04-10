@@ -73,6 +73,12 @@ class AppViewModel @Inject constructor(
         }
     }
 
+    fun subscribeDevice(token: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            userRepository.subscribe(token)
+        }
+    }
+
     /* ############################################################################################# */
     /* ######################### INTERACTION WITH THE ACTIVITY REPOSITORY ########################## */
     /* ############################################################################################# */
@@ -175,6 +181,8 @@ class AppViewModel @Inject constructor(
             profilePicture = userRepository.getUserProfile(username)
         }
     }
+
+
 
 }
 

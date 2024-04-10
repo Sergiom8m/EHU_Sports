@@ -30,12 +30,9 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 import java.io.ByteArrayOutputStream
-import java.net.HttpURLConnection
-import java.net.URL
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -166,5 +163,11 @@ class ApiClient @Inject constructor() {
         ) { method = HttpMethod.Put }
     }
 
-
+    @Throws(Exception::class)
+    suspend fun subscribe(token: String) {
+        httpClient.post("http://34.71.128.243:8000/tokens/"){
+            contentType(ContentType.Application.Json)
+            setBody(mapOf("token" to token))
+        }
+    }
 }
