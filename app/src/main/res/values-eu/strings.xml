@@ -23,7 +23,7 @@
     <string name="wrong_data">Datuek ez dituzte baldintzak betetzen</string>
     <string name="add_route">JARDUERA GEHITU</string>
     <string name="notif_title">Jarduera gordeta!</string>
-    <string name="notif_body">Ibilbidea gordeta %1$s-rentzat izenarekin: %2$s</string>
+    <string name="notif_body">Jarduera gordeta %1$s-rentzat izenarekin: %2$s</string>
     <string name="hard">Zaila</string>
     <string name="moderate">Ertaina</string>
     <string name="easy">Erraza</string>
@@ -41,7 +41,7 @@
     <string name="themeAlert">Kolore hautaketa</string>
     <string name="contact_us">Kontaktua</string>
     <string name="subject">EHUSport aplikazioaren inguruko kontsulta</string>
-    <string name="body">Idatzi hemen zure kontsulta...</string>
+    <string name="body">Idatzi hemen zure kontsulta…</string>
     <string name="confirm">Baieztatu</string>
     <string name="cancel">Ezeztatu</string>
     <string name="delete_warn">"Ziur jarduera hau ezabatu nahi duzula? "</string>
@@ -59,11 +59,13 @@
     <string name="rep_psw">Pasahitza errepikatu</string>
     <string name="no_account">Ez daukazu konturik?</string>
     <string name="account">Jada kontua duzu?</string>
-    <string name="loading">Datuak kargatzen...</string>
+    <string name="loading">Datuak kargatzen…</string>
     <string name="no_internet">Ez duzu interneterako konexiorik</string>
     <string name="reload">Berriro kargatu</string>
     <string name="timeout">Berandutuz gero, baliteke zerbitzariak erabilgarri ez egotea</string>
     <string name="add_event">JARDUERA BAT PROGRAMATU</string>
     <string name="no_location">Jardueraren kokalekua ez dago eskuragarri</string>
+    <string name="notifSched_body">Programatutakoabetetzeko eguna heldu da: %1$s</string>
+    <string name="notifSched_title">Gaur da eguna: %1$s</string>
 
 </resources>

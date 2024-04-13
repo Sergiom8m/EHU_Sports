@@ -163,7 +163,6 @@ fun ShowDeleteMessage(
 
 // Function to throw a notification given the title, the content of the notification and the context
 fun sendNotification(context: Context, title: String, content: String, icon: Int) {
-
     val notificationManager = context.getSystemService(NotificationManager::class.java)
 
     val notification = NotificationCompat.Builder(context, MainActivity.CHANNEL_ID)

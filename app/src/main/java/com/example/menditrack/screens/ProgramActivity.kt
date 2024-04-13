@@ -20,8 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.ContentAlpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
@@ -52,8 +50,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.menditrack.R
+import com.example.menditrack.backgroundServ.AndroidAlarmScheduler
+import com.example.menditrack.data.FutureActivity
 import com.example.menditrack.utils.addEventOnCalendar
 import com.example.menditrack.viewModel.AppViewModel
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,6 +66,7 @@ fun ProgramActivity(
     navController: NavHostController,
 ) {
     val context = LocalContext.current
+    val scheduler = AndroidAlarmScheduler(context)
 
     val datePickerState = rememberDatePickerState()
     var activityName by rememberSaveable { mutableStateOf("") }
@@ -115,6 +119,17 @@ fun ProgramActivity(
                                 context,
                                 activityName,
                                 datePickerState.selectedDateMillis!!
+                            )
+                            val date = LocalDateTime.ofInstant(
+                                Instant.ofEpochMilli(datePickerState.selectedDateMillis!!),
+                                ZoneId.systemDefault()
+                            ).toLocalDate()
+                            scheduler.schedule(
+                                FutureActivity(
+                                    time = LocalDateTime.of(date.year, date.monthValue, date.dayOfMonth, LocalDateTime.now().hour, LocalDateTime.now().minute+1),
+                                    title = context.getString(R.string.notifSched_title, activityName),
+                                    body = context.getString(R.string.notifSched_body, activityName)
+                                )
                             )
                             navController.popBackStack()
                         }

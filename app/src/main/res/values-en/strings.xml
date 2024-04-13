@@ -23,7 +23,7 @@
     <string name="wrong_data">The data does not satisfy the requirements</string>
     <string name="add_route">ADD ACTIVITY</string>
     <string name="notif_title">Activity saved!</string>
-    <string name="notif_body">Route saved for %1$s with the name: %2$s</string>
+    <string name="notif_body">Activity saved for %1$s with the name: %2$s</string>
     <string name="hard">Hard</string>
     <string name="moderate">Moderate</string>
     <string name="easy">Easy</string>
@@ -65,6 +65,8 @@
     <string name="timeout">In case of delay, the servers may not be available</string>
     <string name="add_event">SCHEDULE A NEW ACTIVITY</string>
     <string name="no_location">The activity\'s location isn\'t available</string>
+    <string name="notifSched_body">Time to meet the schedule: %1$s</string>
+    <string name="notifSched_title">Today: %1$s</string>
 
 
 </resources>

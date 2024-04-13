@@ -27,9 +27,9 @@ class UserRepository @Inject constructor(
 ): IUserRepository {
 
     override suspend fun addUser(user: User) {
-        userDao.addUser(user)
         try {
             apiClient.createUser(user)
+            userDao.addUser(user)
         }
         catch (_: Exception){}
     }

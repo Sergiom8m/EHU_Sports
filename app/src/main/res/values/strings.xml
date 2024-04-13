@@ -29,7 +29,7 @@
     <string name="wrong_data">Los datos no cumplen con los requisitos</string>
     <string name="add_route">AÑADIR ACTIVIDAD</string>
     <string name="notif_title">Actividad guardada!</string>
-    <string name="notif_body">Se ha guardado la ruta para %1$s con el nombre: %2$s</string>
+    <string name="notif_body">Se ha guardado la actividad para %1$s con el nombre: %2$s</string>
     <string name="hard">Difícil</string>
     <string name="moderate">Moderado</string>
     <string name="easy">Fácil</string>
@@ -47,7 +47,7 @@
     <string name="themeAlert">Selección de tema</string>
     <string name="contact_us">Contacto</string>
     <string name="subject">Consulta sobre la aplicacion EHUSports</string>
-    <string name="body">Escribe tu consulta aqui...</string>
+    <string name="body">Escribe tu consulta aqui…</string>
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
     <string name="delete_warn">¿Estás seguro de que deseas eliminar esta actividad?</string>
@@ -71,4 +71,6 @@
     <string name="timeout">En caso de demora puede que los servidores no estén disponibles</string>
     <string name="add_event">PROGRAMAR UNA ACTIVIDAD</string>
     <string name="no_location">La ubicación de la actividad no esta disponible</string>
+    <string name="notifSched_body">Ha llegado el dia de cumplir con lo programado para %1$s</string>
+    <string name="notifSched_title">Es hoy: %1$s</string>
 </resources>

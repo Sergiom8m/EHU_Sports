@@ -151,7 +151,6 @@ fun EditActivity(
                 }
             }
         }
-
         // Regular text input fields
         OutlinedTextField(
             value = routeName,
