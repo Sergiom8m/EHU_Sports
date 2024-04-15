@@ -2,6 +2,7 @@ package com.example.menditrack.screens
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -181,8 +182,13 @@ fun InfoRow(boldText: String, normalText: String) {
 fun DownloadButton(activity: SportActivity, context: Context) {
     ExtendedFloatingActionButton(
         onClick = {
-            exportActivityToTxt(activity)
-            sendNotification(context, activity.name, "", R.drawable.download)},
+            try {
+                exportActivityToTxt(activity)
+                sendNotification(context, activity.name, "", R.drawable.download)
+            } catch (_: Exception) {
+                Toast.makeText(context, context.getString(R.string.no_storage), Toast.LENGTH_LONG).show()
+            }
+        },
         icon = {
             Icon(
                 painterResource(id = R.drawable.download),

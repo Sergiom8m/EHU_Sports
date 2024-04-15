@@ -149,9 +149,7 @@ class MainActivity : AppCompatActivity() {
     fun AskPermissions(){
         val permissions = arrayOf(
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            android.Manifest.permission.POST_NOTIFICATIONS,
-            android.Manifest.permission.READ_CALENDAR,
-            android.Manifest.permission.WRITE_CALENDAR,
+            android.Manifest.permission.POST_NOTIFICATIONS
         )
         val permissionState = rememberMultiplePermissionsState(
             permissions = permissions.toList()

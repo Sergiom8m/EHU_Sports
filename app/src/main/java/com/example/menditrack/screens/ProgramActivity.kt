@@ -1,5 +1,6 @@
 package com.example.menditrack.screens
 
+import android.Manifest
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -22,6 +24,7 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -45,14 +49,19 @@ import androidx.navigation.NavHostController
 import com.example.menditrack.R
 import com.example.menditrack.backgroundServ.AndroidAlarmScheduler
 import com.example.menditrack.data.FutureActivity
+import com.example.menditrack.utils.FlickeringImage
 import com.example.menditrack.utils.addEventOnCalendar
 import com.example.menditrack.viewModel.AppViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.accompanist.permissions.rememberPermissionState
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
 @RequiresApi(Build.VERSION_CODES.O)
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun ProgramActivity(
     appViewModel: AppViewModel,
@@ -65,110 +74,167 @@ fun ProgramActivity(
     var activityName by rememberSaveable { mutableStateOf("") }
 
     val errorMessage = stringResource(id = R.string.empty_fields)
-    Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier
-            .padding(10.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
 
-        Box(
+    val permissions = arrayOf(
+        Manifest.permission.READ_CALENDAR,
+        Manifest.permission.WRITE_CALENDAR,
+    )
+
+    // Check calendar permission state
+    val calendarPermissionState = rememberMultiplePermissionsState(
+        permissions = permissions.toList()
+    )
+
+    // If not calendar permission ask for it
+    LaunchedEffect(true){
+        if (!calendarPermissionState.allPermissionsGranted) {
+            calendarPermissionState.launchMultiplePermissionRequest()
+        }
+    }
+
+    // If calendar permissions granted show the UI to add programmed activities
+    if(calendarPermissionState.allPermissionsGranted) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
-                .background(
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .padding(7.dp)
-                .fillMaxWidth()
+                .padding(10.dp)
+                .verticalScroll(rememberScrollState())
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                IconButton(
-                    onClick = {
-                        navController.popBackStack()
-                    }
-                ) {
-                    Icon(
-                        Icons.Default.ArrowBack,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.secondary
-                    )
-                }
-                Spacer(modifier = Modifier.width(8.dp))
 
-                Text(
-                    text = stringResource(id = R.string.add_event),
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                IconButton(
-                    onClick = {
-                        if (datePickerState.selectedDateMillis != null && activityName != "") {
-                            // Add the introduced future activity to the local calendars
-                            addEventOnCalendar(
-                                context,
-                                activityName,
-                                datePickerState.selectedDateMillis!!
-                            )
-                            // Parse the time to get the date in DateTime format
-                            val date = LocalDateTime.ofInstant(
-                                Instant.ofEpochMilli(datePickerState.selectedDateMillis!!),
-                                ZoneId.systemDefault()
-                            ).toLocalDate()
-                            // Schedule a notification for the previous day of the event
-                            scheduler.schedule(
-                                FutureActivity(
-                                    time = LocalDateTime.of(date.year, date.monthValue, date.minusDays(1).dayOfMonth, LocalDateTime.now().hour, LocalDateTime.now().minute),
-                                    title = context.getString(R.string.notifSched_title, activityName),
-                                    body = context.getString(R.string.notifSched_body, activityName)
-                                )
-                            )
+            Box(
+                modifier = Modifier
+                    .background(
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .padding(7.dp)
+                    .fillMaxWidth()
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    IconButton(
+                        onClick = {
                             navController.popBackStack()
                         }
-                        else{
-                            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
-                        }
+                    ) {
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.secondary
+                        )
                     }
-                ) {
-                    Icon(
-                        Icons.Filled.AddCircle,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.secondary
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Text(
+                        text = stringResource(id = R.string.add_event),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f)
                     )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    IconButton(
+                        onClick = {
+                            if (datePickerState.selectedDateMillis != null && activityName != "") {
+                                // Add the introduced future activity to the local calendars
+                                addEventOnCalendar(
+                                    context,
+                                    activityName,
+                                    datePickerState.selectedDateMillis!!
+                                )
+                                // Parse the time to get the date in DateTime format
+                                val date = LocalDateTime.ofInstant(
+                                    Instant.ofEpochMilli(datePickerState.selectedDateMillis!!),
+                                    ZoneId.systemDefault()
+                                ).toLocalDate()
+                                // Schedule a notification for the previous day of the event
+                                scheduler.schedule(
+                                    FutureActivity(
+                                        time = LocalDateTime.of(
+                                            date.year,
+                                            date.monthValue,
+                                            date.minusDays(1).dayOfMonth,
+                                            LocalDateTime.now().hour,
+                                            LocalDateTime.now().minute
+                                        ),
+                                        title = context.getString(
+                                            R.string.notifSched_title,
+                                            activityName
+                                        ),
+                                        body = context.getString(
+                                            R.string.notifSched_body,
+                                            activityName
+                                        )
+                                    )
+                                )
+                                navController.popBackStack()
+                            } else {
+                                Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    ) {
+                        Icon(
+                            Icons.Filled.AddCircle,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.secondary
+                        )
+                    }
                 }
             }
+            OutlinedTextField(
+                value = activityName,
+                onValueChange = { activityName = it },
+                label = { Text(stringResource(id = R.string.route_name)) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                modifier = Modifier.fillMaxWidth()
+            )
+            // Date picker to select the date when the future programmed activity is gonna happen
+            DatePicker(
+                state = datePickerState,
+                modifier = Modifier
+                    .fillMaxSize()
+            )
         }
-
-        OutlinedTextField(
-            value = activityName,
-            onValueChange = { activityName = it },
-            label = { Text(stringResource(id = R.string.route_name)) },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        // Date picker to select the date when the future programmed activity is gonna happen
-        DatePicker(
-            state = datePickerState,
-            modifier = Modifier
-                .fillMaxSize()
-        )
-
-        // On entering this screen nav bars and add floating button should be hidden
-        DisposableEffect(Unit) {
-            appViewModel.showNavBars = false
-            appViewModel.showAddButton = false
-
-            // On exiting this screen make them visible again
-            onDispose {
-                appViewModel.showNavBars = true
-                appViewModel.showAddButton = true
+    }
+    // If calendar permission not granted show an alert screen
+    else{
+        FloatingActionButton(
+            onClick = { navController.popBackStack() },
+            containerColor = MaterialTheme.colorScheme.primary,
+            shape = RoundedCornerShape(20),
+            modifier = Modifier.padding(10.dp)
+        ) {
+            androidx.compose.material.Icon(
+                Icons.Filled.ArrowBack,
+                stringResource(id = R.string.add),
+                tint = MaterialTheme.colorScheme.secondary
+            )
+        }
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                FlickeringImage(R.drawable.no_calendar, 150.dp)
+                Spacer(modifier = Modifier.height(16.dp))
+                androidx.compose.material.Text(text = stringResource(id = R.string.no_calendar))
             }
+        }
+    }
+    // On entering this screen nav bars and add floating button should be hidden
+    DisposableEffect(Unit) {
+        appViewModel.showNavBars = false
+        appViewModel.showAddButton = false
+
+        // On exiting this screen make them visible again
+        onDispose {
+            appViewModel.showNavBars = true
+            appViewModel.showAddButton = true
         }
     }
 }

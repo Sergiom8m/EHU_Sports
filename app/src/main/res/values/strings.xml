@@ -73,6 +73,9 @@
     <string name="no_location">La ubicación de la actividad no esta disponible</string>
     <string name="notifSched_body">Ha llegado el momento de cumplir con lo programado para %1$s</string>
     <string name="notifSched_title">Es mañana: %1$s</string>
-    <string name="widget_title">Últimas actividades en EHUSports</string>
+    <string name="widget_title">Mural de actividades en EHUSports</string>
     <string name="empty_widget">No hay actividades recientes para mostrar</string>
+    <string name="location_off">Permite la ubicación y despues vuelve a intentarlo</string>
+    <string name="no_calendar">Habilita los permisos de calendario y vuelve a intentarlo</string>
+    <string name="no_storage">No hay permisos de almacenamiento concedidos</string>
 </resources>

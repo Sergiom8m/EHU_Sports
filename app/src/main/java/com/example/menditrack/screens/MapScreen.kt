@@ -98,6 +98,22 @@ fun MapScreen(
             }
         }
     }
+    // If location permission not granted show an alert screen
+    else{
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                FlickeringImage(R.drawable.location_off, 150.dp)
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = stringResource(id = R.string.location_off))
+            }
+        }
+    }
     FloatingActionButton(
         onClick = { navController.popBackStack() },
         containerColor = MaterialTheme.colorScheme.primary,

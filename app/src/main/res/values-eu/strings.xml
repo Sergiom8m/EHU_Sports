@@ -67,7 +67,10 @@
     <string name="no_location">Jardueraren kokalekua ez dago eskuragarri</string>
     <string name="notifSched_body">Programatutakoa betetzeko momentua heldu da: %1$s</string>
     <string name="notifSched_title">Bihar da eguna: %1$s</string>
-    <string name="widget_title">Azken jarduerak EHUSports-en</string>
+    <string name="widget_title">EHUSports-en jarduera murala</string>
     <string name="empty_widget">Ez dago erakusteko jarduerarik</string>
+    <string name="location_off">Localizazioa baimendu eta berriro saiatu</string>
+    <string name="no_calendar">Egutegi baimenak onartu eta berriro saiatu</string>
+    <string name="no_storage">Ez dago biltegiratze baimenik</string>
 
 </resources>
