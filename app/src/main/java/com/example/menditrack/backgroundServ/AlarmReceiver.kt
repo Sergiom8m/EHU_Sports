@@ -10,34 +10,36 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.menditrack.MainActivity
 import com.example.menditrack.R
-import com.example.menditrack.remote.ApiClient
-import javax.inject.Inject
 
-class AlarmReceiver: BroadcastReceiver() {
+// BroadcastReceiver to handle alarm events
+class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
 
-        val title = intent?.getStringExtra("TITLE")?: return
+        // Retrieve title and body from the intent
+        val title = intent?.getStringExtra("TITLE") ?: return
         val body = intent.getStringExtra("BODY") ?: return
 
+        // Generate a unique notification ID
         val notificationId = System.currentTimeMillis().toInt()
 
+        // Create a notification using NotificationCompat.Builder
         val builder = NotificationCompat.Builder(context, MainActivity.CHANNEL_ID)
-            .setSmallIcon(R.drawable.applogo)
-            .setContentTitle(title)
-            .setContentText(body)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(true)
+            .setSmallIcon(R.drawable.applogo) // Set the small icon
+            .setContentTitle(title) // Set the title
+            .setContentText(body) // Set the body text
+            .setPriority(NotificationCompat.PRIORITY_HIGH) // Set the priority to high
+            .setAutoCancel(true) // Automatically cancel the notification when tapped
+
+        // Check if the app has the required permission to post notifications
         with(NotificationManagerCompat.from(context)) {
             if (ActivityCompat.checkSelfPermission(
                     context,
                     Manifest.permission.POST_NOTIFICATIONS
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
+                // Post the notification
                 notify(notificationId, builder.build())
             }
         }
-
     }
-
-
 }

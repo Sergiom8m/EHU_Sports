@@ -65,7 +65,9 @@
     <string name="timeout">Berandutuz gero, baliteke zerbitzariak erabilgarri ez egotea</string>
     <string name="add_event">JARDUERA BAT PROGRAMATU</string>
     <string name="no_location">Jardueraren kokalekua ez dago eskuragarri</string>
-    <string name="notifSched_body">Programatutakoabetetzeko eguna heldu da: %1$s</string>
-    <string name="notifSched_title">Gaur da eguna: %1$s</string>
+    <string name="notifSched_body">Programatutakoa betetzeko momentua heldu da: %1$s</string>
+    <string name="notifSched_title">Bihar da eguna: %1$s</string>
+    <string name="widget_title">Azken jarduerak EHUSports-en</string>
+    <string name="empty_widget">Ez dago erakusteko jarduerarik</string>
 
 </resources>

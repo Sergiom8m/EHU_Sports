@@ -64,9 +64,7 @@ fun PieChart(
         MaterialTheme.colorScheme.tertiaryContainer,
 
         )
-
     var animationPlayed by remember { mutableStateOf(false) }
-
     var lastValue = 0f
 
     // it is the diameter value of the Pie
@@ -102,7 +100,6 @@ fun PieChart(
         ,
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         // Pie Chart using Canvas Arc
         Box(
             modifier = Modifier
@@ -127,16 +124,13 @@ fun PieChart(
                 }
             }
         }
-
         // To see the data in more structured way
         // Compose Function in which Items are showing data
         DetailsPieChart(
             data = data,
             colors = colors
         )
-
     }
-
 }
 
 @Composable
@@ -155,7 +149,6 @@ fun DetailsPieChart(
                 color = colors[index]
             )
         }
-
     }
 }
 
@@ -165,19 +158,16 @@ fun DetailsPieChartItem(
     height: Dp = 25.dp,
     color: Color
 ) {
-
     Surface(
         modifier = Modifier
             .padding(vertical = 10.dp, horizontal = 40.dp),
         color = Color.Transparent
     ) {
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-
             Box(
                 modifier = Modifier
                     .background(
@@ -186,17 +176,13 @@ fun DetailsPieChartItem(
                     )
                     .size(height)
             )
-
             Spacer(modifier = Modifier.width(5.dp))
-
             Icon(
                 painter = data.first,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primaryContainer
             )
-
             Spacer(modifier = Modifier.weight(1f))
-
             Text(
                 modifier = Modifier.padding(start = 15.dp),
                 text = data.second.toString(),
@@ -205,7 +191,5 @@ fun DetailsPieChartItem(
                 color = Color.Gray
             )
         }
-
     }
-
 }

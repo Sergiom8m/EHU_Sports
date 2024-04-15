@@ -27,8 +27,6 @@ object appModule {
     @Provides
     fun provideDatabase(@ApplicationContext app: Context)=
         Room.databaseBuilder(app, Database::class.java,"ehuSportsDB")
-            // Instructions to populate the DB with external .db file
-            //.createFromAsset("database/ehuSports.db")
             .build()
 
     @Singleton

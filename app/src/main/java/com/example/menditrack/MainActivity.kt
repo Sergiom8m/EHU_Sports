@@ -2,7 +2,6 @@ package com.example.menditrack
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -35,16 +34,12 @@ import com.example.menditrack.viewModel.AppViewModel
 import com.example.menditrack.viewModel.PreferencesViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.messaging
-
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.tasks.await
 
 @AndroidEntryPoint
@@ -54,6 +49,7 @@ class MainActivity : AppCompatActivity() {
     private val appViewModel by viewModels<AppViewModel> ()
     private val preferencesViewModel by viewModels<PreferencesViewModel> ()
 
+    // Function to pick multimedia files from the device storage (gallery)
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()){
         if (it!=null){
             val ivImage = ImageView(this)
@@ -88,6 +84,7 @@ class MainActivity : AppCompatActivity() {
                 // Ask for permissions
                 AskPermissions()
 
+                // Obtain and upload to remote server device unique token (for Firebase Cloud Messaging)
                 deviceToken(appViewModel)
 
                 val navController = rememberNavController()
@@ -120,6 +117,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Function to upload to remote server device unique token (for Firebase Cloud Messaging)
     private fun deviceToken(appViewModel: AppViewModel) {
         CoroutineScope(Dispatchers.IO).launch {
             val token = Firebase.messaging.token.await()
@@ -128,12 +126,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+    // Function to create a local notification channel
     private fun createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is not in the Support Library.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 getString(R.string.channel_name),
@@ -141,14 +136,13 @@ class MainActivity : AppCompatActivity() {
             ).apply {
                 description = getString(R.string.channel_desc)
             }
-
-            // Register the channel with the system.
             val notificationManager: NotificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
 
+    // Function to ask all needed permissions fot the correct execution of the app
     @OptIn(ExperimentalPermissionsApi::class)
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @Composable
@@ -161,15 +155,9 @@ class MainActivity : AppCompatActivity() {
         )
         val permissionState = rememberMultiplePermissionsState(
             permissions = permissions.toList()
-
         )
         LaunchedEffect(true){
             permissionState.launchMultiplePermissionRequest()
         }
     }
-
-
-
-
 }
-

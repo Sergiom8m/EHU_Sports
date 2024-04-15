@@ -16,13 +16,9 @@ import javax.inject.Inject
 // Interface-class file to create a intermedite repository between Datastore and ViewModel
 
 interface IPreferencesRepository {
-
     fun getLanguage(): Flow<String>
-
     suspend fun setLanguage(code: String)
-
     fun getThemePreferences(): Flow<Int>
-
     suspend fun setThemePreferences(theme: Int)
 }
 
@@ -35,7 +31,6 @@ class PreferencesRepository @Inject constructor(
 
     val PREFERENCE_LANGUAGE = stringPreferencesKey("preference_lang")
     val PREFERENCE_THEME = intPreferencesKey("preference_theme")
-
 
     override fun getLanguage(): Flow<String> = context.dataStore.data.map { preferences -> preferences[PREFERENCE_LANGUAGE]?: Locale.getDefault().language }
     override suspend fun setLanguage(code: String) {
@@ -53,5 +48,4 @@ class PreferencesRepository @Inject constructor(
             preferences[PREFERENCE_THEME] = theme
         }
     }
-
 }

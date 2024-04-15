@@ -37,7 +37,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun AddActivity(
     appViewModel: AppViewModel,
@@ -76,8 +75,8 @@ fun AddActivity(
     val errorMessage = stringResource(id = R.string.wrong_data)
 
     // Strings to the notification
-    var title = stringResource(id = R.string.notif_title)
-    var content = stringResource(id = R.string.notif_body, selectedSport, routeName)
+    val title = stringResource(id = R.string.notif_title)
+    val content = stringResource(id = R.string.notif_body, selectedSport, routeName)
 
 
     Column(
@@ -304,6 +303,3 @@ fun AddHeading(navController: NavController){
         }
     }
 }
-
-
-

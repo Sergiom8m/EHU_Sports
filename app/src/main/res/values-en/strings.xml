@@ -66,7 +66,9 @@
     <string name="add_event">SCHEDULE A NEW ACTIVITY</string>
     <string name="no_location">The activity\'s location isn\'t available</string>
     <string name="notifSched_body">Time to meet the schedule: %1$s</string>
-    <string name="notifSched_title">Today: %1$s</string>
+    <string name="notifSched_title">Tomorrow: %1$s</string>
+    <string name="widget_title">The most recent activities in EHUSports</string>
+    <string name="empty_widget">There are no recent activities</string>
 
 
 </resources>

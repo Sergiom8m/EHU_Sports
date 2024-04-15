@@ -91,7 +91,6 @@ fun BarGraph(
             .padding(10.dp),
         contentAlignment = Alignment.TopStart
     ) {
-
         // y-axis scale and horizontal dotted lines on graph indicating y-axis scale
         Column(
             modifier = Modifier
@@ -100,7 +99,6 @@ fun BarGraph(
                 .fillMaxWidth(),
             horizontalAlignment = CenterHorizontally
         ) {
-
             Canvas(modifier = Modifier.padding(bottom = 10.dp).fillMaxSize()) {
 
                 // Y-Axis Scale Text
@@ -116,7 +114,6 @@ fun BarGraph(
                     }
                     yCoordinates.add(size.height - yAxisScaleSpacing - i * size.height / 3f)
                 }
-
                 // horizontal dotted lines on graph indicating y-axis scale
                 (1..3).forEach {
                     drawLine(
@@ -127,11 +124,8 @@ fun BarGraph(
                         pathEffect = pathEffect
                     )
                 }
-
             }
-
         }
-
         // Graph with Bar Graph and X-Axis Scale
         Box(
             modifier = Modifier
@@ -140,17 +134,14 @@ fun BarGraph(
                 .height(height + xAxisScaleHeight),
             contentAlignment = Alignment.BottomCenter
         ) {
-
             Row(
                 modifier = Modifier
                     .width(width - yAxisTextWidth),
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = barArrangement
             ) {
-
                 // Graph
                 graphBarData.forEachIndexed { index, value ->
-
                     var animationTriggered by remember {
                         mutableStateOf(false)
                     }
@@ -164,13 +155,11 @@ fun BarGraph(
                     LaunchedEffect(key1 = true) {
                         animationTriggered = true
                     }
-
                     Column(
                         modifier = Modifier.fillMaxHeight(),
                         verticalArrangement = Top,
                         horizontalAlignment = CenterHorizontally
                     ) {
-
                         // Each Graph
                         Box(
                             modifier = Modifier
@@ -189,7 +178,6 @@ fun BarGraph(
                                     .background(barColor[index])
                             )
                         }
-
                         // scale x-axis and bottom part of graph
                         Column(
                             modifier = Modifier
@@ -197,7 +185,6 @@ fun BarGraph(
                             verticalArrangement = Top,
                             horizontalAlignment = CenterHorizontally
                         ) {
-
                             // small vertical line joining the horizontal x-axis line
                             Box(
                                 modifier = Modifier
@@ -220,13 +207,9 @@ fun BarGraph(
                                 textAlign = TextAlign.Center,
                                 color = Color.Black
                             )
-
                         }
-
                     }
-
                 }
-
             }
 
             // horizontal line on x-axis below the graph
@@ -245,13 +228,7 @@ fun BarGraph(
                         .height(horizontalLineHeight)
                         .background(Color.Gray)
                 )
-
             }
-
-
         }
-
-
     }
-
 }

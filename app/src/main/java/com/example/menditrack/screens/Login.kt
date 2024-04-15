@@ -1,6 +1,5 @@
 package com.example.menditrack.screens
 
-import android.Manifest
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -29,13 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.menditrack.R
 import com.example.menditrack.navigation.AppScreens
-import com.example.menditrack.utils.addEventOnCalendar
 import com.example.menditrack.utils.hashPassword
 import com.example.menditrack.viewModel.AppViewModel
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.google.accompanist.permissions.rememberPermissionState
+import com.example.menditrack.widgets.EHUSportsWidget
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,8 +42,10 @@ fun Login(
     navController: NavHostController,
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ) {
+    // Set profile picture to null (will be downloaded after login)
     appViewModel.profilePicture = null
 
+    // Variables to store the introduced data in login form data fields
     var username by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
 
@@ -57,6 +54,9 @@ fun Login(
     val wrongUsername = stringResource(R.string.wrong_username)
     val wrongPassword = stringResource(R.string.wrong_password)
 
+    // Refresh widget every time the app is opened
+    EHUSportsWidget().refresh(context)
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -64,10 +64,6 @@ fun Login(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(1.dp)
     ) {
-
-        Button(onClick = { appViewModel.uploadData() }) {
-            Text(text = "SUBIR")
-        }
         Image(
             painter = painterResource(id = R.drawable.applogo),
             contentDescription = "",
@@ -104,6 +100,7 @@ fun Login(
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
+                // Check user validity get in case of correct get the needed data from remote
                 CoroutineScope(Dispatchers.Main).launch {
                     val user = appViewModel.getUser(username)
                     if (user != null) {
@@ -141,4 +138,3 @@ fun Login(
         }
     }
 }
-

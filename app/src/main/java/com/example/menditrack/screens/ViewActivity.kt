@@ -1,9 +1,7 @@
 package com.example.menditrack.screens
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.location.Geocoder
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -41,7 +38,6 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import com.example.menditrack.R
@@ -52,17 +48,7 @@ import com.example.menditrack.utils.mapToUserLanguageDifficulty
 import com.example.menditrack.utils.openShare
 import com.example.menditrack.utils.sendNotification
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
-import com.google.maps.android.compose.rememberCameraPositionState
 
-@OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ViewActivity(
@@ -74,10 +60,6 @@ fun ViewActivity(
     val activityToShow = appViewModel.activityToShow.value
 
     val context = LocalContext.current
-
-    val locationPermissionState = rememberPermissionState(
-        permission = Manifest.permission.ACCESS_FINE_LOCATION
-    )
 
     // Create a scaffold to capsule activity's data and a download button
     Scaffold (
@@ -115,18 +97,14 @@ fun ViewActivity(
                             tint = MaterialTheme.colorScheme.secondary
                         )
                     }
-
                     Spacer(modifier = Modifier.width(8.dp))
-
                     Text(
                         text = activityToShow!!.name,
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.weight(1f)
                     )
-
                     Spacer(modifier = Modifier.width(8.dp))
-
                     IconButton(
                         onClick = { openShare(activityToShow,context) },
                     ) {
@@ -145,7 +123,6 @@ fun ViewActivity(
                             tint = MaterialTheme.colorScheme.secondary
                         )
                     }
-
                 }
             }
 
@@ -155,8 +132,6 @@ fun ViewActivity(
             InfoRow("${stringResource(id = R.string.start_point)}:",activityToShow?.initPoint ?: "")
             InfoRow("${stringResource(id = R.string.grade)}:", "${activityToShow?.grade ?: 0} m")
             InfoRow("${stringResource(id = R.string.difficulty)}:", mapToUserLanguageDifficulty(activityToShow?.difficulty ?: ""))
-
-
         }
     }
 
@@ -174,7 +149,6 @@ fun ViewActivity(
             }
         }
     }
-
 }
 
 @Composable
@@ -224,5 +198,3 @@ fun DownloadButton(activity: SportActivity, context: Context) {
         }
     )
 }
-
-

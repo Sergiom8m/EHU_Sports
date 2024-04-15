@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.Color
 import com.example.menditrack.viewModel.PreferencesViewModel
 
 // Definition of the different themes available in the application
-
 private val OrangeColorScheme = lightColorScheme(
     primary = Color(0xFFFF5722),
     secondary = Color(0xFFFFFFFF),

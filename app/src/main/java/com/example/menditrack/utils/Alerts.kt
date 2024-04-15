@@ -178,4 +178,3 @@ fun sendNotification(context: Context, title: String, content: String, icon: Int
 
     notificationManager.notify(1, notification)
 }
-

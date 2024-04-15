@@ -29,6 +29,7 @@ import com.example.menditrack.R
 import com.example.menditrack.data.User
 import com.example.menditrack.navigation.AppScreens
 import com.example.menditrack.viewModel.AppViewModel
+import com.example.menditrack.widgets.EHUSportsWidget
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,8 +40,10 @@ fun Register(
     navController: NavHostController,
     modifier: Modifier = Modifier.verticalScroll(rememberScrollState())
 ) {
+    // Set profile picture to null (will be downloaded after register)
     appViewModel.profilePicture = null
 
+    // Variables to store the introduced data in register form data fields
     var username by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var password2 by rememberSaveable { mutableStateOf("") }
@@ -52,6 +55,8 @@ fun Register(
     val wrongPsw = stringResource(R.string.wrong_psw)
     val userExist = stringResource(R.string.user_exist)
 
+    // Refresh widget every time the app is opened
+    EHUSportsWidget().refresh(context)
 
     Column(
         modifier = modifier
@@ -106,6 +111,7 @@ fun Register(
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
+                // Check user validity get in case of correct get the needed data from remote
                 CoroutineScope(Dispatchers.Main).launch {
                     if (checkRegistrationFields(username, password, password2, context, emptyFields, diffPsw, wrongPsw)) {
                         if (appViewModel.addUser(username, password2)) {
@@ -140,23 +146,21 @@ fun Register(
     }
 }
 
-
+// Function to validate the introduced data format
 fun checkRegistrationFields(username: String, password: String, password2: String, context: Context, emptyFields: String, diffPsw: String, wrongPsw: String): Boolean {
     if (username.isEmpty() || password.isEmpty() || password2.isEmpty()) {
         Toast.makeText(context, emptyFields,Toast.LENGTH_SHORT).show()
         return false
     }
-
     if (password != password2) {
         Toast.makeText(context, diffPsw,Toast.LENGTH_SHORT).show()
         return false
     }
-
     val minPasswordLength = 6
+
     if (password.length < minPasswordLength) {
         Toast.makeText(context, wrongPsw,Toast.LENGTH_SHORT).show()
         return false
     }
-
     return true
 }

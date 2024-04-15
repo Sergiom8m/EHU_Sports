@@ -3,9 +3,7 @@ package com.example.menditrack.screens
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,22 +15,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -42,7 +36,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -115,18 +108,21 @@ fun ProgramActivity(
                 IconButton(
                     onClick = {
                         if (datePickerState.selectedDateMillis != null && activityName != "") {
+                            // Add the introduced future activity to the local calendars
                             addEventOnCalendar(
                                 context,
                                 activityName,
                                 datePickerState.selectedDateMillis!!
                             )
+                            // Parse the time to get the date in DateTime format
                             val date = LocalDateTime.ofInstant(
                                 Instant.ofEpochMilli(datePickerState.selectedDateMillis!!),
                                 ZoneId.systemDefault()
                             ).toLocalDate()
+                            // Schedule a notification for the previous day of the event
                             scheduler.schedule(
                                 FutureActivity(
-                                    time = LocalDateTime.of(date.year, date.monthValue, date.dayOfMonth, LocalDateTime.now().hour, LocalDateTime.now().minute+1),
+                                    time = LocalDateTime.of(date.year, date.monthValue, date.minusDays(1).dayOfMonth, LocalDateTime.now().hour, LocalDateTime.now().minute),
                                     title = context.getString(R.string.notifSched_title, activityName),
                                     body = context.getString(R.string.notifSched_body, activityName)
                                 )
@@ -156,6 +152,7 @@ fun ProgramActivity(
             modifier = Modifier.fillMaxWidth()
         )
 
+        // Date picker to select the date when the future programmed activity is gonna happen
         DatePicker(
             state = datePickerState,
             modifier = Modifier
@@ -174,5 +171,4 @@ fun ProgramActivity(
             }
         }
     }
-
 }

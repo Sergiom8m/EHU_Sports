@@ -27,23 +27,28 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.menditrack.R
 import com.example.menditrack.navigation.AppScreens
-import com.example.menditrack.utils.LoadingImagePlaceholder
+import com.example.menditrack.utils.FlickeringImage
 import com.example.menditrack.viewModel.AppViewModel
 
+// Function to render a login page before starting the app
 @Composable
 fun LoadingScreen(
     appViewModel: AppViewModel,
     navController: NavHostController
 ) {
+    // Check internet connectivity before downloading data from remote
     if (checkInternetConnectivity()) {
         val loadCompleted = appViewModel.correctInit
+        // Check if data has been downloaded correctly and redirect user to login page
         if (loadCompleted) {
             navController.navigate(AppScreens.Login.route)
         } else {
+            // While data is being downloaded show loading page
             LoadingView()
         }
         appViewModel.downloadData()
     } else {
+        // If no internet connection show an alert view
         NoInternetView(navController = navController)
     }
 }
@@ -58,7 +63,7 @@ fun LoadingView() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            LoadingImagePlaceholder(R.drawable.downloading, 150.dp)
+            FlickeringImage(R.drawable.downloading, 150.dp)
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = stringResource(id = R.string.loading))
         }
@@ -89,7 +94,7 @@ fun NoInternetView(navController: NavHostController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            LoadingImagePlaceholder(R.drawable.no_wifi, 150.dp)
+            FlickeringImage(R.drawable.no_wifi, 150.dp)
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = stringResource(id = R.string.no_internet),
@@ -109,6 +114,7 @@ fun NoInternetView(navController: NavHostController) {
     }
 }
 
+// Function to validate user's connectivity
 @SuppressLint("ServiceCast")
 @Composable
 fun checkInternetConnectivity(): Boolean {
@@ -119,5 +125,3 @@ fun checkInternetConnectivity(): Boolean {
     val networkInfo = connectivityManager.activeNetworkInfo
     return networkInfo != null && networkInfo.isConnected
 }
-
-

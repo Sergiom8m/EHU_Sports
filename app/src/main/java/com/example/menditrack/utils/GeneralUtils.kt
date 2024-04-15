@@ -2,12 +2,10 @@ package com.example.menditrack.utils
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
-import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.location.Geocoder
-import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.CalendarContract
@@ -38,12 +36,9 @@ import com.example.menditrack.remote.PostUser
 import java.io.File
 import java.io.FileWriter
 import java.security.MessageDigest
-import java.time.LocalDate
-import java.time.ZoneOffset
 import java.util.Locale
 import kotlin.random.Random
 import android.provider.CalendarContract.Events
-import android.util.Log
 import java.util.TimeZone
 
 // Function to convert SportActivity to string (data extraction)
@@ -164,6 +159,7 @@ fun hashPassword(password: String): String {
     return hashedBytes.joinToString("") { "%02x".format(it) }
 }
 
+// Function to get latitude and longitude coordinates from a given address (String)
 fun getLatLngFromAddress(context: Context, mAddress: String): Pair<Double, Double>? {
     val coder = Geocoder(context)
     try {
@@ -179,6 +175,8 @@ fun getLatLngFromAddress(context: Context, mAddress: String): Pair<Double, Doubl
     }
 }
 
+
+// Function to transform local user data class to remote user data class
 fun userToPostUser(user: User): PostUser {
     return PostUser(
         user.username,
@@ -186,6 +184,7 @@ fun userToPostUser(user: User): PostUser {
     )
 }
 
+// Function to transform remote user data class to local user data class
 fun postUserToUser(postUser: PostUser): User {
     return User(
         postUser.username,
@@ -193,6 +192,7 @@ fun postUserToUser(postUser: PostUser): User {
     )
 }
 
+// Function to transform local activity data class to remote activity data class
 fun activityToPostActivity(activity: SportActivity): PostActivity {
     return PostActivity(
         activity.id,
@@ -206,6 +206,7 @@ fun activityToPostActivity(activity: SportActivity): PostActivity {
     )
 }
 
+// Function to transform remote activity data class to local activity data class
 fun postActivityToActivity(postActivity: PostActivity): SportActivity {
     return SportActivity(
         postActivity.id,
@@ -219,24 +220,18 @@ fun postActivityToActivity(postActivity: PostActivity): SportActivity {
     )
 }
 
+// Function to print a flickering image given the image and the size
 @Composable
-fun LoadingImagePlaceholder(image: Int, size: Dp) {
-    // Creates an `InfiniteTransition` that runs infinite child animation values.
+fun FlickeringImage(image: Int, size: Dp) {
     val infiniteTransition = rememberInfiniteTransition(label = "")
     val alpha by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        // `infiniteRepeatable` repeats the specified duration-based `AnimationSpec` infinitely.
         animationSpec = infiniteRepeatable(
-            // The `keyframes` animates the value by specifying multiple timestamps.
             animation = keyframes {
-                // One iteration is 1000 milliseconds.
                 durationMillis = 1000
-                // 0.7f at the middle of an iteration.
                 0.7f at 500
             },
-            // When the value finishes animating from 0f to 1f, it repeats by reversing the
-            // animation direction.
             repeatMode = RepeatMode.Reverse
         ), label = ""
     )
@@ -252,6 +247,7 @@ fun LoadingImagePlaceholder(image: Int, size: Dp) {
     )
 }
 
+// Function to get the local calendar's IDs (except google calendars)
 @SuppressLint("Range")
 fun getCalendarIds(context: Context): List<Long> {
     val calendarIds = mutableListOf<Long>()
@@ -272,17 +268,14 @@ fun getCalendarIds(context: Context): List<Long> {
             calendarIds.add(id)
         }
     }
-
     return calendarIds
 }
 
+// Function to add future activities to all local calendars
 @RequiresApi(Build.VERSION_CODES.O)
 fun addEventOnCalendar(context: Context, title: String, dateP: Long){
-
     val contentResolver: ContentResolver = context.contentResolver
-
     val timeZone = TimeZone.getDefault().id
-
     val calendarIDs = getCalendarIds(context)
 
     for (calendarID in calendarIDs) {
@@ -295,28 +288,6 @@ fun addEventOnCalendar(context: Context, title: String, dateP: Long){
             put(Events.ALL_DAY, 1)
             put(Events.EVENT_TIMEZONE, timeZone)
         }
-
-        val uri = contentResolver.insert(Events.CONTENT_URI, contentValues)
-
-        if (uri != null) {
-            val eventId = ContentUris.parseId(uri)
-            addEventReminder(context, eventId, 720)
-        } else {
-            Log.d("CALENDAR", "INCORRECTO")
-        }
+        contentResolver.insert(Events.CONTENT_URI, contentValues)
     }
-
-}
-
-fun addEventReminder(context: Context, eventId: Long, timePrev: Int) {
-    val contentResolver: ContentResolver = context.contentResolver
-
-    val reminderValues = ContentValues().apply {
-        put(CalendarContract.Reminders.EVENT_ID, eventId)
-        put(CalendarContract.Reminders.MINUTES, timePrev)
-        put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT)
-    }
-
-    contentResolver.insert(CalendarContract.Reminders.CONTENT_URI, reminderValues)
-
 }

@@ -36,9 +36,10 @@ import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
+// Custom exception class for user existence
 class UserExistsException : Exception()
 
+// Data class representing the structure of activity data to be posted to the API
 @Serializable
 data class PostActivity(
     @SerialName("id") val id: String,
@@ -50,15 +51,19 @@ data class PostActivity(
     @SerialName("type") val type: String,
     @SerialName("user_id") val user_id: String
 )
+
+// Data class representing the structure of user data to be posted to the API
 @Serializable
 data class PostUser(
-    val username: String,
-    val password: String,
+    @SerialName("username") val username: String,
+    @SerialName("password") val password: String,
 )
 
+// Singleton class responsible for making API requests
 @Singleton
 class ApiClient @Inject constructor() {
 
+    // HTTP client instance for making requests
     private val httpClient = HttpClient(CIO) {
 
         // If return code is not a 2xx then throw an exception
@@ -71,8 +76,10 @@ class ApiClient @Inject constructor() {
         HttpResponseValidator {
             handleResponseExceptionWithRequest { exception, _ ->
                 when {
+                    // Handle unauthorized and conflict status codes
                     exception is ClientRequestException && exception.response.status == HttpStatusCode.Unauthorized -> Log.d("HTTP", exception.toString())
                     exception is ClientRequestException && exception.response.status == HttpStatusCode.Conflict -> Log.d("HTTP", exception.toString())
+                    // For other exceptions, print stack trace and throw
                     else -> {
                         exception.printStackTrace()
                         Log.d("HTTP", exception.toString())
@@ -83,6 +90,7 @@ class ApiClient @Inject constructor() {
         }
     }
 
+    // Function to create a new user on remote DB
     @Throws(UserExistsException::class)
     suspend fun createUser(user: User) {
          httpClient.post("http://34.71.128.243:8000/users/") {
@@ -91,17 +99,20 @@ class ApiClient @Inject constructor() {
         }
     }
 
+    // Function to retrieve a list of users from remote DB
     @Throws(Exception::class)
     suspend fun getUsers(): List<PostUser> = runBlocking {
         val response = httpClient.get("http://34.71.128.243:8000/users/")
         response.body()
     }
 
+    // Function to clear all users on remote DB
     @Throws(Exception::class)
     suspend fun clearUsers() {
         httpClient.delete("http://34.71.128.243:8000/users/")
     }
 
+    // Function to create a new activity on rmeote DB
     @Throws(Exception::class)
     suspend fun createActivity(activity: SportActivity) {
         httpClient.post("http://34.71.128.243:8000/activities/"){
@@ -109,17 +120,21 @@ class ApiClient @Inject constructor() {
             setBody(Json.encodeToJsonElement(activityToPostActivity(activity)))
         }
     }
+
+    // Function to retrieve a list of activities from remote DB
     @Throws(Exception::class)
     suspend fun getActivities(): List<PostActivity> = runBlocking {
         val response = httpClient.get("http://34.71.128.243:8000/activities/")
         response.body()
     }
 
+    // Function to delete an activity on remote DB
     @Throws(Exception::class)
     suspend fun deleteActivity(activity: SportActivity) {
         httpClient.delete("http://34.71.128.243:8000/activities/${activity.id}/")
     }
 
+    // Function to update an activity on remote DB
     @Throws(Exception::class)
     suspend fun updateActivity(activity: SportActivity) {
         httpClient.put("http://34.71.128.243:8000/activities/${activity.id}"){
@@ -128,11 +143,7 @@ class ApiClient @Inject constructor() {
         }
     }
 
-    @Throws(Exception::class)
-    suspend fun clearActivities() {
-        httpClient.delete("http://34.71.128.243:8000/activities/")
-    }
-
+    // Function to retrieve user image on remote DB
     suspend fun getUserImage(username: String): Bitmap? {
         val response = try {
             httpClient.get("http://34.71.128.243:8000/users/${username}/image")
@@ -148,6 +159,7 @@ class ApiClient @Inject constructor() {
         }
     }
 
+    // Function to set user image on remote DB
     suspend fun setUserImage(username: String, image: Bitmap) {
         val stream = ByteArrayOutputStream()
         image.compress(Bitmap.CompressFormat.PNG, 100, stream)
@@ -163,6 +175,7 @@ class ApiClient @Inject constructor() {
         ) { method = HttpMethod.Put }
     }
 
+    // Function to subscribe a device with a token on remote DB
     @Throws(Exception::class)
     suspend fun subscribe(token: String) {
         httpClient.post("http://34.71.128.243:8000/tokens/"){

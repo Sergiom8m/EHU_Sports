@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -21,13 +19,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.menditrack.R
-import com.example.menditrack.utils.LoadingImagePlaceholder
+import com.example.menditrack.utils.FlickeringImage
 import com.example.menditrack.utils.getLatLngFromAddress
 import com.example.menditrack.viewModel.AppViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -47,21 +44,24 @@ fun MapScreen(
     appViewModel: AppViewModel,
     navController: NavController
 ){
-
     // Get the variable that indicates which is the activity to show
     val activityToShow = appViewModel.activityToShow.value
 
     val context = LocalContext.current
 
+    // Check location permission state
     val locationPermissionState = rememberPermissionState(
         permission = Manifest.permission.ACCESS_FINE_LOCATION
     )
+
+    // If not location permission ask for it
     LaunchedEffect(true){
         if (!locationPermissionState.status.isGranted) {
             locationPermissionState.launchPermissionRequest()
         }
     }
 
+    // If location permission is granted show the map with the user's actual location and activity's init point marker
     if (locationPermissionState.status.isGranted) {
         activityToShow?.initPoint?.let { initPoint ->
             getLatLngFromAddress(context, initPoint)?.let { (latitude, longitude) ->
@@ -90,7 +90,7 @@ fun MapScreen(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        LoadingImagePlaceholder(R.drawable.no_location, 150.dp)
+                        FlickeringImage(R.drawable.no_location, 150.dp)
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(text = stringResource(id = R.string.no_location))
                     }
@@ -98,7 +98,6 @@ fun MapScreen(
             }
         }
     }
-
     FloatingActionButton(
         onClick = { navController.popBackStack() },
         containerColor = MaterialTheme.colorScheme.primary,
@@ -111,6 +110,4 @@ fun MapScreen(
             tint = MaterialTheme.colorScheme.secondary
         )
     }
-
 }
-

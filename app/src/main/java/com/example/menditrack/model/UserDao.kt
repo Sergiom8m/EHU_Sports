@@ -6,10 +6,10 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import androidx.room.Update
-import com.example.menditrack.data.SportActivity
 import com.example.menditrack.data.User
 
+
+// Interface to manage DB data (DAO -> Data Access Object)
 @Dao
 interface UserDao {
 
@@ -28,11 +28,5 @@ interface UserDao {
     @Transaction
     @Query("SELECT * FROM users WHERE username = :username")
     suspend fun getUser(username: String): User?
-
-    @Transaction
-    @Query("SELECT * FROM users ")
-    suspend fun getUsers(): List<User>
-
-
 
 }

@@ -11,5 +11,4 @@ import com.example.menditrack.data.User
 abstract class Database: RoomDatabase() {
    abstract fun activityDao(): ActivityDao
    abstract fun userDao(): UserDao
-
 }

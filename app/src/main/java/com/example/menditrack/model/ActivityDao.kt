@@ -36,7 +36,4 @@ interface ActivityDao {
     @Transaction
     @Query("DELETE FROM activities")
     suspend fun clearActivities()
-
-
-
 }

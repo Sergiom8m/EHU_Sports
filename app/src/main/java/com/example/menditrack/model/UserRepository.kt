@@ -8,6 +8,7 @@ import io.ktor.client.plugins.ResponseException
 import javax.inject.Inject
 import javax.inject.Singleton
 
+// Interface-class file to create a intermediate repository between DAO and ViewModel
 interface IUserRepository{
     suspend fun addUser(user: User)
     suspend fun addUsersFromRemote()
@@ -15,8 +16,6 @@ interface IUserRepository{
     suspend fun getUser(username: String): User?
     suspend fun setUserProfile(username: String, image: Bitmap)
     suspend fun getUserProfile(username: String): Bitmap?
-    suspend fun uploadUsers()
-    suspend fun clearUsersOnRemote()
     suspend fun subscribe(token: String)
 }
 
@@ -31,7 +30,7 @@ class UserRepository @Inject constructor(
             apiClient.createUser(user)
             userDao.addUser(user)
         }
-        catch (_: Exception){}
+        catch (_: Exception){ }
     }
 
     override suspend fun addUsersFromRemote() {
@@ -51,33 +50,18 @@ class UserRepository @Inject constructor(
     override suspend fun setUserProfile(username: String, image: Bitmap) {
         try {
           apiClient.setUserImage(username, image)
-        } catch (_: ResponseException) {
-
-        }
+        } catch (_: ResponseException) { }
     }
 
     override suspend fun getUserProfile(username: String): Bitmap? {
         var image: Bitmap? = null
         try {
             image = apiClient.getUserImage(username)
-        } catch (_: ResponseException) {
-
-        }
+        } catch (_: ResponseException) { }
         return image
-    }
-
-    override suspend fun uploadUsers(){
-        val userList = userDao.getUsers()
-        userList.map { apiClient.createUser(it) }
-    }
-
-    override suspend fun clearUsersOnRemote(){
-        apiClient.clearUsers()
     }
 
     override suspend fun subscribe(token: String) {
         apiClient.subscribe(token)
     }
-
-
 }

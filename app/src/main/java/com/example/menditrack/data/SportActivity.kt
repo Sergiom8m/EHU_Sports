@@ -23,6 +23,7 @@ data class SportActivity (
     val userId: String
 )
 
+// Variation of SportActivity data class to be compatible with Glance (widget)
 @Serializable
 data class CompactActivity(
     val id: String,
@@ -44,5 +45,4 @@ data class CompactActivity(
         type = activity.type,
         userId = activity.userId
     )
-
 }
