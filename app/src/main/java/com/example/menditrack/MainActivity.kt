@@ -84,9 +84,6 @@ class MainActivity : AppCompatActivity() {
                 // Ask for permissions
                 AskPermissions()
 
-                // Obtain and upload to remote server device unique token (for Firebase Cloud Messaging)
-                deviceToken(appViewModel)
-
                 val navController = rememberNavController()
 
                 NavHost(
@@ -114,15 +111,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-        }
-    }
-
-    // Function to upload to remote server device unique token (for Firebase Cloud Messaging)
-    private fun deviceToken(appViewModel: AppViewModel) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val token = Firebase.messaging.token.await()
-            Log.d("TOKEN", token)
-            appViewModel.subscribeDevice(token)
         }
     }
 

@@ -3,6 +3,7 @@ package com.example.menditrack.screens
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,12 @@ import com.example.menditrack.R
 import com.example.menditrack.navigation.AppScreens
 import com.example.menditrack.utils.FlickeringImage
 import com.example.menditrack.viewModel.AppViewModel
+import com.google.firebase.Firebase
+import com.google.firebase.messaging.messaging
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 // Function to render a login page before starting the app
 @Composable
@@ -38,6 +45,8 @@ fun LoadingScreen(
 ) {
     // Check internet connectivity before downloading data from remote
     if (checkInternetConnectivity()) {
+        // Obtain and upload to remote server device unique token (for Firebase Cloud Messaging)
+        deviceToken(appViewModel)
         val loadCompleted = appViewModel.correctInit
         // Check if data has been downloaded correctly and redirect user to login page
         if (loadCompleted) {
@@ -124,4 +133,13 @@ fun checkInternetConnectivity(): Boolean {
     }
     val networkInfo = connectivityManager.activeNetworkInfo
     return networkInfo != null && networkInfo.isConnected
+}
+
+// Function to upload to remote server device unique token (for Firebase Cloud Messaging)
+private fun deviceToken(appViewModel: AppViewModel) {
+    CoroutineScope(Dispatchers.IO).launch {
+        val token = Firebase.messaging.token.await()
+        Log.d("TOKEN", token)
+        appViewModel.subscribeDevice(token)
+    }
 }
