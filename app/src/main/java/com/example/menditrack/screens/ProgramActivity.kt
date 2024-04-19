@@ -156,7 +156,7 @@ fun ProgramActivity(
                                             date.monthValue,
                                             date.minusDays(1).dayOfMonth,
                                             LocalDateTime.now().hour,
-                                            LocalDateTime.now().minute
+                                            LocalDateTime.now().minute + 1
                                         ),
                                         title = context.getString(
                                             R.string.notifSched_title,

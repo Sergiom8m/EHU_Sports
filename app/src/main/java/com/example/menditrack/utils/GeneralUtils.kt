@@ -39,6 +39,7 @@ import java.security.MessageDigest
 import java.util.Locale
 import kotlin.random.Random
 import android.provider.CalendarContract.Events
+import android.util.Log
 import java.util.TimeZone
 
 // Function to convert SportActivity to string (data extraction)
@@ -247,14 +248,14 @@ fun FlickeringImage(image: Int, size: Dp) {
     )
 }
 
-// Function to get the local calendar's IDs (except google calendars)
+// Function to get all calendar's IDs (including google calendars)
 @SuppressLint("Range")
-fun getCalendarIds(context: Context): List<Long> {
+fun getAllCalendarIds(context: Context): List<Long> {
     val calendarIds = mutableListOf<Long>()
     val projection = arrayOf(CalendarContract.Calendars._ID)
 
-    val selection = "${CalendarContract.Calendars.ACCOUNT_TYPE} NOT IN (?)"
-    val selectionArgs = arrayOf("com.google")
+    val selection = "${CalendarContract.Calendars.ACCOUNT_TYPE} = ? AND ${CalendarContract.Calendars.NAME} LIKE ?"
+    val selectionArgs = arrayOf("com.google", "%@%")
 
     context.contentResolver.query(
         CalendarContract.Calendars.CONTENT_URI,
@@ -271,12 +272,46 @@ fun getCalendarIds(context: Context): List<Long> {
     return calendarIds
 }
 
-// Function to add future activities to all local calendars
+// Function to get the local calendar's IDs (except google calendars)
+@SuppressLint("Range")
+fun getLocalCalendarIds(context: Context): List<Long> {
+    val calendarIds = mutableListOf<Long>()
+    val projection = arrayOf(CalendarContract.Calendars._ID)
+
+    // Filter the calendars in order to keep only the local ones
+    val selection = "${CalendarContract.Calendars.ACCOUNT_TYPE} IN (?)"
+    val selectionArgs = arrayOf("LOCAL")
+
+    context.contentResolver.query(
+        CalendarContract.Calendars.CONTENT_URI,
+        projection,
+        selection,
+        selectionArgs,
+        null
+    )?.use { cursor ->
+        while (cursor.moveToNext()) {
+            val id = cursor.getLong(cursor.getColumnIndex(CalendarContract.Calendars._ID))
+            calendarIds.add(id)
+        }
+    }
+    return calendarIds
+}
+
+
+// Function to add future activities to calendars
 @RequiresApi(Build.VERSION_CODES.O)
 fun addEventOnCalendar(context: Context, title: String, dateP: Long){
     val contentResolver: ContentResolver = context.contentResolver
     val timeZone = TimeZone.getDefault().id
-    val calendarIDs = getCalendarIds(context)
+
+    // If is possible add events on local calendar
+    var calendarIDs = getLocalCalendarIds(context)
+
+    // If not local calendars available try to add events in other calendars
+    if (calendarIDs.isEmpty()){
+        Log.d("NO LOCALS", "NO LOCALS")
+        calendarIDs = getAllCalendarIds(context)
+    }
 
     for (calendarID in calendarIDs) {
 
@@ -289,5 +324,31 @@ fun addEventOnCalendar(context: Context, title: String, dateP: Long){
             put(Events.EVENT_TIMEZONE, timeZone)
         }
         contentResolver.insert(Events.CONTENT_URI, contentValues)
+    }
+}
+
+// Function to get all calendar's IDs (including google calendars) and print their attributes
+@SuppressLint("Range")
+fun printCalendarAttributes(context: Context) {
+    val projection = arrayOf(
+        CalendarContract.Calendars._ID,
+        CalendarContract.Calendars.NAME,
+        // Add more attributes as needed
+    )
+
+    context.contentResolver.query(
+        CalendarContract.Calendars.CONTENT_URI,
+        projection,
+        null,
+        null,
+        null
+    )?.use { cursor ->
+        while (cursor.moveToNext()) {
+            val id = cursor.getLong(cursor.getColumnIndex(CalendarContract.Calendars._ID))
+            val name = cursor.getString(cursor.getColumnIndex(CalendarContract.Calendars.NAME))
+
+            // Print the attributes of each calendar
+            Log.d("Calendar Attributes", "ID: $id, Name: $name")
+        }
     }
 }

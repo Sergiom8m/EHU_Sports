@@ -142,7 +142,7 @@ class EHUSportsWidget : GlanceAppWidget() {
                                         style = TextStyle(
                                             fontWeight = FontWeight.Bold,
                                             fontSize = 20.sp,
-                                            textAlign = TextAlign.Center,
+                                            textAlign = TextAlign.Start,
                                             color = ColorProvider(secondaryText)
                                         )
                                     )
@@ -166,7 +166,7 @@ class EHUSportsWidget : GlanceAppWidget() {
                                             style = TextStyle(
                                                 fontWeight = FontWeight.Normal,
                                                 fontSize = 15.sp,
-                                                textAlign = TextAlign.Center,
+                                                textAlign = TextAlign.Start,
                                                 color = ColorProvider(secondaryText)
                                             )
                                         )
@@ -182,7 +182,7 @@ class EHUSportsWidget : GlanceAppWidget() {
                                             style = TextStyle(
                                                 fontWeight = FontWeight.Normal,
                                                 fontSize = 15.sp,
-                                                textAlign = TextAlign.Center,
+                                                textAlign = TextAlign.Start,
                                                 color = ColorProvider(secondaryText)
                                             )
                                         )
