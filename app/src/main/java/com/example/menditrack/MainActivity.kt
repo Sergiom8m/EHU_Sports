@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                 color = MaterialTheme.colorScheme.background
             ) {
                 // Ask for permissions
-                AskPermissions()
+                //AskPermissions()
 
                 val navController = rememberNavController()
 

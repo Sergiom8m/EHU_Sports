@@ -1,5 +1,7 @@
 package com.example.menditrack.screens
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -31,10 +33,14 @@ import com.example.menditrack.navigation.AppScreens
 import com.example.menditrack.utils.hashPassword
 import com.example.menditrack.viewModel.AppViewModel
 import com.example.menditrack.widgets.EHUSportsWidget
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@SuppressLint("InlinedApi")
+@OptIn(ExperimentalPermissionsApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Login(
@@ -56,6 +62,19 @@ fun Login(
 
     // Refresh widget every time the app is opened
     EHUSportsWidget().refresh(context)
+
+    val permissions = arrayOf(
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.POST_NOTIFICATIONS
+    )
+    val permissionState = rememberMultiplePermissionsState(
+        permissions = permissions.toList()
+    )
+    LaunchedEffect(true){
+        if (!permissionState.allPermissionsGranted) {
+            permissionState.launchMultiplePermissionRequest()
+        }
+    }
 
     Column(
         modifier = modifier
